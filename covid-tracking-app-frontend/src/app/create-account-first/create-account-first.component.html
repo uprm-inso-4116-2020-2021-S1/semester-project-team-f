@@ -1,0 +1,34 @@
+<div class="sidebar">
+    <div class="form {{fadeEffect}}">
+
+        <div>
+            <img id="back" (click) = "goToPreviousPage()"src="../../assets/Back.png" alt="back">
+            <a id="title">Contact Information</a>
+        </div>
+
+        <a class="form-text">Full name:</a>
+        <a><input type="text" id="inputName" class="form-control" required autofocus></a>
+        <a class="form-text">Gender:</a>
+        <a>
+            <select name="genders" id="genders" class="form-control">
+                <option value="0">Male</option>
+                <option value="1">Female</option>
+                <option value="2">Non-binary</option>
+              </select>
+        </a>
+        <a class="form-text">Birthday:</a>
+        <a><input type="date" id="birthdayTime" class="form-control" name="birthdaytime"></a>
+        <a class="form-text">Phone number:</a>
+        <a> <input type="tel" id="phone" class="form-control" name="phone" placeholder="Ex: 787-872-0000" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required></a>
+        <a class="form-text">Email:</a>
+        <a><input type="email" id="inputEmail" class="form-control" required autofocus></a>
+        <a class="form-text">Password:</a>                
+        <a><input type="password" id="inputPassword" class="form-control" required></a>
+        <a class="btn btn-lg btn-primary" role="button" (click)=goToNextPage()>Next</a>
+    </div>
+
+    <a id="createAccount">I want to sign up as a doctor!</a>
+
+    <app-login-sidebar *ngIf="canGoToPreviousPage"></app-login-sidebar>
+    <app-create-account-second *ngIf="canGoToNextPage"></app-create-account-second>
+</div>

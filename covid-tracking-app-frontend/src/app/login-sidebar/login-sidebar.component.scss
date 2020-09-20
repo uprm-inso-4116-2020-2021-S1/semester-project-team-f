@@ -1,0 +1,47 @@
+.upperBar{
+    background-color: #FF4646;
+    padding: 20px;
+
+    #sidebar-logo{
+        width: 80%;
+    }
+}
+
+.slide-down{
+    animation-name: slide-down;
+    animation-duration: 0.8s;
+    animation-timing-function: ease;
+    animation-fill-mode: forwards;
+    transform: translate(0, -20px);
+}
+
+.slide-up{
+    animation-name: slide-up;
+    animation-duration: 0.8s;
+    animation-timing-function: ease;
+    animation-fill-mode: forwards;
+    transform: translate(0, -20px);
+}
+
+@keyframes slide-down {
+    0% {
+      transform: translate(0, -250px);
+      opacity:.1
+    }
+    100% {
+      transform: translate(0, 0);
+      opacity:1
+    }
+  }
+
+@keyframes slide-up {
+    100% {
+      transform: translate(0, -300px);
+      opacity:.1
+    }
+    0% {
+      transform: translate(0, 0);
+      opacity:1
+    }
+  }
+

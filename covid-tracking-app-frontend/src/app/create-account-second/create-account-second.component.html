@@ -1,0 +1,34 @@
+<div class="sidebar">
+    <div class="form {{fadeEffect}}">
+
+        <div>
+            <img id="back" (click) = "goToPreviousPage()"src="../../assets/Back.png" alt="back">
+            <a id="title">Address Information</a>
+        </div>
+
+        <a class="form-text">Street Address:</a>
+        <a><input type="text" id="inputAddress" class="form-control" required autofocus></a>
+        <a class="form-text">Country/region:</a>
+        <a>
+            <select name="countries" id="countries" class="form-control">
+                <option *ngFor = "let country of countries" value="{{country}}" (click)="selectedCountry = country">{{country}}</option>              
+            </select>
+        </a>
+        <div *ngIf="selectedCountry =='United States'">
+        <a class="form-text">State/province/region:</a>
+        <a>
+            <select name="countries" id="countries" class="form-control">
+                <option *ngFor = "let state of states" value="{{state}}">{{state}}</option>              
+            </select>
+        </a>
+        </div>
+        <a class="form-text">City:</a>
+        <a><input type="text" id="inputCity" class="form-control" required autofocus></a>
+        <a class="form-text">Zip code:</a>
+        <a> <input type="text" id="zipCode" class="form-control" placeholder="Ex: 00662" pattern="[0-9]{5}" required></a>
+        <a class="btn btn-lg btn-primary" role="button">Sign up</a>
+    </div>
+
+    <app-create-account-first *ngIf="canGoToPreviousPage"></app-create-account-first>
+
+</div>
