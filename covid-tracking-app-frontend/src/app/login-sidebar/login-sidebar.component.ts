@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { UserService } from '../services/user.service';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-login-sidebar',
@@ -7,10 +9,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginSidebarComponent implements OnInit {
 
-  effectsInAction: string[];
-  canGoToNextPage: boolean;
+  public effectsInAction: string[]; //effects not related to login
+  public canGoToNextPage: boolean;
 
-  constructor() { }
+  constructor(private userService: UserService) { }
 
   ngOnInit(): void {
     this.effectsInAction = ["slide-down", "fade-in"]; //the default effects when someone enters to the main-page
@@ -23,17 +25,24 @@ export class LoginSidebarComponent implements OnInit {
 
     let timeLeft:number= 180;
 
-    setInterval(() => {
-      if(timeLeft > 0) { timeLeft--; } 
-      else { this.canGoToNextPage = true; }
-    })
-
+    setTimeout(() => this.canGoToNextPage = true, 800);
   }
 
+  public login(): void{
+      let email: string = (<HTMLInputElement>document.querySelector("#inputEmail")).value;
+      let password: string = (<HTMLInputElement>document.querySelector("#inputPassword")).value;
+      this.userService.login(email, password).subscribe(res => {
+        if(res.message == "Success!"){
+          document.querySelector('.sidebar').classList.add('slide-left') //execute the side-left effect (this is another way of doing so)
 
-  
+          setTimeout(() => {
+            UserService.loggedUser = res.user;
+            localStorage.setItem('currentUserId', res.user.user_id);
+            console.log("User with id of " + res.user.user_id + " has logged in!");
+            AppComponent.changeToNavbar();
+          }, 800);
 
-
-
-
+        }
+      })
+  }
 }

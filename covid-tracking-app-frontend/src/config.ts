@@ -1,3 +1,5 @@
+export const API_URL = 'http://localhost:5000/'; //change when deployed
+
 export const MAP_STYLE: google.maps.MapTypeStyle[] = [
     {
         "featureType": "administrative",

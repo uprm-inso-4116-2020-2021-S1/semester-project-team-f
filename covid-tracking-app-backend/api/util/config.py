@@ -2,7 +2,7 @@ import flask
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
-db_url = 'localhost'
+db_url = 'localhost:5432'
 db_name = 'covid_tracking_app_db'
 db_user = 'team-f'
 db_password = 'pay-respect'
@@ -14,3 +14,4 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DEV_DB
 app.secret_key = "coronavirus"
 
 db = SQLAlchemy(app)
+CORS(app)

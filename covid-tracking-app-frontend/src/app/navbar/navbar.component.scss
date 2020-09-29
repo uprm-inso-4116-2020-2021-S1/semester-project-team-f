@@ -1,0 +1,27 @@
+/* Style the navigation menu */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100% ;
+    background-color: #C93232;
+    overflow: auto ;
+  }
+  
+  /* Navigation links */
+.navbar a {
+    padding: 2px;
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    font-size: 18px;
+    width: 33.33%; /* Four equal-width links. If you have two links, use 50%, and 33.33% for three links, etc.. */
+    text-align: center; /* If you want the text to be centered */
+  }
+
+  #navbar_logo{
+      width: 9%;
+      margin: 10px;
+  }
+
+  #settings_icon, #logout_icon{
+    width: 6%;
+  }

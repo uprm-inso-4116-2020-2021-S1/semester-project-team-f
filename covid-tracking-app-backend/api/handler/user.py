@@ -1,13 +1,13 @@
 from flask import jsonify, session
-from api.dao.users import Users
+from api.dao.user import User
 from api.util.utilities import Utilities
 
-class UsersHandler:
+class UserHandler:
 
     @staticmethod
     def getAllUsers():
         try:
-            users = Users.getAllUsers()
+            users = User.getAllUsers()
             result_list = []
             for user in users:
                 result_list.append(Utilities.to_dict(user))
@@ -22,7 +22,7 @@ class UsersHandler:
     @staticmethod
     def getUserById(uid):
         try:
-            user = Users.getUserById(uid)
+            user = User.getUserById(uid)
             user_dict = Utilities.to_dict(user)
             result = {
                 "message": "Success!",
@@ -33,45 +33,14 @@ class UsersHandler:
             return jsonify(reason="Server error", error=e.__str__()), 500
 
     @staticmethod
-    def getDoctors():
-        try:
-            users = Users.getDoctors()
-            result_list = []
-            for user in users:
-                result_list.append(Utilities.to_dict(user))
-            result = {
-                "message": "Success!",
-                "users": result_list
-            }
-            return jsonify(result), 200
-        except Exception as e:
-            return jsonify(reason="Server error", error=e.__str__()), 500
-
-    @staticmethod
-    def getNonDoctors():
-        try:
-            users = Users.getNonDoctors()
-            result_list = []
-            for user in users:
-                result_list.append(Utilities.to_dict(user))
-            result = {
-                "message": "Success!",
-                "users": result_list
-            }
-            return jsonify(result), 200
-        except Exception as e:
-            return jsonify(reason="Server error", error=e.__str__()), 500
-
-    @staticmethod
     def login(json):
         try:
             if json['email'] == "" or json['password'] == "":
                 return jsonify(reason="Must fill both email and password fields."), 400
-            user = Users.getUserByEmail(json['email'])
+            user = User.getUserByEmail(json['email'])
             user_dic = Utilities.to_dict(user)
             if user and user.password == json['password']:
                 session['logged_in'] = True
-                status = True
                 result = {
                     "message": "Success!",
                     "user": user_dic
@@ -92,13 +61,13 @@ class UsersHandler:
 
     @staticmethod
     def createUser(json):
-        valid_params = Utilities.verify_parameters(json, Users.REQUIRED_PARAMETERS)
+        valid_params = Utilities.verify_parameters(json, User.REQUIRED_PARAMETERS)
         if valid_params:
             try:
-                email_exists = Users.getUserByEmail(json['email'])
+                email_exists = User.getUserByEmail(json['email'])
                 if email_exists:
                     return jsonify(message="Email already taken. Please use another one."), 400
-                created_user = Users(**valid_params).createUser()
+                created_user = User(**valid_params).create()
                 user_dict = Utilities.to_dict(created_user)
                 result = {
                     "message": "Success!",

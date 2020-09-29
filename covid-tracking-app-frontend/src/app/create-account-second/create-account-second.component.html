@@ -7,26 +7,39 @@
         </div>
 
         <a class="form-text">Street Address:</a>
-        <a><input type="text" id="inputAddress" class="form-control" required autofocus></a>
+        <a><input type="text" id="inputAddress" class="form-control" 
+            (input) = "setAddressInfo('street_address',$event.target.value)"  
+            value="{{getSavedAddressInfo().street_address}}" required autofocus></a>
+
         <a class="form-text">Country/region:</a>
         <a>
-            <select name="countries" id="countries" class="form-control">
-                <option *ngFor = "let country of countries" value="{{country}}" (click)="selectedCountry = country">{{country}}</option>              
+            <select name="countries" id="countries" class="form-control"
+            (input) = "setAddressInfo('country_name',$event.target.value)"  value="{{getSavedAddressInfo().country_name}}">
+                <option *ngFor = "let country of countries" value="{{country}}">{{country}}</option>              
             </select>
         </a>
-        <div *ngIf="selectedCountry =='United States'">
-        <a class="form-text">State/province/region:</a>
-        <a>
-            <select name="countries" id="countries" class="form-control">
-                <option *ngFor = "let state of states" value="{{state}}">{{state}}</option>              
-            </select>
-        </a>
+
+        <div *ngIf="getSavedAddressInfo().country_name == 'United States'">
+            <a class="form-text">State/province/region:</a>
+            <a>
+                <select name="countries" id="countries" class="form-control"
+                (input) = "setAddressInfo('region_name',$event.target.value)"  value="{{getSavedAddressInfo().region_name}}">
+                    <option *ngFor = "let state of states" value="{{state}}">{{state}}</option>              
+                </select>
+            </a>
         </div>
+
         <a class="form-text">City:</a>
-        <a><input type="text" id="inputCity" class="form-control" required autofocus></a>
+        <a><input type="text" id="inputCity" class="form-control" 
+            (input) = "setAddressInfo('city_name',$event.target.value)" value="{{getSavedAddressInfo().city_name}}"
+            required autofocus></a>
+
         <a class="form-text">Zip code:</a>
-        <a> <input type="text" id="zipCode" class="form-control" placeholder="Ex: 00662" pattern="[0-9]{5}" required></a>
-        <a class="btn btn-lg btn-primary" role="button">Sign up</a>
+        <a> <input type="text" id="zipCode" class="form-control" placeholder="Ex: 00662" pattern="[0-9]{5}" 
+            (input) = "setAddressInfo('zip_code',$event.target.value)" value="{{getSavedAddressInfo().zip_code}}"
+            required></a>
+
+        <a class="btn btn-lg btn-primary" role="button" (click)="signUp()">Sign up</a>
     </div>
 
     <app-create-account-first *ngIf="canGoToPreviousPage"></app-create-account-first>

@@ -1,7 +1,11 @@
 from api.util.config import db
-from api.dao.users import Users
-from api.dao.patients import Patients
-from api.dao.addresses import Addresses
+from api.dao.user import User
+from api.dao.address import Address
+from api.dao.patient import Patient
+from api.dao.doctor import Doctor
+from api.dao.visited_location import VisitedLocation
+from api.dao.medical_office import MedicalOffice
+
 
 #run this to create the tables on pgadmin
 

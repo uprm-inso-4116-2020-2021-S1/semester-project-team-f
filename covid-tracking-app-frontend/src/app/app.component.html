@@ -1,2 +1,12 @@
 <router-outlet></router-outlet>
-<div #mapContainer id="map"></div>
+
+<app-map></app-map>
+
+<div *ngIf="isLoggedIn(); else loginSidebar">
+    <app-navbar></app-navbar>
+</div>
+
+<ng-template #loginSidebar>
+    <app-login-sidebar></app-login-sidebar>
+</ng-template>
+
