@@ -22,6 +22,18 @@
       margin: 10px;
   }
 
+#settings, #logout{
+  transition: transform .5s ease;
+}
+
   #settings_icon, #logout_icon{
     width: 6%;
   }
+
+  #settings:hover, #logout:hover{
+    cursor: pointer;
+    filter:    brightness(0.9)contrast(0.95)hue-rotate(0deg);
+    transition: transform .5s ease;
+  }
+
+  

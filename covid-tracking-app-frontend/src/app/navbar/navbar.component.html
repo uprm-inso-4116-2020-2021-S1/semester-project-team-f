@@ -4,12 +4,15 @@
         <b id="greeting">Hello, {{getLoggedInUser().full_name}}</b>
     </a>
 
+    
     <a id="settings">
         <img id = "settings_icon" src="../../assets/settings.png">
         Account settings
     </a>
-    <a id="logout">
+
+    <a id="logout" (click) = "logout()">
         <img id = "logout_icon" src="../../assets/logout.png">
         Logout
+        
     </a>
 </div>

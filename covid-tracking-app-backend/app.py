@@ -4,6 +4,7 @@ from api.handler.address import AddressHandler
 from api.handler.user import UserHandler
 from api.handler.patient import PatientHandler
 from api.handler.doctor import DoctorHandler
+from api.handler.medical_office import MedicalOfficeHandler
 
 @app.route('/', methods=['GET'])
 def home():
@@ -19,6 +20,14 @@ def getAllAddressOrCreate():
 @app.route('/address/<int:aid>', methods=['GET'])
 def getAddressById(aid):
     return AddressHandler.getAddressById(aid)
+
+@app.route('/offices', methods=['GET'])
+def getMedicalOffices():
+    return MedicalOfficeHandler.getAllMedicalOffices()
+
+@app.route('/offices/<int:mid>', methods=['GET'])
+def getMedicalOfficeById(mid):
+    return MedicalOfficeHandler.getMedicalOfficeById(mid)
 
 @app.route("/users", methods=['GET', 'POST'])
 def getAllUsersOrCreate():

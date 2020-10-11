@@ -33,6 +33,8 @@ class DoctorHandler:
         except Exception as e:
             return jsonify(reason="Server error", error=e.__str__()), 500
 
+    '''ONLY authorized doctors are allowed to add new medical authorities in their respective office, so that they can
+        catalog as somebody to positive or negative to the virus'''
     @staticmethod
     def createDoctor(json):
         valid_params = Utilities.verify_parameters(json, Doctor.REQUIRED_PARAMETERS)

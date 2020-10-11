@@ -5,6 +5,7 @@ import { throwError, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import {API_URL} from '../../config';
+import { AppComponent } from '../app.component';
 
 @Injectable({
   providedIn: 'root'
@@ -54,12 +55,16 @@ export class UserService {
     .post<UserResponse>(API_URL + `login`, json)
   }
 
-  public logout() {
+  public logout(): Observable<UserResponse> {
     UserService.loggedUser = null;
     
     let currentUserId = localStorage.getItem('currentUserId')
     localStorage.removeItem('currentUserId')
     console.log("User with id of " + currentUserId + " has been logged out")
-    this.router.navigateByUrl('/')
+
+    AppComponent.changeToLogin();
+
+    return this.httpClient
+    .get<UserResponse>(API_URL + `logout`)
   }
 }

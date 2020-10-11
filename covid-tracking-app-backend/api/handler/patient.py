@@ -50,66 +50,6 @@ class PatientHandler:
             return jsonify(reason="Server error", error=e.__str__()), 500
 
     @staticmethod
-    def getPositiveCases():
-        try:
-            patients = Patient.getPositiveCases()
-            result_list = []
-            for patient in patients:
-                result_list.append(Utilities.to_dict(patient))
-            result = {
-                "message": "Success!",
-                "patients": result_list
-            }
-            return jsonify(result), 200
-        except Exception as e:
-            return jsonify(reason="Server error", error=e.__str__()), 500
-
-    @staticmethod
-    def getNegativeCases():             #includes the patients who have never being infected and those that recovered
-        try:
-            patients = Patient.getNegativeCases()
-            result_list = []
-            for patient in patients:
-                result_list.append(Utilities.to_dict(patient))
-            result = {
-                "message": "Success!",
-                "patients": result_list
-            }
-            return jsonify(result), 200
-        except Exception as e:
-            return jsonify(reason="Server error", error=e.__str__()), 500
-
-    @staticmethod
-    def getNeverInfectedPatients():
-        try:
-            patients = Patient.getNeverInfectedPatients()
-            result_list = []
-            for patient in patients:
-                result_list.append(Utilities.to_dict(patient))
-            result = {
-                "message": "Success!",
-                "patients": result_list
-            }
-            return jsonify(result), 200
-        except Exception as e:
-            return jsonify(reason="Server error", error=e.__str__()), 500
-
-    @staticmethod
-    def getRecoveredPatients():
-        try:
-            patients = Patient.getRecoveredPatients()
-            result_list = []
-            for patient in patients:
-                result_list.append(Utilities.to_dict(patient))
-            result = {
-                "message": "Success!",
-                "patients": result_list
-            }
-            return jsonify(result), 200
-        except Exception as e:
-            return jsonify(reason="Server error", error=e.__str__()), 500
-
-    @staticmethod
     def createPatient(json):
         valid_params = Utilities.verify_parameters(json, Patient.REQUIRED_PARAMETERS)
         if valid_params:

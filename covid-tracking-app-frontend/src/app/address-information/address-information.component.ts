@@ -3,15 +3,15 @@ import { COUNTRIES, STATES } from 'src/config';
 import { Address } from '../models/address';
 import { AddressService } from '../services/address.service';
 import { UserService } from '../services/user.service';
-import { CreateAccountFirstComponent } from '../create-account-first/create-account-first.component';
 import { AppComponent } from '../app.component';
+import { ContactInformationComponent } from '../contact-information/contact-information.component';
 
 @Component({
-  selector: 'app-create-account-second',
-  templateUrl: './create-account-second.component.html',
-  styleUrls: ['./create-account-second.component.scss']
+  selector: 'app-address-information',
+  templateUrl: './address-information.component.html',
+  styleUrls: ['./address-information.component.scss']
 })
-export class CreateAccountSecondComponent{
+export class AddressInformationComponent{
 
   canGoToPreviousPage: boolean;
   fadeEffect: string;
@@ -20,10 +20,8 @@ export class CreateAccountSecondComponent{
 
   static address_info: Address;
 
-  selectedCountry: string; //to be modeled as part of the address object soon
-
   constructor(private addressService: AddressService, private userService: UserService) { 
-    this.initializeAddressInfo()
+    this.initializeAddressInfo();
     this.fadeEffect = "fade-in"; //the effect that will be executed as soon as the user enters this component
     this.countries = COUNTRIES;
     this.states = STATES;
@@ -36,16 +34,16 @@ export class CreateAccountSecondComponent{
   }
 
   public setAddressInfo(key:string, value:string){
-      CreateAccountSecondComponent.address_info[key] = value;
+      AddressInformationComponent.address_info[key] = value;
   }
 
   public getSavedAddressInfo(): Address{
-    return CreateAccountSecondComponent.address_info;
+    return AddressInformationComponent.address_info;
   }
 
   private initializeAddressInfo(){
     if(!this.getSavedAddressInfo()){
-      CreateAccountSecondComponent.address_info = {
+      AddressInformationComponent.address_info = {
         country_name: '',
         region_name: '',
         street_address: '',
@@ -56,8 +54,8 @@ export class CreateAccountSecondComponent{
   }
 
   public signUp(): void{
-    let newAddress = CreateAccountSecondComponent.address_info;
-    let newUser = CreateAccountFirstComponent.contact_info;
+    let newAddress = AddressInformationComponent.address_info;
+    let newUser = ContactInformationComponent.contact_info;
     this.addressService.createAddress(newAddress).subscribe(res => {
 
         let address_id = res.address.address_id; 
