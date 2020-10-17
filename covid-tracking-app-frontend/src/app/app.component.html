@@ -6,6 +6,10 @@
     <app-navbar></app-navbar>
 </div>
 
+<div *ngIf="isAddingPatient();">
+    <app-add-patient-information></app-add-patient-information>
+</div>
+
 <ng-template #loginSidebar>
     <app-login-sidebar></app-login-sidebar>
 </ng-template>

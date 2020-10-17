@@ -4,15 +4,28 @@
         <b id="greeting">Hello, {{getLoggedInUser().full_name}}</b>
     </a>
 
-    
-    <a id="settings">
+    <a id="Accountsettings">
         <img id = "settings_icon" src="../../assets/settings.png">
-        Account settings
+        Account Settings
     </a>
 
+    
+    <div class="dropdown">
+        <a class="dropbtn">Patient Actions</a>
+        <div class="dropdown-content">
+          <a class = "HoverList" (click) = "AddRemovePatient()" >Add Patient</a>
+          <a class = "HoverList">Delete Patient</a>
+          <a class = "HoverList">Patient Information</a>
+        </div>
+      </div>    
+
+    <a id="NewC" (click) = "logout()">
+        New COVID-19 case
+        
+    </a>
+    
     <a id="logout" (click) = "logout()">
         <img id = "logout_icon" src="../../assets/logout.png">
         Logout
         
     </a>
-</div>
