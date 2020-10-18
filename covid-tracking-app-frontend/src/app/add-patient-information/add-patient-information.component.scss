@@ -1,0 +1,22 @@
+.PatientList {
+    width: 275px;
+    height: 500px;
+    overflow-y: auto;
+  }
+  
+  .PatientList a {
+    background-color: #eee;
+    color: black;
+    display: block;
+    padding: 12px;
+    text-decoration: none;
+  }
+  
+  .PatientList a:hover {
+    background-color: #ccc;
+  }
+  
+  .PatientList a.active {
+    background-color: red;
+    color: white;
+  }

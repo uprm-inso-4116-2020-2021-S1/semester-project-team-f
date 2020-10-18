@@ -12,6 +12,7 @@ import { AddressInformationComponent } from './address-information/address-infor
 import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MapComponent } from './map/map.component';
+import { AddPatientInformationComponent } from './add-patient-information/add-patient-information.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { MapComponent } from './map/map.component';
     AddressInformationComponent,
     NavbarComponent,
     MapComponent,
+    AddPatientInformationComponent,
   ],
   imports: [
     BrowserModule,

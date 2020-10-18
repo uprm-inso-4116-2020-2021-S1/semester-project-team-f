@@ -4,7 +4,6 @@
     top: 0;
     width: 100% ;
     background-color: #C93232;
-    overflow: auto ;
   }
   
   /* Navigation links */
@@ -13,7 +12,7 @@
     color: rgb(255, 255, 255);
     text-decoration: none;
     font-size: 18px;
-    width: 33.33%; /* Four equal-width links. If you have two links, use 50%, and 33.33% for three links, etc.. */
+    width: 15%; /* Four equal-width links. If you have two links, use 50%, and 33.33% for three links, etc.. */
     text-align: center; /* If you want the text to be centered */
   }
 
@@ -21,6 +20,7 @@
       width: 9%;
       margin: 10px;
   }
+
 
 #settings, #logout{
   transition: transform .5s ease;
@@ -36,4 +36,49 @@
     transition: transform .5s ease;
   }
 
-  
+  #settings:hover, #NewC:hover{
+    cursor: pointer;
+    filter:    brightness(0.9)contrast(0.95)hue-rotate(0deg);
+    transition: transform .5s ease;
+  }
+
+.HoverList hover {
+  cursor: pointer;
+  transition: transform .5s ease;
+  background-color: rgb(99, 97, 97);
+}
+  /* Dropdown Button */
+.dropbtn {
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
