@@ -1,21 +1,25 @@
 from api.util.config import db
-from api.dao.doctor import Doctor
+from api.dao.user import User
+from api.dao.medical_office import MedicalOffice
 from datetime import datetime
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
 class Patient(db.Model):
-    REQUIRED_PARAMETERS = {'patient_user_id', 'doctor_id', 'office_id'}
+    REQUIRED_PARAMETERS = {'user_id', 'office_id'}
 
     __tablename__ = 'patient'
-    patient_user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('user.user_id'), nullable=False, primary_key=True)
-    doctor_id = db.Column(UUID(as_uuid=True), db.ForeignKey('doctor.user_id'), nullable=False)
-    office_id = db.Column(db.Integer, db.ForeignKey('medical_office.office_id'), nullable=False)
-    date_registered = db.Column(db.Date, default=datetime.now())
+    __table_args__ = ( db.UniqueConstraint('user_id', 'office_id'), )
+
+    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('user.user_id'), nullable=False, primary_key=True)
+    office_id = db.Column(db.Integer, db.ForeignKey('medical_office.office_id'), nullable=False, primary_key=True)
+    date_registered = db.Column(db.Date, nullable=False)
     has_died = db.Column(db.Boolean, nullable = True)
 
+
+
     def __init__(self, **args):
-        self.patient_user_id = args.get('patient_user_id')
+        self.user_id = args.get('user_id')
         self.doctor_id = args.get('doctor_id')
         self.office_id = args.get('office_id')
         self.date_registered = args.get('date_registered')
@@ -24,19 +28,24 @@ class Patient(db.Model):
     def getAllPatients():
         return Patient().query.all()
 
+    '''Retrieves a single individual that may have a record in multiple offices'''
     @staticmethod
     def getPatientById(pid):
-        return Patient().query.filter_by(patient_id=pid).first()
-    
+        return Patient().query.filter_by(user_id=pid).all()
+
+
+    '''Retrieves a specific patient record in an office'''
     @staticmethod
-    def getPatientsByDoctorId(did):
-        return Patient().query.filter_by(doctor_id=did).all()
+    def getPatientByIdAndOffice(json):
+        return Patient().query.filter_by(user_id=json['user_id'], office_id=json['office_id']).first()
 
     @staticmethod
     def getDeathPatients():
         return Patient().query.filter_by(has_died=True).all()
 
     def create(self):
+        self.date_registered = datetime.now()
+
         db.session.add(self)
         db.session.commit()
         return self

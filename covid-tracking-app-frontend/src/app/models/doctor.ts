@@ -1,7 +1,6 @@
 export interface Doctor {
     user_id: string;
     office_id: number;
-    attended_cases: number;
     registered_date: Date;
   }
   

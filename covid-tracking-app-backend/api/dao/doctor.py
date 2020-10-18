@@ -7,9 +7,10 @@ class Doctor(db.Model):
     REQUIRED_PARAMETERS = {'user_id', 'office_id'}
 
     __tablename__ = 'doctor'
+    __table_args__ = ( db.UniqueConstraint('user_id', 'office_id'), )
+
     user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('user.user_id'), nullable=False, primary_key=True)
-    office_id = db.Column(db.Integer, db.ForeignKey('medical_office.office_id'), nullable=False)
-    attended_cases = db.Column(db.Integer, default=0)
+    office_id = db.Column(db.Integer, db.ForeignKey('medical_office.office_id'), nullable=False, primary_key=True)
     registered_date = db.Column(db.Date, default=datetime.now())
 
     def __init__(self, **args):
@@ -27,13 +28,6 @@ class Doctor(db.Model):
     @staticmethod
     def getDoctorsByOffice(oid):
         return Doctor().query.filter_by(office_id=oid).all()
-
-    @staticmethod
-    def incrementAttendedCases(did):
-        doctor = Doctor.getDoctorById(did)
-        doctor.attended_cases +=1
-        db.session.commit()
-        return doctor
 
     def create(self):
         db.session.add(self)

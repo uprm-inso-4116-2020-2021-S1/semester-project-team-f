@@ -6,11 +6,13 @@ from sqlalchemy.dialects.postgresql import UUID
 class VisitedLocation(db.Model):
     __tablename__ = 'visited_location'
     user_id = db.Column(UUID(as_uuid = True), db.ForeignKey('user.user_id'), unique=True, nullable = False, primary_key=True)
-    location_id = db.Column(db.Integer, db.ForeignKey('location.location_id'), nullable = False)
+    location_id = db.Column(db.Integer, db.ForeignKey('location.location_id'), nullable = False, primary_key=True)
+    date_visited = db.Column(db.Date, default=datetime.now(), primary_key=True)
 
     def __init__(self, **args):
         self.user_id = args.get('user_id')
         self.location_id = args.get('location_id')
+        self.date_visited = args.get('date_visited')
 
     @staticmethod
     def getAllVisitedLocations():

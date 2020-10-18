@@ -12,7 +12,7 @@
     color: rgb(255, 255, 255);
     text-decoration: none;
     font-size: 18px;
-    width: 15%; /* Four equal-width links. If you have two links, use 50%, and 33.33% for three links, etc.. */
+    width: 20%; /* Four equal-width links. If you have two links, use 50%, and 33.33% for three links, etc.. */
     text-align: center; /* If you want the text to be centered */
   }
 
@@ -22,7 +22,7 @@
   }
 
 
-#settings, #logout{
+.navbar_link{
   transition: transform .5s ease;
 }
 
@@ -30,7 +30,7 @@
     width: 6%;
   }
 
-  #settings:hover, #logout:hover{
+  .navbar_link:hover{
     cursor: pointer;
     filter:    brightness(0.9)contrast(0.95)hue-rotate(0deg);
     transition: transform .5s ease;
@@ -42,11 +42,6 @@
     transition: transform .5s ease;
   }
 
-.HoverList hover {
-  cursor: pointer;
-  transition: transform .5s ease;
-  background-color: rgb(99, 97, 97);
-}
   /* Dropdown Button */
 .dropbtn {
   color: white;
@@ -74,11 +69,21 @@
 /* Links inside the dropdown */
 .dropdown-content a {
   color: black;
-  padding: 12px 16px;
   text-decoration: none;
   display: block;
+  width: 100%;
+  padding: 12px 16px;
 }
 
 
 /* Show the dropdown menu on hover */
-.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: orange;
+  display: block;
+  width: 100%;
+  cursor: pointer;
+}

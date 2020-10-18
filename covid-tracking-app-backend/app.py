@@ -5,10 +5,22 @@ from api.handler.user import UserHandler
 from api.handler.patient import PatientHandler
 from api.handler.doctor import DoctorHandler
 from api.handler.medical_office import MedicalOfficeHandler
+from api.handler.location import LocationHandler
 
 @app.route('/', methods=['GET'])
 def home():
     return "Welcome!"
+
+@app.route("/location", methods=['GET', 'POST'])
+def getAllLocationOrCreate():
+    if request.method == 'GET':
+        return LocationHandler.getAllLocations()
+    elif request.method == 'POST':
+        return LocationHandler.createLocation(request.json)
+
+@app.route('/location/<int:lid>', methods=['GET'])
+def getLocationById(lid):
+    return LocationHandler.getLocationById(lid)
 
 @app.route("/address", methods=['GET', 'POST'])
 def getAllAddressOrCreate():
@@ -47,7 +59,7 @@ def getAllDoctorsOrCreate():
     elif request.method == 'POST':
         return DoctorHandler.createDoctor(request.json)
 
-@app.route('/doctors/<int:did>', methods=['GET'])
+@app.route('/doctors/<string:did>', methods=['GET'])
 def getDoctorById(did):
     return DoctorHandler.getDoctorById(did)
 

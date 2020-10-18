@@ -35,6 +35,19 @@ class PatientHandler:
             return jsonify(reason="Server error", error=e.__str__()), 500
 
     @staticmethod
+    def getPatientByIdAndOffice(json):
+        try:
+            patient = Patient.getPatientByIdAndOffice(json)
+            patient_dict = Utilities.to_dict(patient)
+            result = {
+                "message": "Success!",
+                "patient": patient_dict
+            }
+            return jsonify(result), 200
+        except Exception as e:
+            return jsonify(reason="Server error", error=e.__str__()), 500
+
+    @staticmethod
     def getPatientsByDoctor(did):
         try:
             patients = Patient.getPatientsByDoctorId(did)
@@ -54,7 +67,7 @@ class PatientHandler:
         valid_params = Utilities.verify_parameters(json, Patient.REQUIRED_PARAMETERS)
         if valid_params:
             try:
-                user_exists = User.getUserById(json['patient_user_id'])
+                user_exists = User.getUserById(json['user_id'])
                 doctor_exists = Doctor.getDoctorById(json['doctor_id'])
                 if not user_exists:
                     return jsonify(message="The patient you are trying to register doesn't have an account."), 400

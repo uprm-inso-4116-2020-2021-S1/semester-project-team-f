@@ -35,22 +35,26 @@ class CovidCasesHandler:
             return jsonify(reason="Server error", error=e.__str__()), 500
 
     @staticmethod
-    def getCurrentPositiveCases():
+    def getActiveCases():
         try:
-            positive_records = CovidCases.getCurrentPositiveCases()
-            result_list = []
-            for record in positive_records:
-                result_list.append(Utilities.to_dict(record))
+            patients = Patient.getAllPatients()
+            active_cases = []
+            for patient in patients:
+                case = CovidCases.getMostRecentCaseByPatient(patient.user_id)
+                
+                if case.tested_positive:
+                    active_cases.append(Utilities.to_dict(case))
+
             result = {
                 "message": "Success!",
-                "cases": result_list
+                "cases": active_cases
             }
             return jsonify(result), 200
         except Exception as e:
             return jsonify(reason="Server error", error=e.__str__()), 500
 
     @staticmethod
-    def getNegativeCases():             #includes the patients who have never being infected and those that recovered
+    def getNegativeTests():             #includes the patients who have never being infected and those that recovered
         try:
             negative_records = CovidCases.getNegativeCases()
             result_list = []
@@ -67,9 +71,60 @@ class CovidCasesHandler:
     @staticmethod
     def getRecoveredCases():
         try:
-            recovered_records = CovidCases.getRecoveredCases()
+            patients = Patient.getAllPatients()
+            recovered_cases = []
+            for patient in patients:
+                cases = CovidCases.getCasesByPatient(patient.user_id)
+                prev_case = None
+                for patient_case in cases:
+                    if not patient_case.tested_positive and prev_case and prev_case.tested_positive:
+                        recovered_cases.append(Utilities.to_dict(patient_case))
+                    prev_case = patient_case
+
+            result = {
+                "message": "Success!",
+                "cases": recovered_cases
+            }
+            return jsonify(result), 200
+            except Exception as e:
+                return jsonify(reason="Server error", error=e.__str__()), 500
+
+    @staticmethod
+    def getCovidTestsByDoctor(did):
+        try:
+            records = CovidCases.getCasesByDoctor(did)
             result_list = []
-            for record in recovered_records:
+            for record in records:
+                result_list.append(Utilities.to_dict(record))
+            result = {
+                "message": "Success!",
+                "cases": result_list
+            }
+            return jsonify(result), 200
+        except Exception as e:
+            return jsonify(reason="Server error", error=e.__str__()), 500
+
+    @staticmethod
+    def getCovidTestsByoffice(oid):
+        try:
+            records = CovidCases.getCasesByOffice(oid)
+            result_list = []
+            for record in records:
+                result_list.append(Utilities.to_dict(record))
+            result = {
+                "message": "Success!",
+                "cases": result_list
+            }
+            return jsonify(result), 200
+        except Exception as e:
+            return jsonify(reason="Server error", error=e.__str__()), 500
+
+    @staticmethod
+    def getCasesByDoctorAndOffice(json):
+        try:
+            records = CovidCases.getCasesByDoctorAndOffice(json)
+            result_list = []
+            for record in records:
                 result_list.append(Utilities.to_dict(record))
             result = {
                 "message": "Success!",
@@ -81,24 +136,20 @@ class CovidCasesHandler:
 
     @staticmethod
     def addRecord(json):
-        valid_parameters = Utilities.verify_parameters(json, CovidCases.REQUIRED_PARAMETERS)
-        if valid_parameters:   
+        valid_params = Utilities.verify_parameters(json, CovidCases.REQUIRED_PARAMETERS)
+        if valid_params:
             try:
-                recent_case = CovidCases.getMostRecentCaseByPatient(valid_parameters['patient_id'])
-                if recent_case == None or not recent_case.has_covid:
-                    case = CovidCases(**valid_parameters).create()
-                    result = {
-                        "message": "Success!",
-                        "case": Utilities.to_dict(case)
-                    }
-                    return jsonify(result), 200
-                else:
-                    return jsonify(reason="Patient already has an active case."), 400        
-
-            except Exception as e:
-                return jsonify(reason="Server error", error=e.__str__()), 500
+                covid_case = CovidCases(**valid_params).create()
+                case_dict = Utilities.to_dict(covid_case)
+                result = {
+                    "message": "Success!",
+                    "case": case_dict,
+                }
+                return jsonify(result), 201
+            except Exception as err:
+                return jsonify(message="Server error!", error=err.__str__()), 500
         else:
-            return jsonify(reason="Invalid parameters"), 400
+            return jsonify(message="Bad Request!"), 40
 
     @staticmethod
     def deleteRecord(json):

@@ -15,7 +15,7 @@ class User(db.Model):
     email = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(128), nullable=False)
 
-    patient = db.relationship("Patient", foreign_keys='Patient.patient_user_id')
+    patient = db.relationship("Patient", foreign_keys='Patient.user_id')
     doctor = db.relationship("Doctor", foreign_keys='Doctor.user_id')
 
     def __init__(self, **args):

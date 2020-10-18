@@ -2,8 +2,7 @@ export interface MedicalOffice {
     office_id: number;
     owner_id: number;
     office_name: string;
-    address_id: number;
-    attended_cases: number;
+    location_id: number;
   }
   
   export interface MedicalOfficeResponse {

@@ -3,6 +3,8 @@ from datetime import datetime
 from sqlalchemy.dialects.postgresql import UUID
 
 class Location(db.Model):
+    REQUIRED_PARAMETERS = {'lattitude', 'longitude'}
+
     __tablename__ = 'location'
     location_id = db.Column(db.Integer, unique=True, nullable = False, primary_key=True)
     lattitude = db.Column(db.Float, nullable = False)
@@ -24,7 +26,7 @@ class Location(db.Model):
 
     @staticmethod
     def getLocationById(lid):
-        return Location().query.filter_by(user_id=lid).first()
+        return Location().query.filter_by(location_id=lid).first()
 
     @staticmethod
     def getLocationByLattitudeAndLongitude(json):

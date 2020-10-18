@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { AppComponent } from '../app.component';
+import { DoctorService } from '../services/doctor.service';
 
 @Component({
   selector: 'app-login-sidebar',
@@ -13,7 +14,7 @@ export class LoginSidebarComponent implements OnInit {
   public canGoToNextPage: boolean;
   public static justSignedOut: boolean;
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private doctorService: DoctorService) { }
 
   ngOnInit(): void {
     this.effectsInAction = ["slide-down", "fade-in"]; //the default effects when someone enters to the main-page
@@ -36,6 +37,13 @@ export class LoginSidebarComponent implements OnInit {
       let password: string = (<HTMLInputElement>document.querySelector("#inputPassword")).value;
       this.userService.login(email, password).subscribe(res => {
         if(res.message == "Success!"){
+          //lets verify if the user is a doctor
+          this.doctorService.getDoctorById(res.user.user_id).subscribe(res =>{
+            if(res.message == "Success!"){
+              DoctorService.loggedDoctor = res.doctor;
+            }
+          });
+
           //execute the slide-left effect (this is another way of doing so)
           document.querySelector('.sidebar').classList.add('slide-left'); 
 
