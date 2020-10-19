@@ -50,7 +50,7 @@ export class ContactInformationComponent{
         phone_number: '',
         email: '',
         password: '',
-        active: null
+        active: false
       }
     }
   }

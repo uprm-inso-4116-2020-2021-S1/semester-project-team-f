@@ -13,6 +13,8 @@ import { ContactInformationComponent } from '../contact-information/contact-info
 })
 export class AddressInformationComponent{
 
+  
+  canGoToNextPage: boolean;
   canGoToPreviousPage: boolean;
   fadeEffect: string;
   countries: string[];
@@ -26,13 +28,17 @@ export class AddressInformationComponent{
     this.countries = COUNTRIES;
     this.states = STATES;
     this.canGoToPreviousPage = false;
+    this.canGoToNextPage = false;
   }
 
   public goToPreviousPage(): void{
     this.fadeEffect = "fade-out"; //after the users press go back, this effect will be executed
     setTimeout(() => this.canGoToPreviousPage = true, 800);
   }
-
+  public goToNextPage(): void{
+    this.fadeEffect = "fade-out"; //after the users press go next, this effect that will be executed
+    setTimeout(() => this.canGoToNextPage = true, 800);
+  }
   public setAddressInfo(key:string, value:string){
       AddressInformationComponent.address_info[key] = value;
   }
@@ -63,14 +69,8 @@ export class AddressInformationComponent{
         this.userService.createUser(newUser).subscribe(res => {
           
           if(res.message == "Success!"){
-            document.querySelector('.sidebar').classList.add('slide-left') //execute the side-left effect (this is another way of doing so)
-
-            setTimeout(() => {
-              UserService.loggedUser = res.user;
-              localStorage.setItem('currentUserId', res.user.user_id);
-              console.log("User with id of " + res.user.user_id + " has logged in!");
-              AppComponent.changeToNavbar();
-            }, 800);
+            this.goToNextPage()
+            
           }
 
         });

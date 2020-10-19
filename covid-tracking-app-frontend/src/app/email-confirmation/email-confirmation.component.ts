@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { User } from '../models/user'
 
 @Component({
@@ -8,7 +8,7 @@ import { User } from '../models/user'
 })
 export class EmailConfirmationComponent{
 
-  public canGoToPreviousPage: boolean;
+  
   public canGoToNextPage: boolean;
   public fadeEffect: string;
   public static contact_info: User;
@@ -16,14 +16,12 @@ export class EmailConfirmationComponent{
   constructor() { 
     this.initializeUserInfo();
     this.fadeEffect = "fade-in"; //the effect that will be executed as soon as the user enters this component
-    this.canGoToPreviousPage = false;
+    
     this.canGoToNextPage = false;
   }
+  
 
-  public goToPreviousPage(): void{
-    this.fadeEffect = "fade-out"; //after the users press go back, this effect will be executed
-    setTimeout(() => this.canGoToPreviousPage = true, 800);
-  }
+  
 
   public goToNextPage(): void{
     this.fadeEffect = "fade-out"; //after the users press go next, this effect that will be executed
@@ -55,6 +53,6 @@ export class EmailConfirmationComponent{
     }
   }
   public emailConfirm(): void{
-    
+    this.canGoToNextPage = true
   }
 }

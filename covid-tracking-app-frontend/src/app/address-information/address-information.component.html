@@ -41,7 +41,8 @@
 
         <a class="btn btn-lg btn-primary" role="button" (click)="signUp()">Sign up</a>
     </div>
-
+    
     <app-contact-information *ngIf="canGoToPreviousPage"></app-contact-information>
     <app-email-confirmation *ngIf="canGoToNextPage"></app-email-confirmation>
+    
 </div>

@@ -2,7 +2,6 @@
     <div class="form {{fadeEffect}}">
 
         <div>
-            <img id="back" (click) = "goToPreviousPage()"src="../../assets/Back.png" alt="back">
             <a id="title">Email Confirmation</a>
         </div>
         <a class="form-text">Code:</a>
@@ -11,6 +10,4 @@
         <a class="btn btn-lg btn-primary" role="button" (click)="emailConfirm()">Verify</a>
     </div>
 
-    
-    <app-address-information *ngIf="canGoToPreviousPage"></app-address-information>
 </div>
