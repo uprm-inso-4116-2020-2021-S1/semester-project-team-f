@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { User } from '../models/user'
 
 @Component({
-  selector: 'app-contact-information',
-  templateUrl: './contact-information.component.html',
-  styleUrls: ['./contact-information.component.scss']
+  selector: 'app-email-confirmation',
+  templateUrl: './email-confirmation.component.html',
+  styleUrls: ['./email-confirmation.component.scss']
 })
-export class ContactInformationComponent{
+export class EmailConfirmationComponent{
 
   public canGoToPreviousPage: boolean;
   public canGoToNextPage: boolean;
@@ -31,17 +31,17 @@ export class ContactInformationComponent{
   }
   
   public setUserInfo(key:string, value:string){
-    if(key == 'gender_id'){ ContactInformationComponent.contact_info[key] = Number.parseInt(value); }
-    else{ ContactInformationComponent.contact_info[key] = value; }
+    if(key == 'gender_id'){ EmailConfirmationComponent.contact_info[key] = Number.parseInt(value); }
+    else{ EmailConfirmationComponent.contact_info[key] = value; }
   }
   
   public getSavedUserInfo(): User{
-    return ContactInformationComponent.contact_info;
+    return EmailConfirmationComponent.contact_info;
   }
 
   private initializeUserInfo(){
     if(!this.getSavedUserInfo()){
-      ContactInformationComponent.contact_info = {
+      EmailConfirmationComponent.contact_info = {
         user_id: '',
         gender_id: null,
         address_id: null,
@@ -53,5 +53,8 @@ export class ContactInformationComponent{
         active: null
       }
     }
+  }
+  public emailConfirm(): void{
+    
   }
 }

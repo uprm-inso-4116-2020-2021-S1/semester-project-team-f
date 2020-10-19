@@ -39,6 +39,8 @@ class UserHandler:
                 return jsonify(reason="Must fill both email and password fields."), 400
             user = User.getUserByEmail(json['email'])
             user_dic = Utilities.to_dict(user)
+            if user.active == False:
+                return jsonify(reason="Must confirm email address."), 401
             if user and user.password == json['password']:
                 session['logged_in'] = True
                 result = {

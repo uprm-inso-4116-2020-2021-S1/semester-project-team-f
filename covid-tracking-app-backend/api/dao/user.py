@@ -3,7 +3,7 @@ from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
 class User(db.Model):
-    REQUIRED_PARAMETERS = {'gender_id', 'address_id', 'full_name', 'birthdate', 'phone_number', 'email', 'password'}
+    REQUIRED_PARAMETERS = {'gender_id', 'address_id', 'full_name', 'birthdate', 'phone_number', 'email', 'password', 'active' }
     
     __tablename__ = 'user'
     user_id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True, nullable=False)
@@ -11,9 +11,10 @@ class User(db.Model):
     address_id = db.Column(db.Integer, db.ForeignKey('address.address_id'), nullable=False)
     full_name = db.Column(db.String(41), nullable=False)
     birthdate = db.Column(db.Date, nullable = False)
-    phone_number = db.Column(db.String(11), nullable = False)
+    phone_number = db.Column(db.String(13), nullable = False)
     email = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(128), nullable=False)
+    active = db.Column(db.Boolean, nullable=False)
 
     patient = db.relationship("Patient", foreign_keys='Patient.patient_user_id')
     doctor = db.relationship("Doctor", foreign_keys='Doctor.user_id')
@@ -26,6 +27,7 @@ class User(db.Model):
         self.password = args.get('password')
         self.gender_id = args.get('gender_id')
         self.address_id = args.get('address_id')
+        self.active = args.get("active")
 
     @property
     def pk(self):
