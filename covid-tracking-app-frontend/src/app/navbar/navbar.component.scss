@@ -36,12 +36,6 @@
     transition: transform .5s ease;
   }
 
-  #settings:hover, #NewC:hover{
-    cursor: pointer;
-    filter:    brightness(0.9)contrast(0.95)hue-rotate(0deg);
-    transition: transform .5s ease;
-  }
-
   /* Dropdown Button */
 .dropbtn {
   color: white;

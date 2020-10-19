@@ -54,7 +54,7 @@
 /* The sidebar menu */
 .sidebar {
     height: 100%; /* 100% Full-height */
-    width: 275px; /* 200 width - change this with JavaScript */
+    width: 19.5vw; /* 200 width - change this with JavaScript */
     position: fixed; /* Stay in place */
     text-align: center;
     z-index: 1; /* Stay on top */
@@ -66,27 +66,27 @@
   
   /* The sidebar links */
   .sidebar a {
-    padding: 8px;
+    padding: 0.4vw;
     text-decoration: none;
-    font-size: 16px;
+    font-size: 1.2vw;
     color: white;
     margin: auto;
     display: block;
   }
 
   .form{
-    padding: 10px;
+    padding: 1vw;
     text-align: left;
     .form-control {
-        width: 80%;
+        width: 15vw;
         box-sizing: border-box;
-        font-size: 16px;
+        font-size: 1vw;
         margin: auto;
         display: block;
     }
 
     .form-text{
-        margin-left: 22px;
+        margin-left: 1vw;
     }
 }
 
@@ -99,21 +99,19 @@
     color:white;
     border-color: #FF8A00;
     background-color: #FF8A00;
-    width: 50%;
+    width: 10vw;
 }
 
 .btn-primary:hover{
     color:white;
     border-color: #f08000;
     background-color: #f08000;
-    width: 50%;
 }
 
 .btn-primary:active{
     color:white;
     border-color: #cc6d00 !important;
     background-color: #cc6d00 !important;
-    width: 50%;
 }
 
 #createAccount{
