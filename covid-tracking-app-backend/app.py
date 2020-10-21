@@ -6,7 +6,6 @@ from api.handler.patient import PatientHandler
 from api.handler.doctor import DoctorHandler
 from api.handler.medical_office import MedicalOfficeHandler
 from api.dao.user import User
-#from flaskblog import mail
 from flask_mail import Message
 
 @app.route('/', methods=['GET'])

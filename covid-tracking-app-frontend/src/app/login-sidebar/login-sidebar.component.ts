@@ -35,6 +35,11 @@ export class LoginSidebarComponent implements OnInit {
       let email: string = (<HTMLInputElement>document.querySelector("#inputEmail")).value;
       let password: string = (<HTMLInputElement>document.querySelector("#inputPassword")).value;
       this.userService.login(email, password).subscribe(res => {
+        if(res.message == "Inactive Account"){
+          alert('Account not active. Check Email for activation link.')
+          this.userService.sendUserActivation(email).subscribe(res =>{
+          });
+        }
         if(res.message == "Success!"){
           //execute the slide-left effect (this is another way of doing so)
           document.querySelector('.sidebar').classList.add('slide-left'); 

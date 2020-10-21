@@ -70,9 +70,10 @@ export class AddressInformationComponent{
           
           if(res.message == "Success!"){
             this.userService.sendUserActivation(newUser.email).subscribe(res =>{
-
+              this.fadeEffect = "fade-out"; //after the users press go next, this effect that will be executed
+              setTimeout(() => this.canGoToNextPage = true, 800);
+              alert('Signup Success! Activate your account using the link we sent to your email.')
             });
-            AppComponent.changeToLogin
             
           }
 

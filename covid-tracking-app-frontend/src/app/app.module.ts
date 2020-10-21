@@ -9,7 +9,6 @@ import { AppComponent } from './app.component';
 import { LoginSidebarComponent } from './login-sidebar/login-sidebar.component';
 import { ContactInformationComponent } from './contact-information/contact-information.component';
 import { AddressInformationComponent } from './address-information/address-information.component';
-import { EmailConfirmationComponent } from './email-confirmation/email-confirmation.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MapComponent } from './map/map.component';
@@ -22,7 +21,6 @@ import { AddPatientInformationComponent } from './add-patient-information/add-pa
     LoginSidebarComponent,
     ContactInformationComponent,
     AddressInformationComponent,
-    EmailConfirmationComponent,
     NavbarComponent,
     MapComponent,
     AddPatientInformationComponent,
@@ -38,8 +36,7 @@ import { AddPatientInformationComponent } from './add-patient-information/add-pa
   bootstrap: [AppComponent, 
     LoginSidebarComponent,
     ContactInformationComponent,
-    AddressInformationComponent,
-    EmailConfirmationComponent
+    AddressInformationComponent
   ]
 })
 export class AppModule { }

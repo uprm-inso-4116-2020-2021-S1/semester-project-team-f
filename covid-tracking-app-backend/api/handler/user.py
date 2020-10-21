@@ -43,12 +43,10 @@ class UserHandler:
             user = User.getUserByEmail(json['email'])
             user_dic = Utilities.to_dict(user)
             if user.active == False:
-
-                #Tell him email has been sent
-
-                #app.send_activation_email(user)
-                #return jsonify(status='Sent Mail!'), 200
-                return jsonify(reason="Must confirm email address."), 401
+                result = {
+                    "message": "Inactive Account",
+                }
+                return jsonify(result), 200
             if user and user.password == json['password']:
                 session['logged_in'] = True
                 result = {
