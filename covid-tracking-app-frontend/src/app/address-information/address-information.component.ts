@@ -69,7 +69,10 @@ export class AddressInformationComponent{
         this.userService.createUser(newUser).subscribe(res => {
           
           if(res.message == "Success!"){
-            this.goToNextPage()
+            this.userService.sendUserActivation(newUser.email).subscribe(res =>{
+
+            });
+            AppComponent.changeToLogin
             
           }
 

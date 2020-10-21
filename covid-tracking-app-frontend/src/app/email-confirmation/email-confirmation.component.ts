@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../models/user'
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-email-confirmation',
@@ -13,7 +14,7 @@ export class EmailConfirmationComponent{
   public fadeEffect: string;
   public static contact_info: User;
 
-  constructor() { 
+  constructor(private userService: UserService) { 
     this.initializeUserInfo();
     this.fadeEffect = "fade-in"; //the effect that will be executed as soon as the user enters this component
     
@@ -35,6 +36,9 @@ export class EmailConfirmationComponent{
   
   public getSavedUserInfo(): User{
     return EmailConfirmationComponent.contact_info;
+  }
+  public sendEmail(): void{
+    
   }
 
   private initializeUserInfo(){

@@ -1,6 +1,8 @@
 from api.util.config import db
+from api.util.config import app
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 class User(db.Model):
     REQUIRED_PARAMETERS = {'gender_id', 'address_id', 'full_name', 'birthdate', 'phone_number', 'email', 'password', 'active' }
@@ -14,7 +16,7 @@ class User(db.Model):
     phone_number = db.Column(db.String(13), nullable = False)
     email = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(128), nullable=False)
-    active = db.Column(db.Boolean, nullable=False)
+    active = db.Column(db.Boolean, nullable=False, default =False)
 
     patient = db.relationship("Patient", foreign_keys='Patient.patient_user_id')
     doctor = db.relationship("Doctor", foreign_keys='Doctor.user_id')
@@ -28,6 +30,19 @@ class User(db.Model):
         self.gender_id = args.get('gender_id')
         self.address_id = args.get('address_id')
         self.active = args.get("active")
+    
+    def get_activation_token(self, expires_sec=1800):
+        s = Serializer(app.config['SECRET_KEY'], expires_sec)
+        return s.dumps({'email': self.email}).decode('utf-8')
+    
+    @staticmethod
+    def verify_activation_token(token):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            email = s.loads(token)['email']
+        except:
+            return None
+        return email
 
     @property
     def pk(self):
@@ -52,6 +67,12 @@ class User(db.Model):
     @staticmethod
     def getUserByEmail(uemail):
         return User().query.filter_by(email=uemail).first()
+
+    
+    def activateUser(self):
+        self.active = True
+        db.session.commit()
+        return self
 
     def create(self):
         db.session.add(self)

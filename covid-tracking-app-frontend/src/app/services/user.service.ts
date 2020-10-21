@@ -45,6 +45,12 @@ export class UserService {
     .pipe(catchError(this._handleError))
   }
   
+  public sendUserActivation(email:String): Observable<UserResponse>{
+    let json = {
+      "email": email
+    }
+    return this.httpClient.post<UserResponse>(API_URL + `account_activation` , json)
+  }
   public login(email: String, password: String): Observable<UserResponse> {
     let json = {
       "email": email,
