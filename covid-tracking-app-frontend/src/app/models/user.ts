@@ -7,6 +7,7 @@ export interface User {
     phone_number: string;
     email: string;
     password: string;
+    active: boolean;
   }
   
   export interface UserResponse {

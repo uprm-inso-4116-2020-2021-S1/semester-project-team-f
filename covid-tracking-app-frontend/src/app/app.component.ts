@@ -8,7 +8,6 @@ import { Component } from '@angular/core';
 export class AppComponent{
   private static hasLoggedIn: boolean;
   private static addingPatient: boolean;
-
   title = 'Coronavirus Tracking App';
 
   public isLoggedIn() { return AppComponent.hasLoggedIn; }

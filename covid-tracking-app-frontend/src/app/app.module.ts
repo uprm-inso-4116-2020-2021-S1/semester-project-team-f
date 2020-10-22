@@ -14,6 +14,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { MapComponent } from './map/map.component';
 import { AddPatientInformationComponent } from './add-patient-information/add-patient-information.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
