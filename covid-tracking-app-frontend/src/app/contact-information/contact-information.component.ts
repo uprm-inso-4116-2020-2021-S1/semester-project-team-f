@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
 import { User } from '../models/user'
-import { CreateAccountSecondComponent } from '../create-account-second/create-account-second.component';
 
 @Component({
-  selector: 'app-create-account-first',
-  templateUrl: './create-account-first.component.html',
-  styleUrls: ['./create-account-first.component.scss']
+  selector: 'app-contact-information',
+  templateUrl: './contact-information.component.html',
+  styleUrls: ['./contact-information.component.scss']
 })
-export class CreateAccountFirstComponent{
+export class ContactInformationComponent{
 
   public canGoToPreviousPage: boolean;
   public canGoToNextPage: boolean;
@@ -32,17 +31,17 @@ export class CreateAccountFirstComponent{
   }
   
   public setUserInfo(key:string, value:string){
-    if(key == 'gender_id'){ CreateAccountFirstComponent.contact_info[key] = Number.parseInt(value); }
-    else{ CreateAccountFirstComponent.contact_info[key] = value; }
+    if(key == 'gender_id'){ ContactInformationComponent.contact_info[key] = Number.parseInt(value); }
+    else{ ContactInformationComponent.contact_info[key] = value; }
   }
   
   public getSavedUserInfo(): User{
-    return CreateAccountFirstComponent.contact_info;
+    return ContactInformationComponent.contact_info;
   }
 
   private initializeUserInfo(){
     if(!this.getSavedUserInfo()){
-      CreateAccountFirstComponent.contact_info = {
+      ContactInformationComponent.contact_info = {
         user_id: '',
         gender_id: null,
         address_id: null,
@@ -50,7 +49,8 @@ export class CreateAccountFirstComponent{
         birthdate: null,
         phone_number: '',
         email: '',
-        password: ''
+        password: '',
+        active: false
       }
     }
   }

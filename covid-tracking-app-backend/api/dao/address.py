@@ -2,7 +2,7 @@ from api.util.config import db
 
 
 class Address(db.Model):
-    REQUIRED_PARAMETERS = {'country_name', 'region_name', 'street_address', 'city_name', 'zip_code'}
+    REQUIRED_PARAMETERS = {'country_name', 'street_address', 'city_name', 'zip_code'}
 
     __tablename__ = 'address'
     address_id = db.Column(db.Integer, primary_key=True)

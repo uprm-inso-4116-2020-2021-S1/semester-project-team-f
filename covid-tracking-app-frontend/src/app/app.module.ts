@@ -3,24 +3,27 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from './services/user.service';
 import { AddressService } from './services/address.service';
+import { MedicalOfficeService } from './services/medical-office.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginSidebarComponent } from './login-sidebar/login-sidebar.component';
-import { CreateAccountFirstComponent } from './create-account-first/create-account-first.component';
-import { CreateAccountSecondComponent } from './create-account-second/create-account-second.component';
-import { from } from 'rxjs';
+import { ContactInformationComponent } from './contact-information/contact-information.component';
+import { AddressInformationComponent } from './address-information/address-information.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MapComponent } from './map/map.component';
+import { AddPatientInformationComponent } from './add-patient-information/add-patient-information.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginSidebarComponent,
-    CreateAccountFirstComponent,
-    CreateAccountSecondComponent,
+    ContactInformationComponent,
+    AddressInformationComponent,
     NavbarComponent,
     MapComponent,
+    AddPatientInformationComponent,
   ],
   imports: [
     BrowserModule,
@@ -29,11 +32,11 @@ import { MapComponent } from './map/map.component';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [AddressService, UserService],
+  providers: [AddressService, UserService, MedicalOfficeService],
   bootstrap: [AppComponent, 
     LoginSidebarComponent,
-    CreateAccountFirstComponent,
-    CreateAccountSecondComponent
+    ContactInformationComponent,
+    AddressInformationComponent
   ]
 })
 export class AppModule { }

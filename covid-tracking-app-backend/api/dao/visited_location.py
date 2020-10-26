@@ -1,20 +1,17 @@
 from api.util.config import db
 from datetime import datetime
+from api.dao.location import Location
 from sqlalchemy.dialects.postgresql import UUID
 
 class VisitedLocation(db.Model):
     __tablename__ = 'visited_location'
-    lattitude = db.Column(db.Float, nullable = False)
-    longitude = db.Column(db.Float, nullable = False)
-    closest_address_id = db.Column(db.Integer,  db.ForeignKey('address.address_id'), nullable = False)
     user_id = db.Column(UUID(as_uuid = True), db.ForeignKey('user.user_id'), unique=True, nullable = False, primary_key=True)
-    date_visited = db.Column(db.Date, nullable = False)
+    location_id = db.Column(db.Integer, db.ForeignKey('location.location_id'), nullable = False, primary_key=True)
+    date_visited = db.Column(db.Date, default=datetime.now(), primary_key=True)
 
     def __init__(self, **args):
-        self.lattitude = args.get('lattitude')
-        self.longitude = args.get('longitude')
-        self.closest_address_id = args.get('closest_address_id')
         self.user_id = args.get('user_id')
+        self.location_id = args.get('location_id')
         self.date_visited = args.get('date_visited')
 
     @staticmethod
@@ -23,11 +20,11 @@ class VisitedLocation(db.Model):
 
     @staticmethod
     def getLocationsVisitedByUserId(uid):
-        return VisitedLocation().query.filter_by(user_id=uid).all()
+        return VisitedLocation().query.join(Location, Location.location_id==VisitedLocation.location_id).filter_by(user_id=uid).all()
     
     @staticmethod
     def getVisitedLocationsRelativeToAddress(aid):
-        return VisitedLocation().query.filter_by(closest_address_id=aid).all()
+        return VisitedLocation().query.join(Location, Location.location_id==VisitedLocation.location_id).filter_by(closest_address_id=aid).all()
 
     def create(self):
         db.session.add(self)
