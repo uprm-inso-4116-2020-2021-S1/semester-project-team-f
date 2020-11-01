@@ -12,7 +12,8 @@ import { AppComponent } from '../app.component';
 })
 export class DoctorService {
 
-  public static loggedDoctor: Doctor;
+  public static loggedDoctorId: string;
+  public static doctorOfficesId: Set<number>;
 
   constructor(private httpClient: HttpClient, private router: Router) { }
 

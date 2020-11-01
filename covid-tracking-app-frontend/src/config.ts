@@ -6,6 +6,11 @@ export const ICON_TYPE = {
         url: "assets/doctor.png", // url
         scaledSize: new google.maps.Size(50, 50), // scaled size
         labelOrigin: new google.maps.Point(25, 60)
+    },
+    WORK_ICON: {
+        url: "assets/work.png",
+        scaledSize: new google.maps.Size(50, 50), // scaled size
+        labelOrigin: new google.maps.Point(25, 60)
     }
 }
 
