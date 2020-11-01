@@ -34,21 +34,9 @@ export class NavbarComponent implements OnInit {
     }, 800); //wait 800ms for the effect to take effect
   }
 
-  public addOrRemovePatient(): void{
-    document.querySelector('.navbar').classList.add('slide-up') //execute the slide-up effect (this is another way of doing so)
-    AppComponent.changeToAddPatient();
+  public addOrRemovePatient(): void{ AppComponent.changeToAddPatient(); }
+  public patientInformation(): void{ AppComponent.changePatientInformation(); }
+  public contactInformation(): void{ AppComponent.changeContactInformation(); }
+  public addressInformation(): void{ AppComponent.changeAddressInformation(); } 
 
-  }
-
-  public PatientInformation(): void{
-    document.querySelector('.navbar').classList.add('slide-up') //execute the slide-up effect (this is another way of doing so)
-    AppComponent.changePatientInformation();
-
-  }
-
-  public AccountInformation(): void{
-    document.querySelector('.navbar').classList.add('slide-up') //execute the slide-up effect (this is another way of doing so)
-    AppComponent.changeAccountInformation();
-
-  }
 }

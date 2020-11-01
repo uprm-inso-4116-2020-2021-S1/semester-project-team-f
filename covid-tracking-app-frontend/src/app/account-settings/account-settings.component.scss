@@ -1,31 +1,16 @@
-.form-control {
-    width: 15vw;
-    box-sizing: border-box;
-    font-size: 1vw;
-    margin: auto;
-    display: block;
-  }
 
-  .btn-primary{
-    margin-top: 30px;
-    position: center;
-    color:white;
-    border-color: #FF8A00;
-    background-color: #FF8A00;
-    width: 10vw;
-}
-.form{
-    margin-left: auto;
-    text-align: left;
-    font-size: small;
-}
-
-.Button{
-  margin-top: 150px;
+.form a{
+  padding: 0.45vw;
+  font-size: 1vw;
+  text-align: justify;
 }
 
 #title{
   font-family: 'Poppins';
-  font-size: 1.35vw;
+  font-size: 1.8vw;
   text-align: center;
+}
+
+form{
+  margin-bottom: 0.6vw;
 }

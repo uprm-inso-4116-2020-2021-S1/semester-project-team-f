@@ -50,9 +50,12 @@ def getAllUsersOrCreate():
     elif request.method == 'POST':
         return UserHandler.createUser(request.json)
 
-@app.route('/users/<string:uid>', methods=['GET'])
-def getUserById(uid):
-    return UserHandler.getUserById(uid)
+@app.route('/users/<string:uid>', methods=['GET', 'PUT'])
+def getUserByIdOrUpdate(uid):
+    if request.method == 'GET':
+        return UserHandler.getUserById(uid)
+    elif request.method == 'PUT':
+        return UserHandler.updateUserInfo(uid, request.json)
 
 @app.route('/doctors', methods=['GET', 'POST'])
 def getAllDoctorsOrCreate():

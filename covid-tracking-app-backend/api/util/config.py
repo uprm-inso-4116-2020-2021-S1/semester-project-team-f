@@ -6,7 +6,7 @@ from flask_mail import Mail
 db_url = 'localhost:5432'
 db_name = 'covid_tracking_app_db'
 db_user = 'team-f'
-db_password = 'digimon5'
+db_password = 'pay-respect'
 
 DEV_DB = f'postgresql://{db_user}:{db_password}@{db_url}/{db_name}'
 
