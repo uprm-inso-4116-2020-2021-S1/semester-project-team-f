@@ -1,0 +1,28 @@
+<div class="sidebar slide-right">
+
+    <div class="form">
+        
+        <div>
+            <img id="back" (click) = "returnToNavbar()"src="../../assets/Back.png" alt="back">
+            <a id="title">Contact Information</a>
+        </div>
+
+        <a>Phone number: </a>
+        <form><input type="tel" id="phone_number" class="form-control" value="{{getLoggedInUser().phone_number}}" name="phone" 
+            placeholder="Ex: 787-872-0000" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" ></form>
+
+        <a>Email address: </a>
+        <form><input type="email" id="email" class="form-control" value="{{getLoggedInUser().email}}"></form>
+
+        <a>If you wish to change your password, please confirm your old password: </a>
+        <form><input type="password" id="curr_password" class="form-control"></form>
+        <a>New Password: </a>
+        <form><input type="password" id="new_password" class="form-control"></form>
+    </div>
+
+        <a class="btn btn-lg btn-primary" role="button" (click)="updateContactInfo()">Save changes</a>
+
+
+
+
+</div>

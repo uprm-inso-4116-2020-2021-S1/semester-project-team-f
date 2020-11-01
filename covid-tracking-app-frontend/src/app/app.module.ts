@@ -13,6 +13,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MapComponent } from './map/map.component';
 import { AddPatientInformationComponent } from './add-patient-information/add-patient-information.component';
+import { PatientInformationComponent } from './patient-information/patient-information.component';
+import { AccountSettingsComponent } from './account-settings/account-settings.component';
+
 
 @NgModule({
   declarations: [
@@ -23,6 +26,8 @@ import { AddPatientInformationComponent } from './add-patient-information/add-pa
     NavbarComponent,
     MapComponent,
     AddPatientInformationComponent,
+    PatientInformationComponent,
+    AccountSettingsComponent,
   ],
   imports: [
     BrowserModule,

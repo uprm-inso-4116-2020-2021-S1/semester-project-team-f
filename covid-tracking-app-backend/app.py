@@ -1,11 +1,13 @@
-from flask import request
-from api.util.config import app
+from flask import request, url_for, redirect
+from api.util.config import app, mail
 from api.handler.address import AddressHandler
 from api.handler.user import UserHandler
 from api.handler.patient import PatientHandler
 from api.handler.doctor import DoctorHandler
 from api.handler.medical_office import MedicalOfficeHandler
 from api.handler.location import LocationHandler
+from api.dao.user import User
+from flask_mail import Message
 
 @app.route('/', methods=['GET'])
 def home():
@@ -48,9 +50,12 @@ def getAllUsersOrCreate():
     elif request.method == 'POST':
         return UserHandler.createUser(request.json)
 
-@app.route('/users/<string:uid>', methods=['GET'])
-def getUserById(uid):
-    return UserHandler.getUserById(uid)
+@app.route('/users/<string:uid>', methods=['GET', 'PUT'])
+def getUserByIdOrUpdate(uid):
+    if request.method == 'GET':
+        return UserHandler.getUserById(uid)
+    elif request.method == 'PUT':
+        return UserHandler.updateUserInfo(uid, request.json)
 
 @app.route('/doctors', methods=['GET', 'POST'])
 def getAllDoctorsOrCreate():
@@ -74,6 +79,19 @@ def getAllPatientsOrCreate():
 def getPatientById(pid):
     return PatientHandler.getPatientById(pid)
 
+
+def send_activation_email(user):
+    token = user.get_activation_token()
+    msg = Message('Email Confirmation Code',
+                    sender='thecovidtracker@gmail.com',
+                    recipients=[user.email])
+    msg.body = f'''To activate your account visit the following link:
+{url_for('activation_token', token=token, _external=True)}
+
+If you did not make this account then simply ignore this email.
+'''
+    mail.send(msg)
+
 @app.route('/login', methods=['POST'])
 def login():
     return UserHandler.login(request.json)
@@ -81,6 +99,24 @@ def login():
 @app.route('/logout', methods=['GET'])
 def logout():
     return UserHandler.logout()
+
+@app.route('/account_activation', methods=['GET', 'POST'])
+def activation_request():
+    json = request.json
+    user =   User.getUserByEmail(json['email'])
+    send_activation_email(user)
+    return UserHandler.sentEmail()
+
+@app.route('/account_activation/<token>', methods=['GET', 'POST'])
+def activation_token(token):
+    #You should check if user is logged in MAYBE
+    user = User.getUserByEmail(User.verify_activation_token(token))
+    if user is None:
+        pass
+        #You should print a message saying token is not valid or expired
+    UserHandler.activateAccount(user)
+    return redirect('http://localhost:4200')
+    #return UserHandler.activateAccount(user)
 
 if __name__ == '__main__':
     app.run()

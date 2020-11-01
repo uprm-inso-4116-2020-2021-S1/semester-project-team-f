@@ -1,5 +1,5 @@
-<div class="sidebar">
-    <div class="form {{fadeEffect}}">
+<div class="sidebar {{fadeEffect1}}">
+    <div class="form {{fadeEffect2}}">
 
         <div>
             <img id="back" (click) = "goToPreviousPage()"src="../../assets/Back.png" alt="back">
@@ -13,8 +13,8 @@
 
         <a class="form-text">Country/region:</a>
         <a>
-            <select name="countries" id="countries" class="form-control"
-            (input) = "setAddressInfo('country_name',$event.target.value)"  value="{{getSavedAddressInfo().country_name}}">
+            <select [(ngModel)]="getSavedAddressInfo().country_name" name="countries" id="countries" class="form-control"
+            (input) = "setAddressInfo('country_name',$event.target.value)">
                 <option *ngFor = "let country of countries" value="{{country}}">{{country}}</option>              
             </select>
         </a>
@@ -39,9 +39,12 @@
             (input) = "setAddressInfo('zip_code',$event.target.value)" value="{{getSavedAddressInfo().zip_code}}"
             required></a>
 
-        <a class="btn btn-lg btn-primary" role="button" (click)="signUp()">Sign up</a>
+        <a *ngIf="!isLoggedIn(); else editInfo" class="btn btn-lg btn-primary" role="button" (click)="signUp()">Sign up</a>
+
+        <ng-template #editInfo>
+            <a class="btn btn-lg btn-primary" role="button" (click)="updateAddress()">Save changes</a>
+        </ng-template>
     </div>
-
+    <app-login-sidebar *ngIf="canGoToNextPage"></app-login-sidebar>
     <app-contact-information *ngIf="canGoToPreviousPage"></app-contact-information>
-
 </div>

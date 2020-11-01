@@ -33,6 +33,13 @@ export class UserService {
       .pipe(catchError(this._handleError))
   }
 
+  public updateContactInfo(user: User): Observable<any> {
+    return this.httpClient
+      .put(API_URL + `users/${user.user_id}`, user)
+      .pipe(catchError(this._handleError))
+
+  }
+
   public getAllUsers(): Observable<UsersResponse> {
     return this.httpClient
     .get<UsersResponse>(API_URL + `users`)
@@ -45,6 +52,12 @@ export class UserService {
     .pipe(catchError(this._handleError))
   }
   
+  public sendUserActivation(email:String): Observable<UserResponse>{
+    let json = {
+      "email": email
+    }
+    return this.httpClient.post<UserResponse>(API_URL + `account_activation` , json)
+  }
   public login(email: String, password: String): Observable<UserResponse> {
     let json = {
       "email": email,

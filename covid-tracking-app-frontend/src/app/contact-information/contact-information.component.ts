@@ -49,7 +49,8 @@ export class ContactInformationComponent{
         birthdate: null,
         phone_number: '',
         email: '',
-        password: ''
+        password: '',
+        active: false
       }
     }
   }

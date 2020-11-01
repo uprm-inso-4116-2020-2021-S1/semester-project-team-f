@@ -5,9 +5,20 @@
 <div *ngIf="isLoggedIn(); else loginSidebar">
     <app-navbar></app-navbar>
 </div>
-
 <div *ngIf="isAddingPatient();">
     <app-add-patient-information></app-add-patient-information>
+</div>
+
+<div *ngIf="isSeeingInformation();">
+    <app-patient-information></app-patient-information>
+</div>
+
+<div *ngIf="isChangingContactInformation();">
+    <app-account-settings></app-account-settings>
+</div>
+
+<div *ngIf="isChangingAddressInformation();">
+    <app-address-information></app-address-information>
 </div>
 
 <ng-template #loginSidebar>

@@ -4,20 +4,22 @@
         <b id="greeting">Hello, {{getLoggedInUser().full_name}}</b>
     </a>
 
-    <a class="navbar_link">
+    <a class="dropdown navbar_link">
         <img id = "settings_icon" src="../../assets/settings.png">
-        Account Settings
+        <a class="dropbtn">Account Settings</a>
+        <div class="dropdown-content">
+          <a (click) = "contactInformation()" >Change contact information</a>
+          <a (click) = "addressInformation()" >Change address information</a>
+        </div>
     </a>
 
-    <div *ngIf="getLoggedInDoctor() != null">
-        <div class="dropdown navbar_link">
+    <a class="dropdown navbar_link">
             <a class="dropbtn">Patient Actions</a>
             <div class="dropdown-content">
               <a (click) = "addOrRemovePatient()" >Add/Remove Patient</a>
-              <a>Patient Information</a>
+              <a (click) = "patientInformation()" >Patient Information</a>
             </div>
-        </div>    
-    </div>
+    </a>      
 
     <!-- We need to find a way to avoid the redundancy in those if statements if it is possible. If I tried to attach the
         component on the if statement of the line 12, a bug ocurred-->
