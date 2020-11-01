@@ -6,18 +6,16 @@
 
     <a class="navbar_link">
         <img id = "settings_icon" src="../../assets/settings.png">
-        Account Settings
+        <a (click) = "AccountInformation()" >Account Settings</a>
     </a>
 
-    <div *ngIf="getLoggedInDoctor() != null">
-        <div class="dropdown navbar_link">
+    <div class="dropdown navbar_link">
             <a class="dropbtn">Patient Actions</a>
             <div class="dropdown-content">
               <a (click) = "addOrRemovePatient()" >Add/Remove Patient</a>
-              <a>Patient Information</a>
+              <a (click) = "PatientInformation()" >Patient Information</a>
             </div>
-        </div>    
-    </div>
+        </div>      
 
     <!-- We need to find a way to avoid the redundancy in those if statements if it is possible. If I tried to attach the
         component on the if statement of the line 12, a bug ocurred-->

@@ -40,4 +40,15 @@ export class NavbarComponent implements OnInit {
 
   }
 
+  public PatientInformation(): void{
+    document.querySelector('.navbar').classList.add('slide-up') //execute the slide-up effect (this is another way of doing so)
+    AppComponent.changePatientInformation();
+
+  }
+
+  public AccountInformation(): void{
+    document.querySelector('.navbar').classList.add('slide-up') //execute the slide-up effect (this is another way of doing so)
+    AppComponent.changeAccountInformation();
+
+  }
 }

@@ -1,0 +1,47 @@
+<div class="sidebar">
+
+    <div class="form">
+        <img id="back" (click) = "ReturntoNav()"src="../../assets/Back.png" alt="back">
+        <a id="title"> Account Settings</a>
+    </div>
+
+    <div class="PhoneNumber">
+        <a>Current Phone number: </a>
+        <div class="CurrentPhone">
+            <p>  {{getLoggedInUser().phone_number}}</p>
+        </div>
+        <a>Change Phone number: </a>
+        <form>
+            <input type="Phone" id="PhoneNumber" class="form-control">
+        </form>
+
+    </div>
+
+    <div class="Email">
+        <a>Current Email: </a>
+        <div class="CurrentEMAIL">
+            <p> {{getLoggedInUser().email}}</p>
+        </div>
+        <a>Change Email: </a>
+        <form>
+            <input type="Email" id="CurrEmail" class="form-control">
+        </form>
+
+    </div>
+    
+    <div class="Password">
+        <a>Change Password: </a>
+        <form>
+            <input type="pass" id="Password" class="form-control">
+        </form>
+
+    </div>
+  
+    <div class ="Save">
+
+        <a class="btn btn-lg btn-primary" role="button" (click)="ReturntoNav()">Save changes</a>
+
+    </div>
+
+
+</div>
