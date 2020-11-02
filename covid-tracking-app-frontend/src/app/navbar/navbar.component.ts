@@ -34,9 +34,10 @@ export class NavbarComponent implements OnInit {
     }, 800); //wait 800ms for the effect to take effect
   }
 
-  public addOrRemovePatient(): void{ AppComponent.changeToAddPatient(); }
+  public addOrRemovePatient(): void{ AppComponent.changeAddRemovePatients(); }
   public patientInformation(): void{ AppComponent.changePatientInformation(); }
   public contactInformation(): void{ AppComponent.changeContactInformation(); }
   public addressInformation(): void{ AppComponent.changeAddressInformation(); } 
+  public helpInformation(): void{AppComponent.seeHelpInfo();}
 
 }
