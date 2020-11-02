@@ -4,6 +4,7 @@ import { MedicalOfficeService } from '../services/medical-office.service';
 import { AddressService } from '../services/address.service';
 import { LocationService } from '../services/location.service'
 import { Location } from '../models/location';
+import { DoctorService } from '../services/doctor.service';
 
 @Component({
   selector: 'app-map',
@@ -21,7 +22,8 @@ export class MapComponent implements AfterViewInit {
   private lat = 18.196512;
   private lng = -66.4224762;
 
-  private markers: google.maps.Marker[] = [];
+  private static offices_mapping: Map<string, number>;
+  private static markers: google.maps.Marker[] = [];
 
   coordinates = new google.maps.LatLng(this.lat, this.lng);
 
@@ -39,11 +41,14 @@ export class MapComponent implements AfterViewInit {
   }
 
   markOfficeLocations(){
+    MapComponent.offices_mapping = new Map<string, number>();
     this.medicalOfficeService.getAllMedicalOffices().subscribe(res =>{
       for(let office of res.medical_offices){
         this.locationService.getLocationById(office.location_id).subscribe(res =>{
           let location: Location = res.location;
           let coordinates = new google.maps.LatLng(location.lattitude, location.longitude);
+
+          MapComponent.offices_mapping.set(office.office_name, office.office_id);
 
           this.findAndMarkPlace(coordinates, office.office_name, ICON_TYPE.DOCTOR_ICON);
         });
@@ -87,14 +92,21 @@ export class MapComponent implements AfterViewInit {
       title: marker_name
     });
 
-    this.markers.push(marker)
+    MapComponent.markers.push(marker)
   }
 
     // Shows office markers currently in the array.
-    private showOrHideOfficeMarkers(map: google.maps.Map | null) {
-      for (let i = 0; i < this.markers.length; i++) {
-        if(this.markers[i].getIcon() == ICON_TYPE.DOCTOR_ICON)
-            this.markers[i].setMap(map);
-      }
+    public static showWorkingPlacesOnly(): void {
+      
+      for (let i = 0; i < this.markers.length; i++) { 
+        let office_name: string = this.markers[i].getLabel().text;
+        let office_id = this.offices_mapping.get(office_name);
+
+        if(DoctorService.doctorOfficesId.has(office_id)){ this.markers[i].setIcon(ICON_TYPE.WORK_ICON); }
+        else{ this.markers[i].setMap(null); } //hide label from the map
+       }
+
+       alert("Please select the office that you wish to manage...")
+
     }
 }

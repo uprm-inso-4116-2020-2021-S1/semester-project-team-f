@@ -6,7 +6,7 @@ export interface Doctor {
   
   export interface DoctorResponse {
     message: String;
-    doctor: Doctor;
+    doctor: Doctor[];
   }
   
   export interface DoctorsResponse {

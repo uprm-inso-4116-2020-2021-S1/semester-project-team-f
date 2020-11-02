@@ -45,7 +45,13 @@ export class LoginSidebarComponent implements OnInit {
           //lets verify if the user is a doctor
           this.doctorService.getDoctorById(res.user.user_id).subscribe(res =>{
             if(res.message == "Success!"){
-              DoctorService.loggedDoctor = res.doctor;
+              DoctorService.loggedDoctorId = res.doctor[0].user_id;
+              DoctorService.doctorOfficesId = new Set<number>();
+
+              for (let i = 0; i < res.doctor.length; i++){
+                DoctorService.doctorOfficesId.add(res.doctor[i].office_id);
+              }
+
             }
           });
 

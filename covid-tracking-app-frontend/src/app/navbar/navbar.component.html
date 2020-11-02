@@ -23,7 +23,7 @@
 
     <!-- We need to find a way to avoid the redundancy in those if statements if it is possible. If I tried to attach the
         component on the if statement of the line 12, a bug ocurred-->
-    <div *ngIf="getLoggedInDoctor() != null">
+    <div *ngIf="doctorIsLogged()">
         <a id="new_case">
             New COVID-19 case
         </a>
