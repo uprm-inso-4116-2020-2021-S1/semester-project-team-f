@@ -23,7 +23,7 @@ class Doctor(db.Model):
 
     @staticmethod
     def getDoctorById(did):
-        return Doctor().query.filter_by(user_id=did).first()
+        return Doctor().query.filter_by(user_id=did).all()
     
     @staticmethod
     def getDoctorsByOffice(oid):

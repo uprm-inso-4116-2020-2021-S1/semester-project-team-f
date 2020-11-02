@@ -23,11 +23,13 @@ class DoctorHandler:
     @staticmethod
     def getDoctorById(did):
         try:
-            doctor = Doctor.getDoctorById(did)
-            doctor_dict = Utilities.to_dict(doctor)
+            doctors = Doctor.getDoctorById(did)
+            result_list = []
+            for doctor in doctors: #let's not get consfuse, sometimes doctors may work in mort than one ficcw
+                result_list.append(Utilities.to_dict(doctor))
             result = {
                 "message": "Success!",
-                "doctor": doctor_dict
+                "doctor": result_list
             }
             return jsonify(result), 200
         except Exception as e:
