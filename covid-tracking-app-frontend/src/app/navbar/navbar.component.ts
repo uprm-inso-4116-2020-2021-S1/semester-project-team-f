@@ -40,8 +40,10 @@ export class NavbarComponent implements OnInit {
     MapComponent.showWorkingPlacesOnly();
     AppComponent.changeToAddPatient();
    }
+
   public patientInformation(): void{ AppComponent.changePatientInformation(); }
   public contactInformation(): void{ AppComponent.changeContactInformation(); }
   public addressInformation(): void{ AppComponent.changeAddressInformation(); } 
+  public helpInformation(): void{AppComponent.seeHelpInfo();}
 
 }

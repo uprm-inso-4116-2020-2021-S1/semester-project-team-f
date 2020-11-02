@@ -11,19 +11,32 @@ export class AppComponent{
   private static seeingInformation: boolean;
   private static changingContactInformation: boolean;
   private static changingAddressInformation: boolean;
+  private static seeingHelp: boolean;
   title = 'Coronavirus Tracking App';
 
   public isLoggedIn() { return AppComponent.hasLoggedIn; }
   public isAddingPatient() { return AppComponent.addingPatient; }
   public isSeeingInformation()  { return AppComponent.seeingInformation; }
+  public isSeeingHelp()  { return AppComponent.seeingHelp; }
   public isChangingContactInformation() { return AppComponent.changingContactInformation; }
   public isChangingAddressInformation() { return AppComponent.changingAddressInformation;}
   public static changeToNavbar(){ AppComponent.hasLoggedIn = true; }
   public static changeToLogin() { AppComponent.hasLoggedIn = false; }
 
-  public static changeToAddPatient() { AppComponent.addingPatient = true; }
 
-  public static changePatientInformation() { AppComponent.seeingInformation = true; }
+  public static changePatientInformation() { 
+    this.hideNavbar();
+    this.addingPatient = true;
+  }
+
+  public static seeHelpInfo() { 
+    this.hideNavbar();
+    this.seeingHelp= true;
+  }
+  public static changeAddRemovePatients() { 
+    this.hideNavbar();
+    this.seeingInformation = true;
+  }
 
   public static changeContactInformation() { 
     this.hideNavbar();
@@ -43,6 +56,21 @@ export class AppComponent{
   public static exitAddressInformation() {
     this.hideSidebar(); 
     setTimeout(()=> this.changingAddressInformation = false, 800);
+  }
+
+  public static exitPatientInformation() {
+    this.hideSidebar(); 
+    setTimeout(()=> this.seeingInformation = false, 800);
+  }
+
+  public static ExitAddRemovePatient() {
+    this.hideSidebar(); 
+    setTimeout(()=> this.addingPatient = false, 800);
+  }
+
+  public static ExitHelp() {
+    this.hideSidebar(); 
+    setTimeout(()=> this.seeingHelp = false, 800);
   }
 
   private static hideSidebar(): void{

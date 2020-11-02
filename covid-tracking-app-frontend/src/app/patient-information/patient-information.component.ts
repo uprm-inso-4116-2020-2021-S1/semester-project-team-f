@@ -13,8 +13,6 @@ export class PatientInformationComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public ReturntoNav(): void{
-    document.querySelector('.sidebar').classList.add('slide-left'); 
-    AppComponent.changeToNavbar();
-  }
+  public returnToNavbar(): void{ setTimeout(() => { AppComponent.exitPatientInformation(); }, 800); }
+
 }

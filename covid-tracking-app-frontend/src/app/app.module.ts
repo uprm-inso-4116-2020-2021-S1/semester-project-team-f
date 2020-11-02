@@ -15,6 +15,7 @@ import { MapComponent } from './map/map.component';
 import { AddPatientInformationComponent } from './add-patient-information/add-patient-information.component';
 import { PatientInformationComponent } from './patient-information/patient-information.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
+import { HelpInfoComponent } from './help-info/help-info.component';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
     AddPatientInformationComponent,
     PatientInformationComponent,
     AccountSettingsComponent,
+    HelpInfoComponent,
   ],
   imports: [
     BrowserModule,
