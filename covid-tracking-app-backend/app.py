@@ -26,16 +26,14 @@ def getAllLocationOrCreate():
 def getLocationById(lid):
     return LocationHandler.getLocationById(lid)
 
-@app.route("/visited_location", methods =['GET', 'POST'])
-def getALLVisitedLocationOrCreate():
+@app.route("/visited_location", methods =['GET', 'POST', 'DELETE'])
+def getALLVisitedLocationOrCreateOrDelete():
     if request.method == 'GET':
         return VisitedLocationHandler.getAllVisitedLocations()
     elif request.method =='POST':
         return VisitedLocationHandler.createVisitedLocation(request.json)
-
-@app.route('/visited_location/<int:lid>', methods =['GET'])
-def getVisitedLocationById(lid):
-    return VisitedLocationHandler.getVisitedLocationById(lid)
+    elif request.method == 'DELETE':
+        return VisitedLocationHandler.deleteVisitedLocation(request.json)
 
 @app.route("/address", methods=['GET', 'POST'])
 def getAllAddressOrCreate():
