@@ -5,12 +5,12 @@
 <div *ngIf="isLoggedIn(); else loginSidebar">
     <app-navbar></app-navbar>
 </div>
-<div *ngIf="isAddingPatient();">
-    <app-add-patient-information></app-add-patient-information>
+<div *ngIf="isAddingOrRemovingPatient();">
+    <app-manage-patients></app-manage-patients>
 </div>
 
-<div *ngIf="isSeeingInformation();">
-    <app-patient-information></app-patient-information>
+<div *ngIf="isManagingCovidCases();">
+    <app-covid-cases></app-covid-cases>
 </div>
 
 <div *ngIf="isChangingContactInformation();">

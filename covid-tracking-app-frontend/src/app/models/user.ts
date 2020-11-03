@@ -6,8 +6,8 @@ export interface User {
     birthdate: Date;
     phone_number: string;
     email: string;
-    password: string;
-    active: boolean;
+    password?: string;
+    active?: boolean;
   }
   
   export interface UserResponse {

@@ -1,5 +1,6 @@
 from flask import jsonify, session
 from api.dao.covid_cases import CovidCases
+from api.dao.patient import Patient
 from api.util.utilities import Utilities
 
 class CovidCasesHandler:
@@ -86,8 +87,8 @@ class CovidCasesHandler:
                 "cases": recovered_cases
             }
             return jsonify(result), 200
-            except Exception as e:
-                return jsonify(reason="Server error", error=e.__str__()), 500
+        except Exception as e:
+            return jsonify(reason="Server error", error=e.__str__()), 500
 
     @staticmethod
     def getCovidTestsByDoctor(did):
@@ -152,10 +153,25 @@ class CovidCasesHandler:
             return jsonify(message="Bad Request!"), 40
 
     @staticmethod
-    def deleteRecord(json):
-        deleted_record = CovidCases.deleteRecord(json)
+    def deleteRecord(key):
+        parameters = key.split('&')
+        deleted_record = CovidCases.deleteRecord({'patient_id': parameters[0], 'office_id': parameters[1], 'date_tested': parameters[2]})
         result = {
             "message": "Success!",
-            "request": Utilities.to_dict(deleted_record)
+            "case": Utilities.to_dict(deleted_record)
         }
         return jsonify(result), 200
+
+    @staticmethod
+    def updateRecord(json):
+        valid_parameters = Utilities.verify_parameters(json, ['patient_id', 'office_id', 'date_tested', 'tested_positive'])
+        if valid_parameters:
+            try:
+                updatedInfo = CovidCases.updateCovidStatus(**valid_parameters)
+                result = {
+                    "message": "Success!",
+                    "case": Utilities.to_dict(updatedInfo)
+                }
+                return jsonify(result), 200
+            except Exception as e:
+                return jsonify(reason="Server error", error=e.__str__()), 500

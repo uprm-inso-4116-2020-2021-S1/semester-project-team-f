@@ -5,6 +5,10 @@ import { AddressService } from '../services/address.service';
 import { LocationService } from '../services/location.service'
 import { Location } from '../models/location';
 import { DoctorService } from '../services/doctor.service';
+import { AppComponent } from '../app.component';
+import { MedicalOffice } from '../models/medical_office';
+import { ManagePatientsComponent } from '../manage-patients/manage-patients.component';
+import { CovidCasesComponent } from '../covid-cases/covid-cases.component';
 
 @Component({
   selector: 'app-map',
@@ -15,14 +19,13 @@ export class MapComponent implements AfterViewInit {
 
   @ViewChild('mapContainer', {static: false}) gmap: ElementRef;
 
-  private map: google.maps.Map;
-  private service: google.maps.places.PlacesService;
   private geocoder: google.maps.Geocoder;
   
   private lat = 18.196512;
   private lng = -66.4224762;
 
-  private static offices_mapping: Map<string, number>;
+  private static map: google.maps.Map;
+  private static offices_mapping: Map<google.maps.Marker, any>;
   private static markers: google.maps.Marker[] = [];
 
   coordinates = new google.maps.LatLng(this.lat, this.lng);
@@ -34,29 +37,26 @@ export class MapComponent implements AfterViewInit {
      private locationService: LocationService) { }
 
   ngAfterViewInit(): void {
-    this.map = new google.maps.Map(this.gmap.nativeElement, this.mapOptions);
-    this.service = new google.maps.places.PlacesService(this.map);
+    MapComponent.map = new google.maps.Map(this.gmap.nativeElement, this.mapOptions);
     this.geocoder = new google.maps.Geocoder();
     this.markOfficeLocations();
   }
 
   markOfficeLocations(){
-    MapComponent.offices_mapping = new Map<string, number>();
+    MapComponent.offices_mapping = new Map<google.maps.Marker, any>();
     this.medicalOfficeService.getAllMedicalOffices().subscribe(res =>{
       for(let office of res.medical_offices){
         this.locationService.getLocationById(office.location_id).subscribe(res =>{
           let location: Location = res.location;
           let coordinates = new google.maps.LatLng(location.lattitude, location.longitude);
 
-          MapComponent.offices_mapping.set(office.office_name, office.office_id);
-
-          this.findAndMarkPlace(coordinates, office.office_name, ICON_TYPE.DOCTOR_ICON);
+          this.findAndMarkPlace(coordinates, office.office_name, ICON_TYPE.DOCTOR_ICON, office);
         });
       }
     });
   }
 
-  private findAndMarkPlace(coordinates, marker_name: string, icon_type){
+  private findAndMarkPlace(coordinates, marker_name: string, icon_type, data){
               //find the place
               this.geocoder.geocode(
                 {location: coordinates},
@@ -66,20 +66,19 @@ export class MapComponent implements AfterViewInit {
                 ) => {
 
                   if (status === google.maps.GeocoderStatus.OK) {
-                    this.addMarker(results[0], marker_name, icon_type);
-            
-                    this.map.setCenter(
-                      (results[0].geometry as google.maps.places.PlaceGeometry).location
-                    );
+                    //mark it, if it was found
+                    this.addMarker(results[0], marker_name, icon_type, data);
+                    MapComponent.map.setCenter( (results[0].geometry as google.maps.places.PlaceGeometry).location );
                   }
+
                 }
               );
   }
 
-  private addMarker(place: google.maps.GeocoderResult, marker_name: string, icon_type) {
+  private addMarker(place: google.maps.GeocoderResult, marker_name: string, icon_type, data){
 
     const marker = new google.maps.Marker({
-      map: this.map,
+      map: MapComponent.map,
       position: (place.geometry as google.maps.places.PlaceGeometry).location,
 
       label: {
@@ -90,23 +89,54 @@ export class MapComponent implements AfterViewInit {
       icon:
        icon_type,
       title: marker_name
+    
     });
-
+    MapComponent.offices_mapping.set(marker, data);
     MapComponent.markers.push(marker)
   }
 
-    // Shows office markers currently in the array.
-    public static showWorkingPlacesOnly(): void {
+    // Shows only the places where the logged in doctor works.
+    public static showWorkingPlacesOnly(patient_listener: boolean): void {
       
       for (let i = 0; i < this.markers.length; i++) { 
-        let office_name: string = this.markers[i].getLabel().text;
-        let office_id = this.offices_mapping.get(office_name);
+        let medical_office: MedicalOffice = this.offices_mapping.get(this.markers[i]);
 
-        if(DoctorService.doctorOfficesId.has(office_id)){ this.markers[i].setIcon(ICON_TYPE.WORK_ICON); }
-        else{ this.markers[i].setMap(null); } //hide label from the map
+        if(DoctorService.doctorOfficesId.has(medical_office.office_id)){ 
+          this.markers[i].setIcon(ICON_TYPE.WORK_ICON);
+          
+          if(patient_listener){
+              this.markers[i].addListener("click",() => {
+          
+              ManagePatientsComponent.medical_office = medical_office;
+              AppComponent.changeAddOrRemovePatients();
+              this.hideWorkingPlacesAndShowOffices();
+              });
+          }
+          else{
+            this.markers[i].addListener("click",() => {
+          
+              CovidCasesComponent.medical_office = medical_office;
+              AppComponent.changeManagingCovidCases();
+              this.hideWorkingPlacesAndShowOffices();
+              });
+          }
+
+         }
+        else{ 
+          this.markers[i].setMap(null); //hide label from the map
+         } 
        }
 
        alert("Please select the office that you wish to manage...")
+    }
 
+    public static hideWorkingPlacesAndShowOffices(){
+      for (let i = 0; i < this.markers.length; i++) { 
+        if(this.offices_mapping.has(this.markers[i])){
+          google.maps.event.clearListeners(this.markers[i], "click");
+          this.markers[i].setIcon(ICON_TYPE.DOCTOR_ICON);
+          this.markers[i].setMap(this.map);
+        }
+      }
     }
 }
