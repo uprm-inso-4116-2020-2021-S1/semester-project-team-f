@@ -1,6 +1,5 @@
 .PatientList {
-    width: 275px;
-    height: 500px;  
+    width: 19.5vw;
     position: relative;
     overflow-y: auto;
     margin-left: auto;
@@ -11,9 +10,9 @@
     background-color: #eee;
     color: black;
     display: block;
-    padding: 12px;
-    margin-left: auto;
-    margin-right: auto; 
+    padding: 1vw;
+    font-size: 1vw;
+    text-align: left;
     text-decoration: none;
   }
   
@@ -24,6 +23,28 @@
   .PatientList a.active {
     background-color:#FF8A00;
     color: white;
+  }
+
+  #RemovePatient{
+    font-weight: bold;
+    color: red;
+    transition:all .5s ease;
+    -webkit-transition-delay:all .5s ease;
+    -moz-transition-delay:all .5s ease;
+    -ms-transition-delay:all .5s ease;
+    -o-transition-delay:all .5s ease;
+  }
+
+  #RemovePatient:hover{
+    font-weight: bold;
+    color: red;
+    cursor: pointer;
+    color: orange;
+    transition:all .5s ease;
+    -webkit-transition-delay:all .5s ease;
+    -moz-transition-delay:all .5s ease;
+    -ms-transition-delay:all .5s ease;
+    -o-transition-delay:all .5s ease;
   }
 
   .btn-primary{
@@ -37,7 +58,7 @@
   font-family: 'Poppins';
   font-size: 1.35vw;
   text-align: center;
-  margin-left: 50px;
+  margin-left: 2.5vw;
 }
 
 .form-text{

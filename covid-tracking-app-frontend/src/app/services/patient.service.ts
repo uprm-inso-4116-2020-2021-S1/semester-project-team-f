@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DoctorResponse, DoctorsResponse, Doctor } from '../models/doctor'
+import { PatientResponse, PatientsResponse, Patient } from '../models/patient'
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { throwError, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -9,10 +9,7 @@ import {API_URL} from '../../config';
 @Injectable({
   providedIn: 'root'
 })
-export class DoctorService {
-
-  public static loggedDoctorId: string;
-  public static doctorOfficesId: Set<number>;
+export class PatientService {
 
   constructor(private httpClient: HttpClient, private router: Router) { }
 
@@ -27,21 +24,27 @@ export class DoctorService {
     return throwError(error);
   }
 
-  public createDoctor(doctor: Doctor): Observable<any> {
+  public createPatient(patient: Patient): Observable<any> {
     return this.httpClient
-      .post(API_URL + `doctors`, doctor)
+      .post(API_URL + `patients`, patient)
       .pipe(catchError(this._handleError))
   }
 
-  public getAllDoctors(): Observable<DoctorsResponse> {
+  public deletePatient(patient: Patient): Observable<any> {
     return this.httpClient
-    .get<DoctorsResponse>(API_URL + `doctors`)
+      .delete(API_URL + `patients/` + patient.office_id + '&' + patient.user_id)
+      .pipe(catchError(this._handleError))
+  }
+
+  public getAllPatients(): Observable<PatientsResponse> {
+    return this.httpClient
+    .get<PatientsResponse>(API_URL + `patients`)
     .pipe(catchError(this._handleError))
   }
 
-  public getDoctorById(id: string): Observable<DoctorResponse>{
+  public getPatientByOfficeId(id: number): Observable<PatientsResponse>{
     return this.httpClient
-    .get<DoctorResponse>(API_URL + `doctors/` + id)
+    .get<PatientsResponse>(API_URL + `patients/` + id)
     .pipe(catchError(this._handleError))
   }
 }

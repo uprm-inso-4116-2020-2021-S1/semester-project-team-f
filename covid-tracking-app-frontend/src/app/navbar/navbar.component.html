@@ -12,22 +12,16 @@
           <a (click) = "addressInformation()" >Change address information</a>
         </div>
     </a>
-
-    <a class="dropdown navbar_link">
-            <a class="dropbtn">Patient Actions</a>
-            <div class="dropdown-content">
-              <a (click) = "addOrRemovePatient()" >Add/Remove Patient</a>
-              <a (click) = "patientInformation()" >Patient Information</a>
-            </div>
-    </a>      
-
-    <!-- We need to find a way to avoid the redundancy in those if statements if it is possible. If I tried to attach the
-        component on the if statement of the line 12, a bug ocurred-->
-    <div *ngIf="doctorIsLogged()">
-        <a id="new_case">
-            New COVID-19 case
-        </a>
-    </div>
+    <ng-template [ngIf]="doctorIsLogged()">
+        <a class="dropdown navbar_link">
+                <a class="dropbtn">Patient Actions</a>
+                <div class="dropdown-content">
+                <a (click) = "addOrRemovePatient()" >Add/Remove Patient</a>
+                <a (click) = "patientInformation()" >Patient Information</a>
+                <a id="new_case">New COVID-19 case</a>
+                </div>
+        </a>     
+    </ng-template>
  
     <a class="navbar_link" (click) = "logout()">
         <img id = "logout_icon" src="../../assets/logout.png">

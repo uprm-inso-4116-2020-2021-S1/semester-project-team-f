@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent{
   private static hasLoggedIn: boolean;
-  private static addingPatient: boolean;
+  private static addingOrRemovingPatient: boolean;
   private static seeingInformation: boolean;
   private static changingContactInformation: boolean;
   private static changingAddressInformation: boolean;
@@ -15,7 +15,7 @@ export class AppComponent{
   title = 'Coronavirus Tracking App';
 
   public isLoggedIn() { return AppComponent.hasLoggedIn; }
-  public isAddingPatient() { return AppComponent.addingPatient; }
+  public isAddingOrRemovingPatient() { return AppComponent.addingOrRemovingPatient; }
   public isSeeingInformation()  { return AppComponent.seeingInformation; }
   public isSeeingHelp()  { return AppComponent.seeingHelp; }
   public isChangingContactInformation() { return AppComponent.changingContactInformation; }
@@ -26,16 +26,16 @@ export class AppComponent{
 
   public static changePatientInformation() { 
     this.hideNavbar();
-    this.addingPatient = true;
+    this.seeingInformation = true;
   }
 
   public static seeHelpInfo() { 
     this.hideNavbar();
     this.seeingHelp= true;
   }
-  public static changeAddRemovePatients() { 
+  public static changeAddOrRemovePatients() { 
     this.hideNavbar();
-    this.seeingInformation = true;
+    this.addingOrRemovingPatient = true;
   }
 
   public static changeContactInformation() { 
@@ -63,9 +63,9 @@ export class AppComponent{
     setTimeout(()=> this.seeingInformation = false, 800);
   }
 
-  public static ExitAddRemovePatient() {
+  public static exitAddOrRemovePatient() {
     this.hideSidebar(); 
-    setTimeout(()=> this.addingPatient = false, 800);
+    setTimeout(()=> this.addingOrRemovingPatient = false, 800);
   }
 
   public static ExitHelp() {

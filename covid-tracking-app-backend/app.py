@@ -51,9 +51,12 @@ def getAllUsersOrCreate():
         return UserHandler.createUser(request.json)
 
 @app.route('/users/<string:uid>', methods=['GET', 'PUT'])
-def getUserByIdOrUpdate(uid):
+def getUserByIdOrEmailOrUpdate(uid):
     if request.method == 'GET':
-        return UserHandler.getUserById(uid)
+        if '@' in uid:
+            return UserHandler.getUserByEmail(uid)
+        else:
+            return UserHandler.getUserById(uid)
     elif request.method == 'PUT':
         return UserHandler.updateUserInfo(uid, request.json)
 
@@ -68,17 +71,19 @@ def getAllDoctorsOrCreate():
 def getDoctorById(did):
     return DoctorHandler.getDoctorById(did)
 
-@app.route('/patients', methods=['GET'])
-def getAllPatientsOrCreate():
+@app.route('/patients', methods=['GET', 'POST'])
+def getAllPatientsOrCreateOrDelete():
     if request.method == 'GET':
         return PatientHandler.getAllPatients()
     elif request.method == 'POST':
         return PatientHandler.createPatient(request.json)
 
-@app.route('/patients/<int:pid>', methods=['GET'])
-def getPatientById(pid):
-    return PatientHandler.getPatientById(pid)
-
+@app.route('/patients/<id>', methods=['GET', 'DELETE'])
+def getPatientsByOfficeIdOrDeletePatient(id):
+    if request.method == 'GET':
+        return PatientHandler.getPatientsByOfficeId(id)
+    elif request.method == 'DELETE':
+        return PatientHandler.deletePatient(id)
 
 def send_activation_email(user):
     token = user.get_activation_token()
