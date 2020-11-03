@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 export class AppComponent{
   private static hasLoggedIn: boolean;
   private static addingOrRemovingPatient: boolean;
-  private static seeingInformation: boolean;
+  private static managingCovidCases: boolean;
   private static changingContactInformation: boolean;
   private static changingAddressInformation: boolean;
   private static seeingHelp: boolean;
@@ -16,18 +16,12 @@ export class AppComponent{
 
   public isLoggedIn() { return AppComponent.hasLoggedIn; }
   public isAddingOrRemovingPatient() { return AppComponent.addingOrRemovingPatient; }
-  public isSeeingInformation()  { return AppComponent.seeingInformation; }
+  public isManagingCovidCases() { return AppComponent.managingCovidCases; }
   public isSeeingHelp()  { return AppComponent.seeingHelp; }
   public isChangingContactInformation() { return AppComponent.changingContactInformation; }
   public isChangingAddressInformation() { return AppComponent.changingAddressInformation;}
   public static changeToNavbar(){ AppComponent.hasLoggedIn = true; }
   public static changeToLogin() { AppComponent.hasLoggedIn = false; }
-
-
-  public static changePatientInformation() { 
-    this.hideNavbar();
-    this.seeingInformation = true;
-  }
 
   public static seeHelpInfo() { 
     this.hideNavbar();
@@ -36,6 +30,10 @@ export class AppComponent{
   public static changeAddOrRemovePatients() { 
     this.hideNavbar();
     this.addingOrRemovingPatient = true;
+  }
+  public static changeManagingCovidCases() { 
+    this.hideNavbar();
+    this.managingCovidCases = true;
   }
 
   public static changeContactInformation() { 
@@ -58,14 +56,14 @@ export class AppComponent{
     setTimeout(()=> this.changingAddressInformation = false, 800);
   }
 
-  public static exitPatientInformation() {
-    this.hideSidebar(); 
-    setTimeout(()=> this.seeingInformation = false, 800);
-  }
-
   public static exitAddOrRemovePatient() {
     this.hideSidebar(); 
     setTimeout(()=> this.addingOrRemovingPatient = false, 800);
+  }
+
+  public static exitManagingCovidCases() { 
+    this.hideSidebar(); 
+    setTimeout(()=> this.managingCovidCases = false, 800);
   }
 
   public static ExitHelp() {

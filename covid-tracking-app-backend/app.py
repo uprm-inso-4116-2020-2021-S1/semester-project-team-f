@@ -4,6 +4,7 @@ from api.handler.address import AddressHandler
 from api.handler.user import UserHandler
 from api.handler.patient import PatientHandler
 from api.handler.doctor import DoctorHandler
+from api.handler.covid_cases import CovidCasesHandler
 from api.handler.medical_office import MedicalOfficeHandler
 from api.handler.location import LocationHandler
 from api.dao.user import User
@@ -79,11 +80,30 @@ def getAllPatientsOrCreateOrDelete():
         return PatientHandler.createPatient(request.json)
 
 @app.route('/patients/<id>', methods=['GET', 'DELETE'])
-def getPatientsByOfficeIdOrDeletePatient(id):
+def getPatientsByOfficeOrDeletePatient(id):
     if request.method == 'GET':
-        return PatientHandler.getPatientsByOfficeId(id)
+        if '&' in id:
+            return PatientHandler.getPatientByIdAndOffice(id)
+        else:
+            return PatientHandler.getPatientsByOfficeId(id)
     elif request.method == 'DELETE':
         return PatientHandler.deletePatient(id)
+
+@app.route('/covid_cases', methods=['GET', 'POST'])
+def getAllCovidCasesOrCreate():
+    if request.method == 'GET':
+        return CovidCasesHandler.getAllCases()
+    elif request.method == 'POST':
+        return CovidCasesHandler.addRecord(request.json)
+
+@app.route('/covid_cases/<id>', methods=['GET', 'DELETE', 'PUT'])
+def getCovidCaseOrUpdate(id):
+    if request.method == 'GET':
+        return CovidCasesHandler.getCovidTestsByoffice(id)
+    elif request.method == 'DELETE':
+        return CovidCasesHandler.deleteRecord(id)
+    elif request.method == 'PUT':
+        return CovidCasesHandler.updateRecord(request.json)
 
 def send_activation_email(user):
     token = user.get_activation_token()

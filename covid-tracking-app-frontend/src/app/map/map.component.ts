@@ -7,7 +7,8 @@ import { Location } from '../models/location';
 import { DoctorService } from '../services/doctor.service';
 import { AppComponent } from '../app.component';
 import { MedicalOffice } from '../models/medical_office';
-import { AddPatientInformationComponent } from '../add-patient-information/add-patient-information.component';
+import { ManagePatientsComponent } from '../manage-patients/manage-patients.component';
+import { CovidCasesComponent } from '../covid-cases/covid-cases.component';
 
 @Component({
   selector: 'app-map',
@@ -95,19 +96,31 @@ export class MapComponent implements AfterViewInit {
   }
 
     // Shows only the places where the logged in doctor works.
-    public static showWorkingPlacesOnly(): void {
+    public static showWorkingPlacesOnly(patient_listener: boolean): void {
       
       for (let i = 0; i < this.markers.length; i++) { 
         let medical_office: MedicalOffice = this.offices_mapping.get(this.markers[i]);
 
         if(DoctorService.doctorOfficesId.has(medical_office.office_id)){ 
           this.markers[i].setIcon(ICON_TYPE.WORK_ICON);
-          this.markers[i].addListener("click",() => {
           
-          AddPatientInformationComponent.medical_office = medical_office;
-          AppComponent.changeAddOrRemovePatients();
-          this.hideWorkingPlacesAndShowOffices();
-          });
+          if(patient_listener){
+              this.markers[i].addListener("click",() => {
+          
+              ManagePatientsComponent.medical_office = medical_office;
+              AppComponent.changeAddOrRemovePatients();
+              this.hideWorkingPlacesAndShowOffices();
+              });
+          }
+          else{
+            this.markers[i].addListener("click",() => {
+          
+              CovidCasesComponent.medical_office = medical_office;
+              AppComponent.changeManagingCovidCases();
+              this.hideWorkingPlacesAndShowOffices();
+              });
+          }
+
          }
         else{ 
           this.markers[i].setMap(null); //hide label from the map
@@ -117,7 +130,7 @@ export class MapComponent implements AfterViewInit {
        alert("Please select the office that you wish to manage...")
     }
 
-    private static hideWorkingPlacesAndShowOffices(){
+    public static hideWorkingPlacesAndShowOffices(){
       for (let i = 0; i < this.markers.length; i++) { 
         if(this.offices_mapping.has(this.markers[i])){
           google.maps.event.clearListeners(this.markers[i], "click");

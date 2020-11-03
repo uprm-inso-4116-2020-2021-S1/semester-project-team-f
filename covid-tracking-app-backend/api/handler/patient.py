@@ -35,9 +35,10 @@ class PatientHandler:
             return jsonify(reason="Server error", error=e.__str__()), 500
 
     @staticmethod
-    def getPatientByIdAndOffice(json):
+    def getPatientByIdAndOffice(key):
         try:
-            patient = Patient.getPatientByIdAndOffice(json)
+            parameters = key.split('&')
+            patient = Patient.getPatientByIdAndOffice({'user_id': parameters[1], 'office_id': parameters[0]})
             patient_dict = Utilities.to_dict(patient)
             result = {
                 "message": "Success!",

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PatientResponse, PatientsResponse, Patient } from '../models/patient'
+import { CovidCaseResponse, CovidCasesResponse, CovidCase } from '../models/covid_case'
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { throwError, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -9,7 +9,7 @@ import {API_URL} from '../../config';
 @Injectable({
   providedIn: 'root'
 })
-export class PatientService {
+export class CovidService {
 
   constructor(private httpClient: HttpClient, private router: Router) { }
 
@@ -24,33 +24,27 @@ export class PatientService {
     return throwError(error);
   }
 
-  public createPatient(patient: Patient): Observable<any> {
+  public createRecord(covid_Case: CovidCase): Observable<any> {
     return this.httpClient
-      .post(API_URL + `patients`, patient)
+      .post(API_URL + `covid_cases`, covid_Case)
       .pipe(catchError(this._handleError))
   }
 
-  public deletePatient(patient: Patient): Observable<any> {
+  public deleteRecord(covid_Case: CovidCase): Observable<any> {
     return this.httpClient
-      .delete(API_URL + `patients/` + patient.office_id + '&' + patient.user_id)
+      .delete(API_URL + `covid_cases/` + covid_Case.patient_id + '&' + covid_Case.office_id + '&' + covid_Case.date_tested)
       .pipe(catchError(this._handleError))
   }
 
-  public getAllPatients(): Observable<PatientsResponse> {
+  public getAllCases(): Observable<CovidCasesResponse> {
     return this.httpClient
-    .get<PatientsResponse>(API_URL + `patients`)
+    .get<CovidCasesResponse>(API_URL + `covid_cases`)
     .pipe(catchError(this._handleError))
   }
 
-  public getPatientByOfficeId(id: number): Observable<PatientsResponse>{
+  public getCovidCasesByOfficeId(id: number): Observable<CovidCasesResponse>{
     return this.httpClient
-    .get<PatientsResponse>(API_URL + `patients/` + id)
-    .pipe(catchError(this._handleError))
-  }
-
-  public getPatientIdAndOffice(patient: Patient): Observable<PatientsResponse>{
-    return this.httpClient
-    .get<PatientsResponse>(API_URL + `patients/` + patient.office_id + '&' + patient.user_id)
+    .get<CovidCasesResponse>(API_URL + `covid_cases/` + id)
     .pipe(catchError(this._handleError))
   }
 }

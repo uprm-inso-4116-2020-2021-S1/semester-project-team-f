@@ -9,15 +9,16 @@ import { UserService } from '../services/user.service';
 type PatientRecord = Patient & User;
 
 @Component({
-  selector: 'app-add-patient-information',
-  templateUrl: './add-patient-information.component.html',
-  styleUrls: ['./add-patient-information.component.scss']
+  selector: 'app-manage-patients',
+  templateUrl: './manage-patients.component.html',
+  styleUrls: ['./manage-patients.component.scss']
 })
 
-export class AddPatientInformationComponent implements OnInit {
+export class ManagePatientsComponent implements OnInit {
 
   static medical_office: MedicalOffice
   patients: PatientRecord[]
+  error: string;
   
   constructor(private patientsService: PatientService, private userService: UserService) { }
 
@@ -28,7 +29,7 @@ export class AddPatientInformationComponent implements OnInit {
    public showPatients(): void{
     this.patients = [];
 
-    this.patientsService.getPatientByOfficeId(AddPatientInformationComponent.medical_office.office_id).subscribe(patient_repsonse => {
+    this.patientsService.getPatientByOfficeId(ManagePatientsComponent.medical_office.office_id).subscribe(patient_repsonse => {
       for (let i = 0; i < patient_repsonse.patients.length; i++){
           let patient: Patient = patient_repsonse.patients[i];
 
@@ -54,12 +55,29 @@ export class AddPatientInformationComponent implements OnInit {
     });
    }
 
+   public patientExists(): boolean{
+     document.getElementById(this.patients[0].user_id).classList.remove("active");
+     let email: string = (<HTMLInputElement>document.querySelector("#inputEmail")).value;
+     for(let i = 0; i < this.patients.length; i++){
+       let patient : PatientRecord = this.patients[i];
+        if(patient.email == email){
+          this.patients.splice(i,1);
+          this.patients.unshift(patient);
+          this.error = null;
+          document.getElementById(this.patients[0].user_id).classList.add("active");
+          return true;
+        }
+     }
+     this.error = "Email is not registered in this office.";
+     return false;
+   }
+
   public returnToNavbar(): void{
-    AddPatientInformationComponent.medical_office = null; 
+    ManagePatientsComponent.medical_office = null; 
     setTimeout(() => { AppComponent.exitAddOrRemovePatient(); }, 800); }
 
   public getOffice(): MedicalOffice{
-    return AddPatientInformationComponent.medical_office;
+    return ManagePatientsComponent.medical_office;
   }
 
   public deletePatient(patient: PatientRecord){
@@ -76,9 +94,11 @@ export class AddPatientInformationComponent implements OnInit {
     let email = (<HTMLInputElement>document.querySelector('#inputEmail')).value;
     this.userService.getUserByIdOrEmail(email).subscribe(user_response => {
       if(user_response.message == "Success!"){
+        this.error = null;
+
         let patient: Patient = {
           user_id: user_response.user.user_id,
-          office_id: AddPatientInformationComponent.medical_office.office_id
+          office_id: ManagePatientsComponent.medical_office.office_id
         }
         this.patientsService.createPatient(patient).subscribe(patient_response => {
             if(patient_response.message == "Success!"){
@@ -101,6 +121,6 @@ export class AddPatientInformationComponent implements OnInit {
             }
         });
       }
-    })
+    }, err => this.error = "Email does not exist. Make sure that the patient registers as a regular user first.");
   }
 }
