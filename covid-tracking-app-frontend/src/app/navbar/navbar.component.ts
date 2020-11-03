@@ -32,16 +32,13 @@ export class NavbarComponent implements OnInit {
     setTimeout(() =>  {
       DoctorService.loggedDoctorId = null;
       DoctorService.doctorOfficesId = null;
+      MapComponent.hideWorkingPlacesAndShowOffices();
       this.userService.logout()
     }, 800); //wait 800ms for the effect to take effect
   }
 
-  public addOrRemovePatient(): void{ 
-    MapComponent.showWorkingPlacesOnly();
-    AppComponent.changeToAddPatient();
-   }
-
-  public patientInformation(): void{ AppComponent.changePatientInformation(); }
+  public addOrRemovePatient(): void{ MapComponent.showWorkingPlacesOnly(true); }
+  public manageCovidCases(): void { MapComponent.showWorkingPlacesOnly(false); }
   public contactInformation(): void{ AppComponent.changeContactInformation(); }
   public addressInformation(): void{ AppComponent.changeAddressInformation(); } 
   public helpInformation(): void{AppComponent.seeHelpInfo();}

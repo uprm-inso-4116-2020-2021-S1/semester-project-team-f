@@ -12,10 +12,10 @@ import { AddressInformationComponent } from './address-information/address-infor
 import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './navbar/navbar.component';
 import { MapComponent } from './map/map.component';
-import { AddPatientInformationComponent } from './add-patient-information/add-patient-information.component';
-import { PatientInformationComponent } from './patient-information/patient-information.component';
+import { ManagePatientsComponent } from './manage-patients/manage-patients.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { HelpInfoComponent } from './help-info/help-info.component';
+import { CovidCasesComponent } from './covid-cases/covid-cases.component';
 
 
 @NgModule({
@@ -26,10 +26,10 @@ import { HelpInfoComponent } from './help-info/help-info.component';
     AddressInformationComponent,
     NavbarComponent,
     MapComponent,
-    AddPatientInformationComponent,
-    PatientInformationComponent,
+    ManagePatientsComponent,
     AccountSettingsComponent,
     HelpInfoComponent,
+    CovidCasesComponent,
   ],
   imports: [
     BrowserModule,

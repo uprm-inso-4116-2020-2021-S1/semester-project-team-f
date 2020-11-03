@@ -34,6 +34,19 @@ class UserHandler:
         except Exception as e:
             return jsonify(reason="Server error", error=e.__str__()), 500
 
+    @staticmethod
+    def getUserByEmail(email):
+        try:
+            user = User.getUserByEmail(email)
+            user_dict = Utilities.to_dict(user)
+            result = {
+                "message": "Success!",
+                "user": user_dict
+            }
+            return jsonify(result), 200
+        except Exception as e:
+            return jsonify(reason="Server error", error=e.__str__()), 500
+
 
     @staticmethod
     def login(json):

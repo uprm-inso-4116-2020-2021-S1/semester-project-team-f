@@ -12,6 +12,7 @@ export class LoginSidebarComponent implements OnInit {
 
   public effectsInAction: string[]; //effects not related to login
   public canGoToNextPage: boolean;
+  public error: string;
   public static justSignedOut: boolean;
 
   constructor(private userService: UserService, private doctorService: DoctorService) { }
@@ -41,7 +42,7 @@ export class LoginSidebarComponent implements OnInit {
           this.userService.sendUserActivation(email).subscribe(res =>{
           });
         }
-        if(res.message == "Success!"){
+        else if(res.message == "Success!"){
           //lets verify if the user is a doctor
           this.doctorService.getDoctorById(res.user.user_id).subscribe(res =>{
             if(res.message == "Success!"){
@@ -54,7 +55,7 @@ export class LoginSidebarComponent implements OnInit {
 
             }
           });
-
+         
           //execute the slide-left effect (this is another way of doing so)
           document.querySelector('.sidebar').classList.add('slide-left'); 
 
@@ -66,6 +67,7 @@ export class LoginSidebarComponent implements OnInit {
           }, 800);
 
         }
-      })
+      },
+      err => this.error = err.error.reason);
   }
 }

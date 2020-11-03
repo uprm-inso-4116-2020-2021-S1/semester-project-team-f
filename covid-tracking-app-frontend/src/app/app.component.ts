@@ -7,35 +7,33 @@ import { Component } from '@angular/core';
 })
 export class AppComponent{
   private static hasLoggedIn: boolean;
-  private static addingPatient: boolean;
-  private static seeingInformation: boolean;
+  private static addingOrRemovingPatient: boolean;
+  private static managingCovidCases: boolean;
   private static changingContactInformation: boolean;
   private static changingAddressInformation: boolean;
   private static seeingHelp: boolean;
   title = 'Coronavirus Tracking App';
 
   public isLoggedIn() { return AppComponent.hasLoggedIn; }
-  public isAddingPatient() { return AppComponent.addingPatient; }
-  public isSeeingInformation()  { return AppComponent.seeingInformation; }
+  public isAddingOrRemovingPatient() { return AppComponent.addingOrRemovingPatient; }
+  public isManagingCovidCases() { return AppComponent.managingCovidCases; }
   public isSeeingHelp()  { return AppComponent.seeingHelp; }
   public isChangingContactInformation() { return AppComponent.changingContactInformation; }
   public isChangingAddressInformation() { return AppComponent.changingAddressInformation;}
   public static changeToNavbar(){ AppComponent.hasLoggedIn = true; }
   public static changeToLogin() { AppComponent.hasLoggedIn = false; }
 
-
-  public static changePatientInformation() { 
-    this.hideNavbar();
-    this.addingPatient = true;
-  }
-
   public static seeHelpInfo() { 
     this.hideNavbar();
     this.seeingHelp= true;
   }
-  public static changeAddRemovePatients() { 
+  public static changeAddOrRemovePatients() { 
     this.hideNavbar();
-    this.seeingInformation = true;
+    this.addingOrRemovingPatient = true;
+  }
+  public static changeManagingCovidCases() { 
+    this.hideNavbar();
+    this.managingCovidCases = true;
   }
 
   public static changeContactInformation() { 
@@ -58,14 +56,14 @@ export class AppComponent{
     setTimeout(()=> this.changingAddressInformation = false, 800);
   }
 
-  public static exitPatientInformation() {
+  public static exitAddOrRemovePatient() {
     this.hideSidebar(); 
-    setTimeout(()=> this.seeingInformation = false, 800);
+    setTimeout(()=> this.addingOrRemovingPatient = false, 800);
   }
 
-  public static ExitAddRemovePatient() {
+  public static exitManagingCovidCases() { 
     this.hideSidebar(); 
-    setTimeout(()=> this.addingPatient = false, 800);
+    setTimeout(()=> this.managingCovidCases = false, 800);
   }
 
   public static ExitHelp() {

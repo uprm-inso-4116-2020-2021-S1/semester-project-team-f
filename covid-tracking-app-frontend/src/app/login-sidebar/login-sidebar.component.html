@@ -4,7 +4,8 @@
     <div class="upperBar {{effectsInAction[0]}}" ><img id="sidebar-logo" src="../../assets/Logo.png" alt="logo"></div>
 
     <div class="form {{effectsInAction[1]}}">
-        <a>Please login to makes use of the contact tracing</a>
+        <a *ngIf="!error">Please login to makes use of the contact tracing</a>
+        <a *ngIf="error" style="color: orange;">{{error}}</a>
         <a class="form-text">Email:</a>
         <a><input type="email" id="inputEmail" class="form-control" required autofocus></a>
         <a class="form-text">Password:</a>                
