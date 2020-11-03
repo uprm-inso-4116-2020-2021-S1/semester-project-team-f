@@ -16,15 +16,17 @@ export class AddressInformationComponent{
   
   canGoToNextPage: boolean;
   canGoToPreviousPage: boolean;
-  fadeEffect: string;
+  fadeEffect1: string;
+  fadeEffect2: string;
   countries: string[];
   states: string[];
 
   static address_info: Address;
 
   constructor(private addressService: AddressService, private userService: UserService) { 
+    this.fadeEffect1 = "";
+    this.fadeEffect2 = "fade-in"; //the effect that will be executed as soon as the user enters this component
     this.initializeAddressInfo();
-    this.fadeEffect = "fade-in"; //the effect that will be executed as soon as the user enters this component
     this.countries = COUNTRIES;
     this.states = STATES;
     this.canGoToPreviousPage = false;
@@ -32,11 +34,16 @@ export class AddressInformationComponent{
   }
 
   public goToPreviousPage(): void{
-    this.fadeEffect = "fade-out"; //after the users press go back, this effect will be executed
-    setTimeout(() => this.canGoToPreviousPage = true, 800);
+    if(this.isLoggedIn()){
+      this.returnToNavbar();
+    }
+    else{
+      this.fadeEffect2 = "fade-out"; //after the users press go back, this effect will be executed
+      setTimeout(() => this.canGoToPreviousPage = true, 800);
+    }
   }
   public goToNextPage(): void{
-    this.fadeEffect = "fade-out"; //after the users press go next, this effect that will be executed
+    this.fadeEffect2 = "fade-out"; //after the users press go next, this effect that will be executed
     setTimeout(() => this.canGoToNextPage = true, 800);
   }
   public setAddressInfo(key:string, value:string){
@@ -47,8 +54,10 @@ export class AddressInformationComponent{
     return AddressInformationComponent.address_info;
   }
 
+  public isLoggedIn():boolean{ return UserService.loggedUser != null; }
+
   private initializeAddressInfo(){
-    if(!this.getSavedAddressInfo()){
+    if(!this.isLoggedIn() && !this.getSavedAddressInfo()){
       AddressInformationComponent.address_info = {
         country_name: '',
         region_name: '',
@@ -57,6 +66,30 @@ export class AddressInformationComponent{
         zip_code: null
       }
     }
+    else if(this.isLoggedIn()){
+      this.fadeEffect1 = "slide-right";
+      this.addressService.getAddressById(UserService.loggedUser.address_id).subscribe(res => {
+        if(res.message == "Success!"){
+          AddressInformationComponent.address_info = res.address;
+        }
+      });
+    }
+  }
+
+  public updateAddress(): void{
+    let newAddress = AddressInformationComponent.address_info;
+    this.addressService.createAddress(newAddress).subscribe(res => {
+          if(res.message == "Success!"){
+              UserService.loggedUser.address_id = res.address_id;
+
+              this.userService.updateContactInfo(UserService.loggedUser);
+
+              alert('Address information successfully updated!');
+
+              this.returnToNavbar();
+          }
+        });
+      
   }
 
   public signUp(): void{
@@ -70,9 +103,9 @@ export class AddressInformationComponent{
           
           if(res.message == "Success!"){
             this.userService.sendUserActivation(newUser.email).subscribe(res =>{
-              this.fadeEffect = "fade-out"; //after the users press go next, this effect that will be executed
+              this.fadeEffect2 = "fade-out"; //after the users press go next, this effect that will be executed
               setTimeout(() => this.canGoToNextPage = true, 800);
-              alert('Signup Success! Activate your account using the link we sent to your email.')
+              alert('Sign up was successful! Activate your account using the link we sent to your email.')
             });
             
           }
@@ -81,4 +114,6 @@ export class AddressInformationComponent{
       
     });
   }
+
+  public returnToNavbar(): void{ AppComponent.exitAddressInformation(); }
 }

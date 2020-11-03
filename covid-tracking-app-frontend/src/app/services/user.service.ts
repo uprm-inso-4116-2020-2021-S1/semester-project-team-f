@@ -33,6 +33,13 @@ export class UserService {
       .pipe(catchError(this._handleError))
   }
 
+  public updateContactInfo(user: User): Observable<any> {
+    return this.httpClient
+      .put(API_URL + `users/${user.user_id}`, user)
+      .pipe(catchError(this._handleError))
+
+  }
+
   public getAllUsers(): Observable<UsersResponse> {
     return this.httpClient
     .get<UsersResponse>(API_URL + `users`)
