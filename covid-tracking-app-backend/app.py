@@ -7,6 +7,7 @@ from api.handler.doctor import DoctorHandler
 from api.handler.covid_cases import CovidCasesHandler
 from api.handler.medical_office import MedicalOfficeHandler
 from api.handler.location import LocationHandler
+from api.handler.visited_location import VisitedLocationHandler
 from api.dao.user import User
 from flask_mail import Message
 
@@ -24,6 +25,17 @@ def getAllLocationOrCreate():
 @app.route('/location/<int:lid>', methods=['GET'])
 def getLocationById(lid):
     return LocationHandler.getLocationById(lid)
+
+@app.route("/visited_location", methods =['GET', 'POST'])
+def getALLVisitedLocationOrCreate():
+    if request.method == 'GET':
+        return VisitedLocationHandler.getAllVisitedLocations()
+    elif request.method =='POST':
+        return VisitedLocationHandler.createVisitedLocation(request.json)
+
+@app.route('/visited_location/<int:lid>', methods =['GET'])
+def getVisitedLocationById(lid):
+    return VisitedLocationHandler.getVisitedLocationById(lid)
 
 @app.route("/address", methods=['GET', 'POST'])
 def getAllAddressOrCreate():
