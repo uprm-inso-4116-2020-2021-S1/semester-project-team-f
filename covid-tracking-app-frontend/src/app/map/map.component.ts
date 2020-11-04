@@ -91,6 +91,11 @@ export class MapComponent implements AfterViewInit {
       title: marker_name
     
     });
+
+    google.maps.event.addListener(marker, 'click', function() { 
+      alert("Marker Test"); 
+   }); 
+
     MapComponent.offices_mapping.set(marker, data);
     MapComponent.markers.push(marker)
   }
