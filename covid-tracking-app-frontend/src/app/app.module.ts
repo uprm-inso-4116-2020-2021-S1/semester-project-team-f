@@ -16,6 +16,7 @@ import { ManagePatientsComponent } from './manage-patients/manage-patients.compo
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { HelpInfoComponent } from './help-info/help-info.component';
 import { CovidCasesComponent } from './covid-cases/covid-cases.component';
+import { OfficeInformationComponent } from './office-information/office-information.component';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { CovidCasesComponent } from './covid-cases/covid-cases.component';
     AccountSettingsComponent,
     HelpInfoComponent,
     CovidCasesComponent,
+    OfficeInformationComponent,
   ],
   imports: [
     BrowserModule,

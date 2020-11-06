@@ -21,6 +21,9 @@
     <app-address-information></app-address-information>
 </div>
 
+<div *ngIf="isViewingOffice();">
+    <app-office-information></app-office-information>
+</div>
 
 <ng-template #loginSidebar>
     <app-login-sidebar></app-login-sidebar>
