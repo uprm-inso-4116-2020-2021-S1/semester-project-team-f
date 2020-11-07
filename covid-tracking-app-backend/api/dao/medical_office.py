@@ -8,12 +8,14 @@ class MedicalOffice(db.Model):
     owner_id = db.Column(UUID(as_uuid=True), db.ForeignKey('user.user_id'), nullable=False)
     office_name = db.Column(db.String(50), nullable=False)
     location_id = db.Column(db.Integer, db.ForeignKey('location.location_id'), nullable=True)
+    office_phone_number = db.Column(db.Integer, nullable=False)
 
     def __init__(self, **args):
         self.office_id = args.get('office_id')
         self.owner_id = args.get('owner_id')
         self.office_name = args.get('office_name')
         self.location_id = args.get('location_id')
+        self.office_phone_number = args.get('location_id')
 
     @staticmethod
     def getAllMedicalOffices():
