@@ -16,7 +16,11 @@ import { ManagePatientsComponent } from './manage-patients/manage-patients.compo
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { HelpInfoComponent } from './help-info/help-info.component';
 import { CovidCasesComponent } from './covid-cases/covid-cases.component';
-
+import { PatientService } from './services/patient.service';
+import { CovidService } from './services/covid.service';
+import { DoctorService } from './services/doctor.service';
+import { LocationService } from './services/location.service';
+import { VisitedLocationService } from './services/visited-location.service';
 
 @NgModule({
   declarations: [
@@ -38,11 +42,16 @@ import { CovidCasesComponent } from './covid-cases/covid-cases.component';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [AddressService, UserService, MedicalOfficeService],
-  bootstrap: [AppComponent, 
-    LoginSidebarComponent,
-    ContactInformationComponent,
-    AddressInformationComponent
-  ]
+  providers: [
+    AddressService, 
+    UserService, 
+    MedicalOfficeService,
+    PatientService, 
+    CovidService,
+    DoctorService, 
+    LocationService,
+    VisitedLocationService
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

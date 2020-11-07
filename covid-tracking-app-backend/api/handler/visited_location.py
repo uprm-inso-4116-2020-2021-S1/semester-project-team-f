@@ -7,27 +7,42 @@ class VisitedLocationHandler:
     @staticmethod
     def getAllVisitedLocations():
         try:
-            locations = VisitedLocation.getAllVisitedLocations()
+            visited_locations = VisitedLocation.getAllVisitedLocations()
             result_list = []
-            for VisitedLocation in locations:
-                result_list.append(Utilities.to_dict(VisitedLocation))
+            for location in visited_locations:
+                result_list.append(Utilities.to_dict(location))
             result = {
                 "message": "Success!",
-                "Visited locations": result_list
+                "visited_locations": result_list
             }
             return jsonify(result), 200
         except Exception as e:
             return jsonify(reason="Server error", error=e.__str__()), 500
 
     @staticmethod
-    def getVisitedLocationByLattitudeAndLongitude(json):
+    def getLocationsVisitedByUserId(uid):
         try:
-            location = VisitedLocation.getVisitedLocationByLattitudeAndLongitude(json)
-            location_dic = Utilities.to_dict(location)
+            visited_location = VisitedLocation.getLocationsVisitedByUserId(uid)
+            location_dic = Utilities.to_dict(visited_location)
 
             result = {
                 "message": "Success!",
-                "visited location": location_dic
+                "visited_location": location_dic
+            }
+            return jsonify(result), 200
+
+        except Exception as e:
+            return jsonify(reason="Server error", error=e.__str__()), 500
+
+    @staticmethod
+    def getVisitedLocationsRelativeToAddress(aid):
+        try:
+            visited_location = VisitedLocation.getVisitedLocationsRelativeToAddress(aid)
+            location_dic = Utilities.to_dict(visited_location)
+
+            result = {
+                "message": "Success!",
+                "visited_location": location_dic
             }
             return jsonify(result), 200
 
@@ -39,11 +54,11 @@ class VisitedLocationHandler:
         valid_params = Utilities.verify_parameters(json, VisitedLocation.REQUIRED_PARAMETERS)
         if valid_params:
             try:
-                location = VisitedLocation(**valid_params).create()
-                location_dict = Utilities.to_dict(covid_case)
+                visited_location = VisitedLocation(**valid_params).create()
+                location_dict = Utilities.to_dict(visited_location)
                 result = {
                     "message": "Success!",
-                    "visited location": location_dict,
+                    "visited_location": location_dict,
                 }
                 return jsonify(result), 201
             except Exception as err:
@@ -53,9 +68,9 @@ class VisitedLocationHandler:
     
     @staticmethod
     def deleteVisitedLocation(json):
-        deleteVisitedLocation = VisitedLocation.deleteVisitedLocation(json)
+        deletedVisitedLocation = VisitedLocation.deleteVisitedLocation(json)
         result = {
             "message": "Success!",
-            "Visited Location": Utilities.to_dict(deleteVisitedLocation)
+            "visited_location": Utilities.to_dict(deletedVisitedLocation)
         }
         return jsonify(result), 200
