@@ -92,13 +92,15 @@ export class MapComponent implements AfterViewInit {
     
     });
 
-    google.maps.event.addListener(marker, 'click', function() { 
-      OfficeInformationComponent.viewOffice();
-   }); 
-
+  
     MapComponent.offices_mapping.set(marker, data);
     MapComponent.markers.push(marker)
-    OfficeInformationComponent.medical_office = MapComponent.offices_mapping.get(marker);
+    
+    google.maps.event.addListener(marker, 'click', function() { 
+      OfficeInformationComponent.viewOffice();
+      OfficeInformationComponent.medical_office = MapComponent.offices_mapping.get(marker);
+   }); 
+
   }
 
     // Shows only the places where the logged in doctor works.

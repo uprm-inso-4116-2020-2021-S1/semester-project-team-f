@@ -3,5 +3,8 @@
     <div class="upperBar {{effectsInAction[0]}}">
         <img id="back" (click) = "exitOfficeView()"src="../../assets/Back.png" alt="back" style="float:left">
     </div>
-    <a id="title">{{getOffice().office_name}}</a>
+    <a id="title">Office: {{getOffice().office_name}}
+        <br>Phone Number: {{getOffice().office_phone_number}}
+        <br>
+    </a>
 </div>
