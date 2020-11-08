@@ -32,7 +32,7 @@ export class NavbarComponent implements OnInit {
     setTimeout(() =>  {
       DoctorService.loggedDoctorId = null;
       DoctorService.doctorOfficesId = null;
-      MapComponent.hideWorkingPlacesAndShowOffices();
+      MapComponent.showOfficesOnly();
       this.userService.logout()
     }, 800); //wait 800ms for the effect to take effect
   }
