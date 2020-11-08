@@ -9,30 +9,21 @@ import { MedicalOffice } from '../models/medical_office';
   styleUrls: ['./office-information.component.scss']
 })
 export class OfficeInformationComponent implements OnInit {
-  public effectsInAction: string[];
   public static isViewingOffice: boolean;
   static medical_office: MedicalOffice
 
   constructor() { }
 
   ngOnInit(): void {
-    this.effectsInAction = ["slide-right", "slide-left"]; //the default effects when someone enters to the main-page
+
   }
 
   public exitOfficeView(): void{
     OfficeInformationComponent.medical_office = null;
-    setTimeout(() => {AppComponent.exitOfficeView(); }, 800);
-    OfficeInformationComponent.isViewingOffice = false; 
+    AppComponent.exitOfficeView(); 
   }
 
   public getOffice(): MedicalOffice{
     return OfficeInformationComponent.medical_office;
   }
-
-  public static viewOffice(): void{
-    setTimeout(() => {AppComponent.viewOffice(); }, 800);
-    OfficeInformationComponent.isViewingOffice = true;
-  }
-
-
 }

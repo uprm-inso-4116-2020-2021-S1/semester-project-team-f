@@ -1,13 +1,14 @@
 <div class="sidebar slide-right">
+
+    <div class="upperBar">
+        <a><img id="back" (click) = "returnToNavbar()"src="../../assets/Back.png" alt="back"></a>
+        <a id="title">{{getOffice().office_name}}</a>
+    </div>
+
     <div class="form">
-        <div class="upperBar" >
-            <img id="back" (click) = "returnToNavbar()"src="../../assets/Back.png" alt="back">
-            <a id="title">{{getOffice().office_name}}</a>
-        </div>
             <a *ngIf="error" style="color: orange; padding: 1vw;">{{error}}</a>
             <a class="form-text">Patient's Email:</a>
             <a><input type="email" id="inputEmail" class="form-control" required autofocus></a>
-
     </div>
 
     

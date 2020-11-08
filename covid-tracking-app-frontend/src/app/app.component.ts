@@ -32,7 +32,8 @@ export class AppComponent{
 
   public static viewOffice(){
     this.hideNavbar(); 
-    this.viewingOffice = true;
+    this.viewingOffice = !this.managingCovidCases && !this.addingOrRemovingPatient && 
+    !this.changingContactInformation && !this.changingAddressInformation;
   }
 
   public static changeAddOrRemovePatients() { 

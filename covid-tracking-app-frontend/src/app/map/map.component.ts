@@ -97,8 +97,8 @@ export class MapComponent implements AfterViewInit {
     MapComponent.markers.push(marker)
     
     google.maps.event.addListener(marker, 'click', function() { 
-      OfficeInformationComponent.viewOffice();
       OfficeInformationComponent.medical_office = MapComponent.offices_mapping.get(marker);
+      AppComponent.viewOffice();
    }); 
 
   }
@@ -111,6 +111,7 @@ export class MapComponent implements AfterViewInit {
 
         if(DoctorService.doctorOfficesId.has(medical_office.office_id)){ 
           this.markers[i].setIcon(ICON_TYPE.WORK_ICON);
+          google.maps.event.clearListeners(this.markers[i], "click");
           
           if(patient_listener){
               this.markers[i].addListener("click",() => {
@@ -145,7 +146,8 @@ export class MapComponent implements AfterViewInit {
           this.markers[i].setIcon(ICON_TYPE.DOCTOR_ICON);
           this.markers[i].setMap(this.map);
           this.markers[i].addListener("click",() => {
-            OfficeInformationComponent.viewOffice();
+            OfficeInformationComponent.medical_office = MapComponent.offices_mapping.get(this.markers[i]);
+            AppComponent.viewOffice();
             });
         }
       }
