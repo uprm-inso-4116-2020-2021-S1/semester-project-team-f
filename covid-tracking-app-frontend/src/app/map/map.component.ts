@@ -9,6 +9,7 @@ import { AppComponent } from '../app.component';
 import { MedicalOffice } from '../models/medical_office';
 import { ManagePatientsComponent } from '../manage-patients/manage-patients.component';
 import { CovidCasesComponent } from '../covid-cases/covid-cases.component';
+import {OfficeInformationComponent} from '../office-information/office-information.component';
 
 @Component({
   selector: 'app-map',
@@ -41,7 +42,6 @@ export class MapComponent implements AfterViewInit {
     this.geocoder = new google.maps.Geocoder();
     this.markOfficeLocations();
   }
-
   markOfficeLocations(){
     MapComponent.offices_mapping = new Map<google.maps.Marker, any>();
     this.medicalOfficeService.getAllMedicalOffices().subscribe(res =>{
@@ -91,8 +91,16 @@ export class MapComponent implements AfterViewInit {
       title: marker_name
     
     });
+
+  
     MapComponent.offices_mapping.set(marker, data);
     MapComponent.markers.push(marker)
+    
+    google.maps.event.addListener(marker, 'click', function() { 
+      OfficeInformationComponent.medical_office = MapComponent.offices_mapping.get(marker);
+      AppComponent.viewOffice();
+   }); 
+
   }
 
     // Shows only the places where the logged in doctor works.
@@ -103,6 +111,7 @@ export class MapComponent implements AfterViewInit {
 
         if(DoctorService.doctorOfficesId.has(medical_office.office_id)){ 
           this.markers[i].setIcon(ICON_TYPE.WORK_ICON);
+          google.maps.event.clearListeners(this.markers[i], "click");
           
           if(patient_listener){
               this.markers[i].addListener("click",() => {
@@ -136,6 +145,10 @@ export class MapComponent implements AfterViewInit {
           google.maps.event.clearListeners(this.markers[i], "click");
           this.markers[i].setIcon(ICON_TYPE.DOCTOR_ICON);
           this.markers[i].setMap(this.map);
+          this.markers[i].addListener("click",() => {
+            OfficeInformationComponent.medical_office = MapComponent.offices_mapping.get(this.markers[i]);
+            AppComponent.viewOffice();
+            });
         }
       }
     }

@@ -9,6 +9,7 @@ export class AppComponent{
   private static hasLoggedIn: boolean;
   private static addingOrRemovingPatient: boolean;
   private static managingCovidCases: boolean;
+  private static viewingOffice: boolean;
   private static changingContactInformation: boolean;
   private static changingAddressInformation: boolean;
   private static seeingHelp: boolean;
@@ -20,6 +21,7 @@ export class AppComponent{
   public isSeeingHelp()  { return AppComponent.seeingHelp; }
   public isChangingContactInformation() { return AppComponent.changingContactInformation; }
   public isChangingAddressInformation() { return AppComponent.changingAddressInformation;}
+  public isViewingOffice(){ return AppComponent.viewingOffice;}
   public static changeToNavbar(){ AppComponent.hasLoggedIn = true; }
   public static changeToLogin() { AppComponent.hasLoggedIn = false; }
 
@@ -27,10 +29,18 @@ export class AppComponent{
     this.hideNavbar();
     this.seeingHelp= true;
   }
+
+  public static viewOffice(){
+    this.hideNavbar(); 
+    this.viewingOffice = !this.managingCovidCases && !this.addingOrRemovingPatient && 
+    !this.changingContactInformation && !this.changingAddressInformation;
+  }
+
   public static changeAddOrRemovePatients() { 
     this.hideNavbar();
     this.addingOrRemovingPatient = true;
   }
+
   public static changeManagingCovidCases() { 
     this.hideNavbar();
     this.managingCovidCases = true;
@@ -45,7 +55,12 @@ export class AppComponent{
     this.hideNavbar();
     this.changingAddressInformation = true; 
   }
-  
+
+  public static exitOfficeView(){
+    this.hideSidebar();
+    setTimeout(()=> this.viewingOffice = false, 800);
+  }
+
   public static exitContactInformation() { 
     this.hideSidebar();
     setTimeout(()=> this.changingContactInformation = false, 800);
@@ -82,8 +97,4 @@ export class AppComponent{
     document.querySelector('.navbar').classList.remove('slide-down')
     document.querySelector('.navbar').classList.add('slide-up') 
   }
-
-
-  
-
 }
