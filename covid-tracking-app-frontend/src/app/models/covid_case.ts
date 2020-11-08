@@ -2,7 +2,7 @@ export interface CovidCase {
     patient_id: string;
     doctor_id: string;
     office_id: number;
-    date_tested?: Date;
+    date_tested?: string;
     tested_positive?: Boolean;
   }
   
