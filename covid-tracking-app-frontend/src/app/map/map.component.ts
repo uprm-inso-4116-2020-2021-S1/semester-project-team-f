@@ -22,27 +22,57 @@ export class MapComponent implements AfterViewInit {
 
   private geocoder: google.maps.Geocoder;
   
-  private lat = 18.196512;
-  private lng = -66.4224762;
-
+  private static user_marker: google.maps.Marker; //the user's marker
   private static map: google.maps.Map;
   private static offices_mapping: Map<google.maps.Marker, any>;
   private static markers: google.maps.Marker[] = [];
-
-  coordinates = new google.maps.LatLng(this.lat, this.lng);
-
-  mapOptions: google.maps.MapOptions = {center: this.coordinates,zoom: 8,  styles: MAP_STYLE, mapTypeControl: false,
-  streetViewControl: false, minZoom: 3, fullscreenControl: false};
+  private static directionsRenderer = new google.maps.DirectionsRenderer({suppressMarkers: true});
 
   constructor(private medicalOfficeService: MedicalOfficeService, private addressService: AddressService,
      private locationService: LocationService) { }
 
   ngAfterViewInit(): void {
-    MapComponent.map = new google.maps.Map(this.gmap.nativeElement, this.mapOptions);
+    let coordinates = new google.maps.LatLng(18.196512, -66.4224762);
+
+    let mapOptions: google.maps.MapOptions = {
+      center: coordinates,
+      zoom: 8,
+      styles: MAP_STYLE,
+      mapTypeControl: false,
+      streetViewControl: false, 
+      minZoom: 3,
+      fullscreenControl: false
+    };
+
+    MapComponent.map = new google.maps.Map(this.gmap.nativeElement, mapOptions);
+
     this.geocoder = new google.maps.Geocoder();
+    this.requestUserLocation();
     this.markOfficeLocations();
   }
-  markOfficeLocations(){
+
+  private requestUserLocation(){
+        // Try HTML5 geolocation.
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position: Position) => { MapComponent.user_marker = new google.maps.Marker({
+              position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
+        
+              label: {
+                color: 'black',
+                text: "Your location",
+              },
+              icon: ICON_TYPE.PERSON_ICON,
+              title: "Your location"
+            }); }
+          );
+        } else {
+          // Browser doesn't support Geolocation
+          alert("ERROR: Your browser doesn't support geolocation. ")
+        }
+  }
+
+  private markOfficeLocations(){
     MapComponent.offices_mapping = new Map<google.maps.Marker, any>();
     this.medicalOfficeService.getAllMedicalOffices().subscribe(res =>{
       for(let office of res.medical_offices){
@@ -68,7 +98,6 @@ export class MapComponent implements AfterViewInit {
                   if (status === google.maps.GeocoderStatus.OK) {
                     //mark it, if it was found
                     this.addMarker(results[0], marker_name, icon_type, data);
-                    MapComponent.map.setCenter( (results[0].geometry as google.maps.places.PlaceGeometry).location );
                   }
 
                 }
@@ -89,18 +118,11 @@ export class MapComponent implements AfterViewInit {
       icon:
        icon_type,
       title: marker_name
-    
     });
-
   
     MapComponent.offices_mapping.set(marker, data);
     MapComponent.markers.push(marker)
-    
-    google.maps.event.addListener(marker, 'click', function() { 
-      OfficeInformationComponent.medical_office = MapComponent.offices_mapping.get(marker);
-      AppComponent.viewOffice();
-   }); 
-
+    MapComponent.addOfficeListener(marker);
   }
 
     // Shows only the places where the logged in doctor works.
@@ -118,7 +140,7 @@ export class MapComponent implements AfterViewInit {
           
               ManagePatientsComponent.medical_office = medical_office;
               AppComponent.changeAddOrRemovePatients();
-              this.hideWorkingPlacesAndShowOffices();
+              this.showOfficesOnly();
               });
           }
           else{
@@ -126,7 +148,7 @@ export class MapComponent implements AfterViewInit {
           
               CovidCasesComponent.medical_office = medical_office;
               AppComponent.changeManagingCovidCases();
-              this.hideWorkingPlacesAndShowOffices();
+              this.showOfficesOnly();
               });
           }
 
@@ -139,17 +161,47 @@ export class MapComponent implements AfterViewInit {
        alert("Please select the office that you wish to manage...")
     }
 
-    public static hideWorkingPlacesAndShowOffices(){
+    private static addOfficeListener(marker): void{
+      marker.setIcon(ICON_TYPE.DOCTOR_ICON);
+      marker.setMap(this.map);
+
+      let start = this.user_marker.getPosition().lat() + ', ' + this.user_marker.getPosition().lng();
+      let end = marker.getPosition().lat() + ', ' + marker.getPosition().lng();
+      let directionsService = new google.maps.DirectionsService();
+
+      google.maps.event.addListener(marker, 'click', function() { 
+        OfficeInformationComponent.medical_office = MapComponent.offices_mapping.get(marker);
+        directionsService.route(
+          {
+            origin: start,
+            destination: end,
+            travelMode: google.maps.TravelMode.DRIVING,
+          }, (response, status) => {
+            if(status === 'OK'){ 
+              MapComponent.user_marker.setMap(MapComponent.map);
+              MapComponent.user_marker.setAnimation(google.maps.Animation.DROP);
+              MapComponent.directionsRenderer.setDirections(response); 
+              MapComponent.directionsRenderer.setMap(MapComponent.map);
+              OfficeInformationComponent.distance = response.routes[0].legs[0].distance.text;
+            }
+          }
+        );
+
+        AppComponent.viewOffice();
+     }); 
+    }
+
+    public static showOfficesOnly(){
       for (let i = 0; i < this.markers.length; i++) { 
         if(this.offices_mapping.has(this.markers[i])){
           google.maps.event.clearListeners(this.markers[i], "click");
-          this.markers[i].setIcon(ICON_TYPE.DOCTOR_ICON);
-          this.markers[i].setMap(this.map);
-          this.markers[i].addListener("click",() => {
-            OfficeInformationComponent.medical_office = MapComponent.offices_mapping.get(this.markers[i]);
-            AppComponent.viewOffice();
-            });
+          this.addOfficeListener(this.markers[i]);
         }
       }
+    }
+
+    public static resetRoute(){ 
+      MapComponent.user_marker.setMap(null);
+      this.directionsRenderer.setMap(null); 
     }
 }

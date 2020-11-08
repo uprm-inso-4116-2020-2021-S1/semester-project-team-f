@@ -88,7 +88,8 @@ export class CovidCasesComponent implements OnInit {
       if(res.message == "Success!"){
         console.log("The following COVID-19 record was deleted: ");
         console.log(covid_case);
-        this.showCases();
+        let index = this.cases.indexOf(covid_case);
+        this.cases.splice(index, 1);
       }
     })
   }
@@ -99,10 +100,13 @@ export class CovidCasesComponent implements OnInit {
       if(user_response.message == "Success!"){
         this.error = null;
 
+        let date: Date = new Date();
+
         let covid_case: CovidCase = {
           patient_id: user_response.user.user_id,
           doctor_id: DoctorService.loggedDoctorId,
-          office_id: CovidCasesComponent.medical_office.office_id
+          office_id: CovidCasesComponent.medical_office.office_id,
+          date_tested: date.toDateString()
         };
 
         this.covidService.createRecord(covid_case).subscribe(covid_response => {
@@ -125,8 +129,8 @@ export class CovidCasesComponent implements OnInit {
   
               this.cases.push(infected_patient);
             }
-        });
+        }, err => this.error = "User is not in our office record.");
       }
-    }, err => this.error = "Email does not exist. Are you sure that this email is a patient of our office?");
+    }, err => this.error = "User does not exist.");
   }
 }

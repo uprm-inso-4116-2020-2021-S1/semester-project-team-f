@@ -154,13 +154,16 @@ class CovidCasesHandler:
 
     @staticmethod
     def deleteRecord(key):
-        parameters = key.split('&')
-        deleted_record = CovidCases.deleteRecord({'patient_id': parameters[0], 'office_id': parameters[1], 'date_tested': parameters[2]})
-        result = {
-            "message": "Success!",
-            "case": Utilities.to_dict(deleted_record)
-        }
-        return jsonify(result), 200
+        try:
+            parameters = key.split('&')
+            deleted_record = CovidCases.deleteRecord({'patient_id': parameters[0], 'office_id': parameters[1], 'date_tested': parameters[2]})
+            result = {
+                "message": "Success!",
+                "case": Utilities.to_dict(deleted_record)
+            }
+            return jsonify(result), 200
+        except Exception as e:
+            return jsonify(reason="Server error", error=e.__str__()), 500
 
     @staticmethod
     def updateRecord(json):

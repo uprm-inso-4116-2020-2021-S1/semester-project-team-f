@@ -55,7 +55,7 @@ export class ManagePatientsComponent implements OnInit {
     });
    }
 
-   public patientExists(): boolean{
+   public searchPatient(): boolean{
      document.getElementById(this.patients[0].user_id).classList.remove("active");
      let email: string = (<HTMLInputElement>document.querySelector("#inputEmail")).value;
      for(let i = 0; i < this.patients.length; i++){
@@ -85,7 +85,8 @@ export class ManagePatientsComponent implements OnInit {
       if(res.message == "Success!"){
         console.log("The following patient record was deleted: ");
         console.log(patient);
-        this.showPatients();
+        let index = this.patients.indexOf(patient);
+        this.patients.splice(index, 1);
       }
     })
   }
