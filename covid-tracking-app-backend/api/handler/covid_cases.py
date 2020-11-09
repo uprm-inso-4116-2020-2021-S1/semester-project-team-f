@@ -1,6 +1,10 @@
 from flask import jsonify, session
+from api.util.config import app, mail
+from flask_mail import Message
 from api.dao.covid_cases import CovidCases
 from api.dao.patient import Patient
+from api.dao.medical_office import MedicalOffice
+from api.dao.user import User
 from api.util.utilities import Utilities
 
 class CovidCasesHandler:
@@ -182,7 +186,22 @@ class CovidCasesHandler:
                     "message": "Success!",
                     "case": Utilities.to_dict(updatedInfo)
                 }
+
+                user = Utilities.to_dict(User.getUserById(json['patient_id']))
+                office = Utilities.to_dict(MedicalOffice.getMedicalOfficeById(json['office_id']))
+
+                if(json['test_status'] != 1):
+                    statuses = {2: 'negative', 3: 'positive'}
+
+                    msg = Message('COVID-19 Test Result',
+                                    sender='thecovidtracker@gmail.com',
+                                    recipients=[user['email']])
+                    msg.body = f'''Hi {user['full_name']},
+                    
+                    Your tested {statuses[json['test_status']]} to the COVID-19. If you want to know more info about your COVID-19 test, please call {office['office_phone_number']}.
+                    '''
+                    mail.send(msg)
+
                 return jsonify(result), 200
             except Exception as e:
-                print(e.__str__())
                 return jsonify(reason="Server error", error=e.__str__()), 500
