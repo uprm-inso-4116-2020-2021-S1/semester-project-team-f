@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LoginSidebarComponent } from './login-sidebar/login-sidebar.component';
 
 @Component({
   selector: 'app-root',
@@ -22,8 +23,18 @@ export class AppComponent{
   public isChangingContactInformation() { return AppComponent.changingContactInformation; }
   public isChangingAddressInformation() { return AppComponent.changingAddressInformation;}
   public isViewingOffice(){ return AppComponent.viewingOffice;}
-  public static changeToNavbar(){ AppComponent.hasLoggedIn = true; }
-  public static changeToLogin() { AppComponent.hasLoggedIn = false; }
+
+
+  public static changeToNavbar(){ 
+    try{ this.hideSidebar(); }
+    catch{setTimeout(()=> this.hasLoggedIn = true, 800);}
+   }
+  public static changeToLogin() { 
+    this.hideNavbar();
+    setTimeout(()=> {
+      this.hasLoggedIn = false;
+      document.querySelector('.sidebar').classList.add('slide-right'); }, 800); //slide-right as soon as user logs out
+  }
 
   public static seeHelpInfo() { 
     this.hideNavbar();
@@ -31,7 +42,9 @@ export class AppComponent{
   }
 
   public static viewOffice(){
-    this.hideNavbar(); 
+    if(this.hasLoggedIn) this.hideNavbar(); 
+    else this.showOfficeWhenLoggedOut(); 
+
     this.viewingOffice = !this.managingCovidCases && !this.addingOrRemovingPatient && 
     !this.changingContactInformation && !this.changingAddressInformation;
   }
@@ -57,7 +70,9 @@ export class AppComponent{
   }
 
   public static exitOfficeView(){
-    this.hideSidebar();
+    if(this.hasLoggedIn) this.hideSidebar();
+    else this.hideOfficeWhenLoggedOut();
+
     setTimeout(()=> this.viewingOffice = false, 800);
   }
 
@@ -81,7 +96,7 @@ export class AppComponent{
     setTimeout(()=> this.managingCovidCases = false, 800);
   }
 
-  public static ExitHelp() {
+  public static exitHelp() {
     this.hideSidebar(); 
     setTimeout(()=> this.seeingHelp = false, 800);
   }
@@ -96,5 +111,19 @@ export class AppComponent{
   private static hideNavbar(): void{
     document.querySelector('.navbar').classList.remove('slide-down')
     document.querySelector('.navbar').classList.add('slide-up') 
+  }
+
+  private static showOfficeWhenLoggedOut(){
+    try{ document.querySelector('.sidebar').classList.remove('slide-right');  }
+    catch { /*do nothing...*/ }  
+    
+    document.querySelector('.sidebar').classList.add('slide-left'); 
+  }
+
+  private static hideOfficeWhenLoggedOut(){
+    document.querySelector('.office-info').classList.remove('slide-right'); 
+    document.querySelector('.office-info').classList.add('slide-left'); 
+    document.querySelector('.sidebar').classList.remove('slide-left'); 
+    document.querySelector('.sidebar').classList.add('slide-right'); 
   }
 }

@@ -1,6 +1,10 @@
 from flask import jsonify, session
+from api.util.config import app, mail
+from flask_mail import Message
 from api.dao.covid_cases import CovidCases
 from api.dao.patient import Patient
+from api.dao.medical_office import MedicalOffice
+from api.dao.user import User
 from api.util.utilities import Utilities
 
 class CovidCasesHandler:
@@ -140,13 +144,20 @@ class CovidCasesHandler:
         valid_params = Utilities.verify_parameters(json, CovidCases.REQUIRED_PARAMETERS)
         if valid_params:
             try:
-                covid_case = CovidCases(**valid_params).create()
-                case_dict = Utilities.to_dict(covid_case)
-                result = {
-                    "message": "Success!",
-                    "case": case_dict,
-                }
-                return jsonify(result), 201
+                patient_exists = Patient.getPatientByIdAndOffice({'user_id': json['patient_id'], 'office_id': json['office_id']})
+                if patient_exists:
+                    try:
+                        covid_case = CovidCases(**valid_params).create()
+                        case_dict = Utilities.to_dict(covid_case)
+                        result = {
+                            "message": "Success!",
+                            "case": case_dict,
+                        }
+                        return jsonify(result), 201
+                    except:
+                        return jsonify(reason="Patient was already tested today."), 401
+                else:
+                    return jsonify(reason="User is not in our office record."), 401
             except Exception as err:
                 return jsonify(message="Server error!", error=err.__str__()), 500
         else:
@@ -167,14 +178,30 @@ class CovidCasesHandler:
 
     @staticmethod
     def updateRecord(json):
-        valid_parameters = Utilities.verify_parameters(json, ['patient_id', 'office_id', 'date_tested', 'tested_positive'])
+        valid_parameters = Utilities.verify_parameters(json, CovidCases.REQUIRED_PARAMETERS)
         if valid_parameters:
             try:
-                updatedInfo = CovidCases.updateCovidStatus(**valid_parameters)
+                updatedInfo = CovidCases.updateCovidStatus(json)
                 result = {
                     "message": "Success!",
                     "case": Utilities.to_dict(updatedInfo)
                 }
+
+                user = Utilities.to_dict(User.getUserById(json['patient_id']))
+                office = Utilities.to_dict(MedicalOffice.getMedicalOfficeById(json['office_id']))
+
+                if(json['test_status'] != 1):
+                    statuses = {2: 'negative', 3: 'positive'}
+
+                    msg = Message('COVID-19 Test Result',
+                                    sender='thecovidtracker@gmail.com',
+                                    recipients=[user['email']])
+                    msg.body = f'''Hi {user['full_name']},
+                    
+                    Your tested {statuses[json['test_status']]} to the COVID-19. If you want to know more info about your COVID-19 test, please call {office['office_phone_number']}.
+                    '''
+                    mail.send(msg)
+
                 return jsonify(result), 200
             except Exception as e:
                 return jsonify(reason="Server error", error=e.__str__()), 500

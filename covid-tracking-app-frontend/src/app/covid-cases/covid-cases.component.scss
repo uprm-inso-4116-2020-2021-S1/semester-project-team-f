@@ -9,6 +9,27 @@
       overflow-y: auto;
       margin-left: auto;
       margin-right: auto;
+      a{
+        font-size: 1vw;
+      }
+      .element {
+        border-style: solid;
+        border-width: 0vw 0.05vw 0.05vw 0.05vw;
+        background-color: #eee;
+        color: black;
+        display: block;
+        padding: 0.5vw;
+        text-align: left;
+        text-decoration: none;
+      }
+      .element:hover {
+        background-color: #ccc;
+      }
+      
+      .element:active {
+        background-color:#FF8A00;
+        color: white;
+      }
     }
   
     .form{ padding: 0px; }
@@ -17,25 +38,6 @@
        display: inline; 
        margin: 0.45vw;
       }
-    
-    .CaseList a {
-      background-color: #eee;
-      color: black;
-      display: block;
-      padding: 1vw;
-      font-size: 1vw;
-      text-align: left;
-      text-decoration: none;
-    }
-    
-    .CaseList a:hover {
-      background-color: #ccc;
-    }
-    
-    .CaseList a.active {
-      background-color:#FF8A00;
-      color: white;
-    }
   
     #RemoveCase{
       font-weight: bold;
@@ -73,4 +75,10 @@
   
   .form-text{
     margin-top: 1vw;
+  }
+
+  #statuses{
+    font-size: 1vw;
+    width: 7.5vw;
+    height: 2.25vw;
   }

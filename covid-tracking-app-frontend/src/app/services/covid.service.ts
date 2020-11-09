@@ -36,6 +36,12 @@ export class CovidService {
       .pipe(catchError(this._handleError))
   }
 
+  public updateRecord(covid_Case: CovidCase): Observable<any> {
+    return this.httpClient
+      .put(API_URL + `covid_cases`, covid_Case)
+      .pipe(catchError(this._handleError))
+  }
+
   public getAllCases(): Observable<CovidCasesResponse> {
     return this.httpClient
     .get<CovidCasesResponse>(API_URL + `covid_cases`)

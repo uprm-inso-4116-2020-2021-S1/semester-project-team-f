@@ -13,22 +13,15 @@ export class LoginSidebarComponent implements OnInit {
   public effectsInAction: string[]; //effects not related to login
   public canGoToNextPage: boolean;
   public error: string;
-  public static justSignedOut: boolean;
 
   constructor(private userService: UserService, private doctorService: DoctorService) { }
 
   ngOnInit(): void {
-    this.effectsInAction = ["slide-down", "fade-in"]; //the default effects when someone enters to the main-page
-
-    if(LoginSidebarComponent.justSignedOut){
-      document.querySelector('.sidebar').classList.add('slide-right');
-    }
-    
+    this.effectsInAction = ["slide-down", "fade-in"]; //the default effects when someone enters to the main-page  
     this.canGoToNextPage = false;
   }
 
   public createAccount(): void{
-
     this.effectsInAction = ["slide-up", "fade-out"]; //after the users press create account, those are the effects that will be executed
     setTimeout(() => this.canGoToNextPage = true, 800);
   }
@@ -49,23 +42,19 @@ export class LoginSidebarComponent implements OnInit {
               DoctorService.loggedDoctorId = res.doctor[0].user_id;
               DoctorService.doctorOfficesId = new Set<number>();
 
-              for (let i = 0; i < res.doctor.length; i++){
-                DoctorService.doctorOfficesId.add(res.doctor[i].office_id);
+              for (let doctor of res.doctor){
+                DoctorService.doctorOfficesId.add(doctor.office_id);
               }
 
             }
           });
-         
-          //execute the slide-left effect (this is another way of doing so)
-          document.querySelector('.sidebar').classList.add('slide-left'); 
 
-          setTimeout(() => {
             UserService.loggedUser = res.user;
             localStorage.setItem('currentUserId', res.user.user_id);
-            console.log("User with id of " + res.user.user_id + " has logged in!");
-            AppComponent.changeToNavbar();
-          }, 800);
 
+            console.log("User with id of " + res.user.user_id + " has logged in!");
+
+            AppComponent.changeToNavbar();
         }
       },
       err => this.error = err.error.reason);

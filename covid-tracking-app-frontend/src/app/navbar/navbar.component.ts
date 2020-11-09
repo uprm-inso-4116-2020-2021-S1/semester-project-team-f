@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { DoctorService } from '../services/doctor.service';
 import { User } from '../models/user';
-import { LoginSidebarComponent } from '../login-sidebar/login-sidebar.component';
 import { AppComponent } from '../app.component';
-import { Doctor } from '../models/doctor';
 import { MapComponent } from '../map/map.component';
 
 @Component({
@@ -27,14 +25,10 @@ export class NavbarComponent implements OnInit {
   }
 
   public logout(): void{
-    document.querySelector('.navbar').classList.add('slide-up') //execute the slide-up effect (this is another way of doing so)
-    LoginSidebarComponent.justSignedOut = true;
-    setTimeout(() =>  {
+      this.userService.logout();
       DoctorService.loggedDoctorId = null;
       DoctorService.doctorOfficesId = null;
-      MapComponent.showOfficesOnly();
-      this.userService.logout()
-    }, 800); //wait 800ms for the effect to take effect
+      AppComponent.changeToLogin();
   }
 
   public addOrRemovePatient(): void{ MapComponent.showWorkingPlacesOnly(true); }

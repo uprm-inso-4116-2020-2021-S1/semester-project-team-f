@@ -2,6 +2,7 @@ from flask import jsonify, session
 from api.dao.user import User
 from api.dao.patient import Patient
 from api.dao.doctor import Doctor
+from api.dao.covid_cases import CovidCases
 from api.util.utilities import Utilities
 
 class PatientHandler:
@@ -98,6 +99,9 @@ class PatientHandler:
     @staticmethod
     def deletePatient(key):
         parameters = key.split('&')
+        covid_case_exists = CovidCases.getCasesByPatient(parameters[1])
+        if covid_case_exists:
+            return jsonify(reason="Can't delete the patient, the patient has active tests."), 400
         deletedPatient = Patient.deletePatient({'user_id': parameters[1], 'office_id': parameters[0]})
         result = {
             "message": "Success!",

@@ -88,7 +88,7 @@ export class ManagePatientsComponent implements OnInit {
         let index = this.patients.indexOf(patient);
         this.patients.splice(index, 1);
       }
-    })
+    }, err => this.error = err.error.reason);
   }
 
   public addPatient(){

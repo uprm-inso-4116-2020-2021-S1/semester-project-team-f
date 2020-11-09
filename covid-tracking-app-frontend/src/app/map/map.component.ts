@@ -10,6 +10,7 @@ import { MedicalOffice } from '../models/medical_office';
 import { ManagePatientsComponent } from '../manage-patients/manage-patients.component';
 import { CovidCasesComponent } from '../covid-cases/covid-cases.component';
 import {OfficeInformationComponent} from '../office-information/office-information.component';
+import { MessageBoxComponent } from '../message-box/message-box.component';
 
 @Component({
   selector: 'app-map',
@@ -64,7 +65,8 @@ export class MapComponent implements AfterViewInit {
               },
               icon: ICON_TYPE.PERSON_ICON,
               title: "Your location"
-            }); }
+            }); }, err => MessageBoxComponent.displayMessageBox("In order to have a better experience in our application, we recommend you to allow access to location permissions.")
+
           );
         } else {
           // Browser doesn't support Geolocation
@@ -165,12 +167,14 @@ export class MapComponent implements AfterViewInit {
       marker.setIcon(ICON_TYPE.DOCTOR_ICON);
       marker.setMap(this.map);
 
-      let start = this.user_marker.getPosition().lat() + ', ' + this.user_marker.getPosition().lng();
-      let end = marker.getPosition().lat() + ', ' + marker.getPosition().lng();
-      let directionsService = new google.maps.DirectionsService();
-
       google.maps.event.addListener(marker, 'click', function() { 
         OfficeInformationComponent.medical_office = MapComponent.offices_mapping.get(marker);
+        AppComponent.viewOffice();
+
+        let start = MapComponent.user_marker.getPosition().lat() + ', ' + MapComponent.user_marker.getPosition().lng();
+        let end = marker.getPosition().lat() + ', ' + marker.getPosition().lng();
+        let directionsService = new google.maps.DirectionsService();
+
         directionsService.route(
           {
             origin: start,
@@ -186,8 +190,6 @@ export class MapComponent implements AfterViewInit {
             }
           }
         );
-
-        AppComponent.viewOffice();
      }); 
     }
 
@@ -201,7 +203,7 @@ export class MapComponent implements AfterViewInit {
     }
 
     public static resetRoute(){ 
-      MapComponent.user_marker.setMap(null);
-      this.directionsRenderer.setMap(null); 
+      if(this.user_marker) this.user_marker.setMap(null);
+      if(this.directionsRenderer) this.directionsRenderer.setMap(null); 
     }
 }

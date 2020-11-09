@@ -15,7 +15,7 @@ class CovidCases(db.Model):
     doctor_id = db.Column(UUID(as_uuid=True), nullable=False)
     office_id = db.Column(db.Integer, nullable = False, primary_key=True)
     date_tested = db.Column(db.Date, nullable = False,  primary_key=True)
-    tested_positive = db.Column(db.Boolean, nullable = True) #the test may take days to show the results
+    test_status = db.Column(db.Integer, nullable=False, default=1) #the test may take days to show the results
 
     __table_args__ = (db.ForeignKeyConstraint([patient_id, office_id], [Patient.user_id, Patient.office_id]),
                         db.ForeignKeyConstraint([doctor_id, office_id], [Doctor.user_id, Doctor.office_id]),
@@ -26,7 +26,7 @@ class CovidCases(db.Model):
         self.doctor_id = args.get('doctor_id')
         self.office_id = args.get('office_id')
         self.date_tested = args.get('date_tested')
-        self.tested_positive = args.get('tested_positive')
+        self.test_status = args.get('test_status')
 
     '''Assuming that the patient can get re-infected, then the following query will
        return the record of all the times that the patient got COVID-19, if any
@@ -89,7 +89,7 @@ class CovidCases(db.Model):
     @staticmethod
     def updateCovidStatus(json):
         covid_case = CovidCases.getSpecificCase(json)
-        covid_case.tested_positive = json['tested_positive']
+        covid_case.test_status = json['test_status']
         db.session.commit()
         return covid_case
 

@@ -88,7 +88,8 @@ export class AddressInformationComponent{
 
               this.returnToNavbar();
           }
-        });
+        },
+        err => alert(err.error.reason));
       
   }
 
@@ -106,7 +107,9 @@ export class AddressInformationComponent{
               this.fadeEffect2 = "fade-out"; //after the users press go next, this effect that will be executed
               setTimeout(() => this.canGoToNextPage = true, 800);
               alert('Sign up was successful! Activate your account using the link we sent to your email.')
-            });
+            },
+            err => alert(err.error.reason)
+            );
             
           }
 
