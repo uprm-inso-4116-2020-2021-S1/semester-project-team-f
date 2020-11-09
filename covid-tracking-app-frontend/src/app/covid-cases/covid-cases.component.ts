@@ -7,6 +7,7 @@ import { UserService } from '../services/user.service';
 import { AppComponent } from '../app.component';
 import { DoctorService } from '../services/doctor.service';
 import { PatientService } from '../services/patient.service';
+import { MessageBoxComponent } from '../message-box/message-box.component';
 
 type InfectedPatient = User & CovidCase;
 
@@ -19,12 +20,14 @@ type InfectedPatient = User & CovidCase;
 export class CovidCasesComponent implements OnInit {
 
   static medical_office: MedicalOffice
+  statuses: string[]
   cases: InfectedPatient[]
   error: string;
   
   constructor(private covidService: CovidService, private userService: UserService, private patientService: PatientService) { }
 
   ngOnInit(): void {
+      this.statuses = ['Pending', 'Negative', 'Positive']
       this.showCases();
    }
 
@@ -49,7 +52,7 @@ export class CovidCasesComponent implements OnInit {
               patient_id: covid_case.patient_id,
               doctor_id: covid_case.doctor_id,
               date_tested: covid_case.date_tested,
-              tested_positive: covid_case.tested_positive
+              test_status: covid_case.test_status
             }
 
             this.cases.push(infected_patient);
@@ -83,6 +86,29 @@ export class CovidCasesComponent implements OnInit {
     return CovidCasesComponent.medical_office;
   }
 
+  public classifyTestResult(covid_case: InfectedPatient, result: string){
+    let message = 'You just changed the test status to "' + result
+    message+='". Are you sure you sure this is the test result? An email will be sent to the patient if you confirm the result.'
+    MessageBoxComponent.confirmMessageBox(message, ()=>{
+
+      let updated_case: CovidCase = {
+        patient_id: covid_case.patient_id,
+        doctor_id: covid_case.doctor_id,
+        office_id: covid_case.office_id,
+        date_tested: covid_case.date_tested,
+        test_status: this.statuses.indexOf(result) + 1
+      }
+
+      this.covidService.updateRecord(updated_case).subscribe(res => {
+        if(res.message == "Success!"){
+          console.log("Test result was updated.");
+          this.cases[this.cases.indexOf(covid_case)].test_status = updated_case.test_status;
+        }
+      });
+    }
+    );
+  }
+
   public deleteCase(covid_case: InfectedPatient){
     this.covidService.deleteRecord(covid_case).subscribe(res =>{
       if(res.message == "Success!"){
@@ -91,7 +117,7 @@ export class CovidCasesComponent implements OnInit {
         let index = this.cases.indexOf(covid_case);
         this.cases.splice(index, 1);
       }
-    })
+    });
   }
 
   public addCase(){
@@ -124,7 +150,7 @@ export class CovidCasesComponent implements OnInit {
                 patient_id: covid_case.patient_id,
                 doctor_id: covid_case.doctor_id,
                 date_tested: covid_case.date_tested,
-                tested_positive: covid_case.tested_positive
+                test_status: covid_case.test_status
               }
   
               this.cases.push(infected_patient);
@@ -133,5 +159,9 @@ export class CovidCasesComponent implements OnInit {
       }
     }, err => this.error = err.error.reason
     );
+  }
+
+  public decodeCovidResult(patient: InfectedPatient): string{
+    return this.statuses[patient.test_status - 1];
   }
 }

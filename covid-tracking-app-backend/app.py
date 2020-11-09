@@ -99,21 +99,21 @@ def getPatientsByOfficeOrDeletePatient(id):
     elif request.method == 'DELETE':
         return PatientHandler.deletePatient(id)
 
-@app.route('/covid_cases', methods=['GET', 'POST'])
+@app.route('/covid_cases', methods=['GET', 'POST', 'PUT'])
 def getAllCovidCasesOrCreate():
     if request.method == 'GET':
         return CovidCasesHandler.getAllCases()
     elif request.method == 'POST':
         return CovidCasesHandler.addRecord(request.json)
+    elif request.method == 'PUT':
+        return CovidCasesHandler.updateRecord(request.json)
 
-@app.route('/covid_cases/<id>', methods=['GET', 'DELETE', 'PUT'])
+@app.route('/covid_cases/<id>', methods=['GET', 'DELETE'])
 def getCovidCaseOrUpdate(id):
     if request.method == 'GET':
         return CovidCasesHandler.getCovidTestsByoffice(id)
     elif request.method == 'DELETE':
         return CovidCasesHandler.deleteRecord(id)
-    elif request.method == 'PUT':
-        return CovidCasesHandler.updateRecord(request.json)
 
 def send_activation_email(user):
     token = user.get_activation_token()

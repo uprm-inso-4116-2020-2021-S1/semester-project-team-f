@@ -11,7 +11,7 @@ import { MapComponent } from '../map/map.component';
 })
 export class OfficeInformationComponent implements OnInit {
   public static medical_office: MedicalOffice
-  public static distance;
+  public static distance: string;
 
   constructor() { }
 
@@ -30,7 +30,7 @@ export class OfficeInformationComponent implements OnInit {
     return OfficeInformationComponent.medical_office;
   }
 
-  public getDistance(): MedicalOffice{
+  public getDistance(): string{
     return OfficeInformationComponent.distance;
   }
 }

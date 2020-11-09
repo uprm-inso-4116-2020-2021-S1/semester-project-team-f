@@ -9,6 +9,8 @@ export class MessageBoxComponent implements OnInit {
 
   public static message: string;
   private static element;
+  private static type; //1 - display message, 2 - confirmation message 
+  private static action;
 
   constructor() { }
 
@@ -26,8 +28,23 @@ export class MessageBoxComponent implements OnInit {
   }
 
   public static displayMessageBox(message: string){
+    this.type = 1;
     this.element.style.display = "block";
     this.message = message;
   }
+
+  public static confirmMessageBox(message: string, action){
+    this.type = 2;
+    this.element.style.display = "block";
+    this.message = message;
+    this.action = action;
+  }
+
+  public doAction(){
+    MessageBoxComponent.action();
+    this.closeMessageBox();
+  }
+
+  public getMessageType(){ return MessageBoxComponent.type; }
 
 }

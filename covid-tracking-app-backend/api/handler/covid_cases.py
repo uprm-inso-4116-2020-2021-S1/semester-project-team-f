@@ -174,14 +174,15 @@ class CovidCasesHandler:
 
     @staticmethod
     def updateRecord(json):
-        valid_parameters = Utilities.verify_parameters(json, ['patient_id', 'office_id', 'date_tested', 'tested_positive'])
+        valid_parameters = Utilities.verify_parameters(json, CovidCases.REQUIRED_PARAMETERS)
         if valid_parameters:
             try:
-                updatedInfo = CovidCases.updateCovidStatus(**valid_parameters)
+                updatedInfo = CovidCases.updateCovidStatus(json)
                 result = {
                     "message": "Success!",
                     "case": Utilities.to_dict(updatedInfo)
                 }
                 return jsonify(result), 200
             except Exception as e:
+                print(e.__str__())
                 return jsonify(reason="Server error", error=e.__str__()), 500

@@ -12,6 +12,6 @@ export class HelpInfoComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  public returnToNavbar(): void{ setTimeout(() => { AppComponent.ExitHelp() }, 800); }
+  public returnToNavbar(): void{ setTimeout(() => { AppComponent.exitHelp() }, 800); }
 
 }

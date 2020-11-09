@@ -3,7 +3,7 @@ export interface CovidCase {
     doctor_id: string;
     office_id: number;
     date_tested?: string;
-    tested_positive?: Boolean;
+    test_status?: number;
   }
   
   export interface CovidCaseResponse {

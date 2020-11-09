@@ -167,12 +167,14 @@ export class MapComponent implements AfterViewInit {
       marker.setIcon(ICON_TYPE.DOCTOR_ICON);
       marker.setMap(this.map);
 
-      let start = this.user_marker.getPosition().lat() + ', ' + this.user_marker.getPosition().lng();
-      let end = marker.getPosition().lat() + ', ' + marker.getPosition().lng();
-      let directionsService = new google.maps.DirectionsService();
-
       google.maps.event.addListener(marker, 'click', function() { 
         OfficeInformationComponent.medical_office = MapComponent.offices_mapping.get(marker);
+        AppComponent.viewOffice();
+
+        let start = MapComponent.user_marker.getPosition().lat() + ', ' + MapComponent.user_marker.getPosition().lng();
+        let end = marker.getPosition().lat() + ', ' + marker.getPosition().lng();
+        let directionsService = new google.maps.DirectionsService();
+
         directionsService.route(
           {
             origin: start,
@@ -188,8 +190,6 @@ export class MapComponent implements AfterViewInit {
             }
           }
         );
-
-        AppComponent.viewOffice();
      }); 
     }
 
@@ -203,7 +203,7 @@ export class MapComponent implements AfterViewInit {
     }
 
     public static resetRoute(){ 
-      MapComponent.user_marker.setMap(null);
-      this.directionsRenderer.setMap(null); 
+      if(this.user_marker) this.user_marker.setMap(null);
+      if(this.directionsRenderer) this.directionsRenderer.setMap(null); 
     }
 }
