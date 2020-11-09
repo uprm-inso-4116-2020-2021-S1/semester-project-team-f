@@ -140,13 +140,20 @@ class CovidCasesHandler:
         valid_params = Utilities.verify_parameters(json, CovidCases.REQUIRED_PARAMETERS)
         if valid_params:
             try:
-                covid_case = CovidCases(**valid_params).create()
-                case_dict = Utilities.to_dict(covid_case)
-                result = {
-                    "message": "Success!",
-                    "case": case_dict,
-                }
-                return jsonify(result), 201
+                patient_exists = Patient.getPatientByIdAndOffice({'user_id': json['patient_id'], 'office_id': json['office_id']})
+                if patient_exists:
+                    try:
+                        covid_case = CovidCases(**valid_params).create()
+                        case_dict = Utilities.to_dict(covid_case)
+                        result = {
+                            "message": "Success!",
+                            "case": case_dict,
+                        }
+                        return jsonify(result), 201
+                    except:
+                        return jsonify(reason="Patient was already tested today."), 401
+                else:
+                    return jsonify(reason="User is not in our office record."), 401
             except Exception as err:
                 return jsonify(message="Server error!", error=err.__str__()), 500
         else:

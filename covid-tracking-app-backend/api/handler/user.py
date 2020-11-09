@@ -38,12 +38,15 @@ class UserHandler:
     def getUserByEmail(email):
         try:
             user = User.getUserByEmail(email)
-            user_dict = Utilities.to_dict(user)
-            result = {
-                "message": "Success!",
-                "user": user_dict
-            }
-            return jsonify(result), 200
+            if user:
+                user_dict = Utilities.to_dict(user)
+                result = {
+                    "message": "Success!",
+                    "user": user_dict
+                }
+                return jsonify(result), 200
+            else:
+                return jsonify(reason="User does not exist."), 401
         except Exception as e:
             return jsonify(reason="Server error", error=e.__str__()), 500
 

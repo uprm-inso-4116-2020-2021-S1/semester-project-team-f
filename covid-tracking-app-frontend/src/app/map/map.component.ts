@@ -10,6 +10,7 @@ import { MedicalOffice } from '../models/medical_office';
 import { ManagePatientsComponent } from '../manage-patients/manage-patients.component';
 import { CovidCasesComponent } from '../covid-cases/covid-cases.component';
 import {OfficeInformationComponent} from '../office-information/office-information.component';
+import { MessageBoxComponent } from '../message-box/message-box.component';
 
 @Component({
   selector: 'app-map',
@@ -64,7 +65,8 @@ export class MapComponent implements AfterViewInit {
               },
               icon: ICON_TYPE.PERSON_ICON,
               title: "Your location"
-            }); }
+            }); }, err => MessageBoxComponent.displayMessageBox("In order to have a better experience in our application, we recommend you to allow access to location permissions.")
+
           );
         } else {
           // Browser doesn't support Geolocation

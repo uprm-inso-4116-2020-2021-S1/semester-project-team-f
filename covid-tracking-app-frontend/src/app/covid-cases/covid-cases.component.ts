@@ -129,8 +129,9 @@ export class CovidCasesComponent implements OnInit {
   
               this.cases.push(infected_patient);
             }
-        }, err => this.error = "User is not in our office record.");
+        }, err => this.error = err.error.reason);
       }
-    }, err => this.error = "User does not exist.");
+    }, err => this.error = err.error.reason
+    );
   }
 }

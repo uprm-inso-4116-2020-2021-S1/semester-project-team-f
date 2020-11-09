@@ -23,6 +23,7 @@ import { CovidService } from './services/covid.service';
 import { DoctorService } from './services/doctor.service';
 import { LocationService } from './services/location.service';
 import { VisitedLocationService } from './services/visited-location.service';
+import { MessageBoxComponent } from './message-box/message-box.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { VisitedLocationService } from './services/visited-location.service';
     HelpInfoComponent,
     CovidCasesComponent,
     OfficeInformationComponent,
+    MessageBoxComponent,
   ],
   imports: [
     BrowserModule,
