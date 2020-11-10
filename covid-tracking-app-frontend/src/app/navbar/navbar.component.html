@@ -14,10 +14,13 @@
     </a>
     <ng-template [ngIf]="doctorIsLogged()">
         <a class="dropdown navbar_link">
-                <a class="dropbtn">Patient Actions</a>
+                <a class="dropbtn">Office Management</a>
                 <div class="dropdown-content">
                 <a (click) = "addOrRemovePatient()" >Manage Patients</a>
                 <a (click) = "manageCovidCases()">Manage COVID-19 Cases</a>
+                <ng-template [ngIf]="hasMedicalOffices()">
+                    <a (click) = "manageEmployees()">Manage Employees</a>
+                </ng-template>
                 </div>
         </a>     
     </ng-template>

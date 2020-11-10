@@ -74,14 +74,15 @@ export class ManagePatientsComponent implements OnInit {
 
   public returnToNavbar(): void{
     ManagePatientsComponent.medical_office = null; 
-    setTimeout(() => { AppComponent.exitAddOrRemovePatient(); }, 800); }
+    AppComponent.exitAddOrRemovePatient(); 
+  }
 
   public getOffice(): MedicalOffice{
     return ManagePatientsComponent.medical_office;
   }
 
   public deletePatient(patient: PatientRecord){
-    this.patientsService.deletePatient(patient).subscribe(res =>{
+    this.patientsService.deletePatient(patient.office_id, patient.user_id).subscribe(res =>{
       if(res.message == "Success!"){
         console.log("The following patient record was deleted: ");
         console.log(patient);

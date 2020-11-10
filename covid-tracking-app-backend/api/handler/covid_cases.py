@@ -144,7 +144,7 @@ class CovidCasesHandler:
         valid_params = Utilities.verify_parameters(json, CovidCases.REQUIRED_PARAMETERS)
         if valid_params:
             try:
-                patient_exists = Patient.getPatientByIdAndOffice({'user_id': json['patient_id'], 'office_id': json['office_id']})
+                patient_exists = Patient.getPatientByOfficeAndUserId(json['office_id'], json['patient_id'])
                 if patient_exists:
                     try:
                         covid_case = CovidCases(**valid_params).create()

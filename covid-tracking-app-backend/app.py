@@ -54,8 +54,12 @@ def getMedicalOffices():
 def getMedicalOfficeById(mid):
     return MedicalOfficeHandler.getMedicalOfficeById(mid)
 
+@app.route('/users/<string:uid>/offices', methods=['GET'])
+def getMedicalOfficesByOwnerId(uid):
+    return MedicalOfficeHandler.getMedicalOfficesByOwnerId(uid)
+
 @app.route("/users", methods=['GET', 'POST', 'PUT'])
-def getAllUsersOrCreate():
+def getAllUsersOrCreateOrUpdate():
     if request.method == 'GET':
         return UserHandler.getAllUsers()
     elif request.method == 'POST':
@@ -64,7 +68,7 @@ def getAllUsersOrCreate():
         return UserHandler.updateUserInfo(request.json)
 
 @app.route('/users/<string:uid>', methods=['GET'])
-def getUserByIdOrEmailOrUpdate(uid):
+def getUserByIdOrEmail(uid):
     if request.method == 'GET':
         if '@' in uid:
             return UserHandler.getUserByEmail(uid)
@@ -79,8 +83,13 @@ def getAllDoctorsOrCreate():
         return DoctorHandler.createDoctor(request.json)
 
 @app.route('/doctors/<string:did>', methods=['GET'])
-def getDoctorById(did):
-    return DoctorHandler.getDoctorById(did)
+def getDoctorByUserId(did):
+    return DoctorHandler.getDoctorByUserId(did)
+
+@app.route('/offices/<int:oid>/doctors/<string:uid>', methods=['DELETE'])
+def deleteDoctorByOfficeAndUserId(oid, uid):
+    if request.method == 'DELETE':
+        return DoctorHandler.deleteDoctor(oid, uid)
 
 @app.route('/patients', methods=['GET', 'POST'])
 def getAllPatientsOrCreate():
@@ -94,20 +103,25 @@ def getPatientsByOfficeId(id):
     if request.method == 'GET':
         return PatientHandler.getPatientsByOfficeId(id)
 
+@app.route('/offices/<int:id>/doctors', methods=['GET'])
+def getDoctorsByOfficeId(id):
+    if request.method == 'GET':
+        return DoctorHandler.getDoctorsByOfficeId(id)
+
 @app.route('/offices/<int:id>/covid-cases', methods=['GET'])
 def getCovidCasesByOfficeId(id):
     if request.method == 'GET':
         return CovidCasesHandler.getCovidTestsByofficeId(id)
 
-@app.route('/patients/<string:id>', methods=['GET', 'DELETE'])
-def getPatientByIdAndOfficeOrDeletePatient(id):
+@app.route('/offices/<int:oid>/patients/<string:uid>', methods=['GET', 'DELETE'])
+def getOrDeletePatientOfficeAndUserId(oid, uid):
     if request.method == 'GET':
-        return PatientHandler.getPatientByIdAndOffice(id)
+        return PatientHandler.getPatientByOfficeAndUserId(oid, uid)
     elif request.method == 'DELETE':
-        return PatientHandler.deletePatient(id)
+        return PatientHandler.deletePatient(oid, uid)
 
 @app.route('/covid-cases', methods=['GET', 'POST', 'PUT'])
-def getAllCovidCasesOrCreate():
+def getAllCovidCasesOrCreateOrUpdate():
     if request.method == 'GET':
         return CovidCasesHandler.getAllCases()
     elif request.method == 'POST':

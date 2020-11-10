@@ -1,0 +1,24 @@
+<div class="sidebar slide-right">
+
+    <div class="upperBar">
+        <a><img id="back" (click) = "returnToNavbar()"src="../../assets/Back.png" alt="back"></a>
+        <a id="title">{{getOffice().office_name}}</a>
+    </div>
+
+    <div class="form">
+            <a *ngIf="error" style="color: orange; padding: 1vw;">{{error}}</a>
+            <a class="form-text">Employee's Email:</a>
+            <a><input type="email" id="inputEmail" class="form-control" required autofocus></a>
+    </div>
+
+    
+    <a class="btn btn-lg btn-primary" (click) = "addEmployee()" role="button">Register</a>
+
+        <a class="btn btn-lg btn-primary" role="button" (click)="searchEmployee()">Search</a>
+        <div style="margin-top: 1.1vw;">Employee List:</div>
+        <div class="EmployeeList" *ngFor="let employee of employees">
+            <a id="{{employee.user_id}}">Name: {{employee.full_name}}
+                <br>Email: {{employee.email}}
+                <div id="RemoveDoctor" (click) = "deleteEmployee(employee)">Remove employee</div></a>
+          </div>
+</div>

@@ -30,9 +30,9 @@ export class PatientService {
       .pipe(catchError(this._handleError))
   }
 
-  public deletePatient(patient: Patient): Observable<any> {
+  public deletePatient(oid: number, uid: string): Observable<any> {
     return this.httpClient
-      .delete(API_URL + `patients/` + patient.office_id + '&' + patient.user_id)
+      .delete(API_URL + 'offices/' + oid +'/patients/' + uid)
       .pipe(catchError(this._handleError))
   }
 
@@ -48,9 +48,9 @@ export class PatientService {
     .pipe(catchError(this._handleError))
   }
 
-  public getPatientIdAndOffice(patient: Patient): Observable<PatientsResponse>{
+  public getPatientUserIdAndOffice(oid: number, uid: string): Observable<PatientsResponse>{
     return this.httpClient
-    .get<PatientsResponse>(API_URL + `patients/` + patient.office_id + '&' + patient.user_id)
+    .get<PatientsResponse>(API_URL + 'offices/' + oid +'/patients/' + uid)
     .pipe(catchError(this._handleError))
   }
 }

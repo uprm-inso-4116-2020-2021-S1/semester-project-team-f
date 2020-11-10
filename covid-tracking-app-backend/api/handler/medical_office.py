@@ -23,7 +23,7 @@ class MedicalOfficeHandler:
             return jsonify(reason="Server error", error=e.__str__()), 500
 
     @staticmethod
-    def getAllMedicalOfficesByOwnerId(oid):
+    def getMedicalOfficesByOwnerId(oid):
         try:
             medical_offices = MedicalOffice.getMedicalOfficesbyOwnerId(oid)
             result_list = []

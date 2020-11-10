@@ -80,7 +80,8 @@ export class CovidCasesComponent implements OnInit {
 
   public returnToNavbar(): void{
     CovidCasesComponent.medical_office = null; 
-    setTimeout(() => { AppComponent.exitManagingCovidCases(); }, 800); }
+    AppComponent.exitManagingCovidCases();
+  }
 
   public getOffice(): MedicalOffice{
     return CovidCasesComponent.medical_office;

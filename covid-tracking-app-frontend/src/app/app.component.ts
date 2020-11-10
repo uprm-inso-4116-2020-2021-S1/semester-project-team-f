@@ -10,6 +10,7 @@ export class AppComponent{
   private static hasLoggedIn: boolean;
   private static addingOrRemovingPatient: boolean;
   private static managingCovidCases: boolean;
+  private static managingEmployees: boolean;
   private static viewingOffice: boolean;
   private static changingContactInformation: boolean;
   private static changingAddressInformation: boolean;
@@ -19,6 +20,7 @@ export class AppComponent{
   public isLoggedIn() { return AppComponent.hasLoggedIn; }
   public isAddingOrRemovingPatient() { return AppComponent.addingOrRemovingPatient; }
   public isManagingCovidCases() { return AppComponent.managingCovidCases; }
+  public isManagingEmployees() { return AppComponent.managingEmployees; }
   public isSeeingHelp()  { return AppComponent.seeingHelp; }
   public isChangingContactInformation() { return AppComponent.changingContactInformation; }
   public isChangingAddressInformation() { return AppComponent.changingAddressInformation;}
@@ -59,6 +61,11 @@ export class AppComponent{
     this.managingCovidCases = true;
   }
 
+  public static changeManagingEmployees() {
+    this.hideNavbar();
+    this.managingEmployees = true;
+  }
+
   public static changeContactInformation() { 
     this.hideNavbar();
     this.changingContactInformation = true;
@@ -94,6 +101,11 @@ export class AppComponent{
   public static exitManagingCovidCases() { 
     this.hideSidebar(); 
     setTimeout(()=> this.managingCovidCases = false, 800);
+  }
+
+  public static exitManagingEmployees() {
+    this.hideSidebar();
+    setTimeout(()=> this.managingEmployees = false, 800);
   }
 
   public static exitHelp() {

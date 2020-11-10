@@ -13,6 +13,7 @@ import { AppComponent } from '../app.component';
 export class UserService {
 
   public static loggedUser: User;
+  public static userOwnedOfficesId: Set<number>;
 
   constructor(private httpClient: HttpClient, private router: Router) { }
 

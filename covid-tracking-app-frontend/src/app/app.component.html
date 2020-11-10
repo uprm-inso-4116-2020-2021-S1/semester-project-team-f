@@ -25,6 +25,10 @@
     <app-office-information></app-office-information>
 </div>
 
+<div *ngIf="isManagingEmployees();">
+    <app-manage-employees></app-manage-employees>
+</div>
+
 <ng-template #loginSidebar>
     <app-login-sidebar></app-login-sidebar>
 </ng-template>

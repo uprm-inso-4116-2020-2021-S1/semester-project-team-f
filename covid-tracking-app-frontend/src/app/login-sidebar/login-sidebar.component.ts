@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { AppComponent } from '../app.component';
 import { DoctorService } from '../services/doctor.service';
+import { MedicalOfficeService } from '../services/medical-office.service';
 
 @Component({
   selector: 'app-login-sidebar',
@@ -14,7 +15,7 @@ export class LoginSidebarComponent implements OnInit {
   public canGoToNextPage: boolean;
   public error: string;
 
-  constructor(private userService: UserService, private doctorService: DoctorService) { }
+  constructor(private userService: UserService, private doctorService: DoctorService, private medicalService: MedicalOfficeService) { }
 
   ngOnInit(): void {
     this.effectsInAction = ["slide-down", "fade-in"]; //the default effects when someone enters to the main-page  
@@ -40,10 +41,21 @@ export class LoginSidebarComponent implements OnInit {
           this.doctorService.getDoctorById(res.user.user_id).subscribe(res =>{
             if(res.message == "Success!"){
               DoctorService.loggedDoctorId = res.doctor[0].user_id;
-              DoctorService.doctorOfficesId = new Set<number>();
+              DoctorService.doctorWorkingOfficesId = new Set<number>();
 
               for (let doctor of res.doctor){
-                DoctorService.doctorOfficesId.add(doctor.office_id);
+                DoctorService.doctorWorkingOfficesId.add(doctor.office_id);
+              }
+
+            }
+          });
+
+          this.medicalService.getMedicalOfficesByOwnerId(res.user.user_id).subscribe(res => {
+            if(res.message == "Success!"){
+              UserService.userOwnedOfficesId = new Set<number>();
+
+              for (let office of res.medical_offices){
+                UserService.userOwnedOfficesId.add(office.office_id);
               }
 
             }
