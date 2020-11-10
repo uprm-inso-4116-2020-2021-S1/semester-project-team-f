@@ -47,7 +47,7 @@ class CovidCasesHandler:
             for patient in patients:
                 case = CovidCases.getMostRecentCaseByPatient(patient.user_id)
                 
-                if case.tested_positive:
+                if case.test_status == 3:
                     active_cases.append(Utilities.to_dict(case))
 
             result = {
@@ -82,7 +82,7 @@ class CovidCasesHandler:
                 cases = CovidCases.getCasesByPatient(patient.user_id)
                 prev_case = None
                 for patient_case in cases:
-                    if not patient_case.tested_positive and prev_case and prev_case.tested_positive:
+                    if patient_case.test_status != 3 and prev_case and prev_case.test_status == 3:
                         recovered_cases.append(Utilities.to_dict(patient_case))
                     prev_case = patient_case
 
@@ -110,7 +110,7 @@ class CovidCasesHandler:
             return jsonify(reason="Server error", error=e.__str__()), 500
 
     @staticmethod
-    def getCovidTestsByoffice(oid):
+    def getCovidTestsByofficeId(oid):
         try:
             records = CovidCases.getCasesByOffice(oid)
             result_list = []
@@ -140,7 +140,7 @@ class CovidCasesHandler:
             return jsonify(reason="Server error", error=e.__str__()), 500
 
     @staticmethod
-    def addRecord(json):
+    def createRecord(json):
         valid_params = Utilities.verify_parameters(json, CovidCases.REQUIRED_PARAMETERS)
         if valid_params:
             try:

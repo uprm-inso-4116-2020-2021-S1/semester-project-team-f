@@ -108,11 +108,15 @@ class UserHandler:
             return jsonify(message="Bad Request!"), 40
 
     @staticmethod
-    def updateUserInfo(rid, json):
+    def updateUserInfo(json):
         valid_parameters = Utilities.verify_parameters(json, ['user_id', 'email', 'phone_number', 'password'])
         if valid_parameters:
             try:
-                updatedInfo = User.updateUserInfo(rid, **valid_parameters)
+                email_exists = User.getUserByEmail(json['email'])
+                if email_exists:
+                    return jsonify(message="Email already in use."), 400
+
+                updatedInfo = User.updateUserInfo(**valid_parameters)
                 result = {
                     "message": "Success!",
                     "user": Utilities.to_dict(updatedInfo)

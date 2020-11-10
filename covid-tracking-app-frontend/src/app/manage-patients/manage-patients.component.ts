@@ -29,7 +29,7 @@ export class ManagePatientsComponent implements OnInit {
    public showPatients(): void{
     this.patients = [];
 
-    this.patientsService.getPatientByOfficeId(ManagePatientsComponent.medical_office.office_id).subscribe(patient_repsonse => {
+    this.patientsService.getPatientsByOfficeId(ManagePatientsComponent.medical_office.office_id).subscribe(patient_repsonse => {
       for (let i = 0; i < patient_repsonse.patients.length; i++){
           let patient: Patient = patient_repsonse.patients[i];
 

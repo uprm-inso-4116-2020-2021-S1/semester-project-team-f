@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '../models/user';
 import { UserService } from '../services/user.service';
 import { AppComponent } from '../app.component';
+import { MessageBoxComponent } from '../message-box/message-box.component';
 
 @Component({
   selector: 'app-account-settings',
@@ -31,7 +32,7 @@ export class AccountSettingsComponent implements OnInit {
 
     this.userService.updateContactInfo(UserService.loggedUser).subscribe(res => {
       if(res.message == 'Success!'){
-        alert('Contact information successfully updated!');
+        MessageBoxComponent.displayMessageBox('Contact information successfully updated!');
         this.returnToNavbar();
       }
     })

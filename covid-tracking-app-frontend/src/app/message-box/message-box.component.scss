@@ -28,6 +28,9 @@
 
   .btn-primary{
     width: 6vw;
+    display: block;
+    margin: auto;
+    font-size: 1.3vw;
   }
 
   .confirm-dialog{
@@ -36,9 +39,9 @@
     width: 50%;
     padding: 0.5vw;
     a{ 
-      margin: 1vw;
+      margin: 0.4vw;
       display: inline-block;
-      padding: 0.25vw 1vw 0.25vw 1vw;
+      padding: 0.3vw 1.05vw 0.3vw 1.05vw;
      }
   } 
 

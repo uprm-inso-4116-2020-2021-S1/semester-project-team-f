@@ -42,9 +42,9 @@ export class PatientService {
     .pipe(catchError(this._handleError))
   }
 
-  public getPatientByOfficeId(id: number): Observable<PatientsResponse>{
+  public getPatientsByOfficeId(id: number): Observable<PatientsResponse>{
     return this.httpClient
-    .get<PatientsResponse>(API_URL + `patients/` + id)
+    .get<PatientsResponse>(API_URL + `offices/${id}/patients`)
     .pipe(catchError(this._handleError))
   }
 

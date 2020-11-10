@@ -35,7 +35,7 @@ export class UserService {
 
   public updateContactInfo(user: User): Observable<any> {
     return this.httpClient
-      .put(API_URL + `users/${user.user_id}`, user)
+      .put(API_URL + `users`, user)
       .pipe(catchError(this._handleError))
 
   }
@@ -56,7 +56,7 @@ export class UserService {
     let json = {
       "email": email
     }
-    return this.httpClient.post<UserResponse>(API_URL + `account_activation` , json)
+    return this.httpClient.post<UserResponse>(API_URL + `account-activation` , json)
   }
   public login(email: String, password: String): Observable<UserResponse> {
     let json = {
