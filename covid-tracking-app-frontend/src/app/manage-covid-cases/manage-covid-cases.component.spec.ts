@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CovidCasesComponent } from './covid-cases.component';
+import { ManageCovidCasesComponent } from './manage-covid-cases.component';
 
 describe('CovidCasesComponent', () => {
-  let component: CovidCasesComponent;
-  let fixture: ComponentFixture<CovidCasesComponent>;
+  let component: ManageCovidCasesComponent;
+  let fixture: ComponentFixture<ManageCovidCasesComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CovidCasesComponent ]
+      declarations: [ ManageCovidCasesComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CovidCasesComponent);
+    fixture = TestBed.createComponent(ManageCovidCasesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

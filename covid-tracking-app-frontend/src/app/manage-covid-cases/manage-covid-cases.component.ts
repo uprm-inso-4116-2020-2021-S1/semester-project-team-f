@@ -12,12 +12,12 @@ import { MessageBoxComponent } from '../message-box/message-box.component';
 type InfectedPatient = User & CovidCase;
 
 @Component({
-  selector: 'app-covid-cases',
-  templateUrl: './covid-cases.component.html',
-  styleUrls: ['./covid-cases.component.scss']
+  selector: 'app-manage-covid-cases',
+  templateUrl: './manage-covid-cases.component.html',
+  styleUrls: ['./manage-covid-cases.component.scss']
 })
 
-export class CovidCasesComponent implements OnInit {
+export class ManageCovidCasesComponent implements OnInit {
 
   static medical_office: MedicalOffice
   statuses: string[]
@@ -34,7 +34,7 @@ export class CovidCasesComponent implements OnInit {
    public showCases(): void{
     this.cases = [];
 
-    this.covidService.getCovidCasesByOfficeId(CovidCasesComponent.medical_office.office_id).subscribe(cases_repsonse => {
+    this.covidService.getCovidCasesByOfficeId(ManageCovidCasesComponent.medical_office.office_id).subscribe(cases_repsonse => {
       for (let i = 0; i < cases_repsonse.cases.length; i++){
           let covid_case: CovidCase = cases_repsonse.cases[i];
 
@@ -79,12 +79,12 @@ export class CovidCasesComponent implements OnInit {
    }
 
   public returnToNavbar(): void{
-    CovidCasesComponent.medical_office = null; 
+    ManageCovidCasesComponent.medical_office = null; 
     AppComponent.exitManagingCovidCases();
   }
 
   public getOffice(): MedicalOffice{
-    return CovidCasesComponent.medical_office;
+    return ManageCovidCasesComponent.medical_office;
   }
 
   public classifyTestResult(covid_case: InfectedPatient, result: string){
@@ -131,8 +131,8 @@ export class CovidCasesComponent implements OnInit {
 
         let covid_case: CovidCase = {
           patient_id: user_response.user.user_id,
-          doctor_id: DoctorService.loggedDoctorId,
-          office_id: CovidCasesComponent.medical_office.office_id,
+          doctor_id: UserService.loggedUser.user_id,
+          office_id: ManageCovidCasesComponent.medical_office.office_id,
           date_tested: date.toDateString()
         };
 

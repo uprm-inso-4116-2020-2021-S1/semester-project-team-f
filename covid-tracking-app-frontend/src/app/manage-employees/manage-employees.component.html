@@ -14,6 +14,7 @@
     
     <a class="btn btn-lg btn-primary" (click) = "addEmployee()" role="button">Register</a>
 
+    <ng-template [ngIf]= "employees.length != 0" [ngIfElse]="default">
         <a class="btn btn-lg btn-primary" role="button" (click)="searchEmployee()">Search</a>
         <div style="margin-top: 1.1vw;">Employee List:</div>
         <div class="EmployeeList" *ngFor="let employee of employees">
@@ -21,4 +22,9 @@
                 <br>Email: {{employee.email}}
                 <div id="RemoveDoctor" (click) = "deleteEmployee(employee)">Remove employee</div></a>
           </div>
+    </ng-template>
+
+          <ng-template #default>
+            <p style="text-align: justify; padding: 1.25vw;">There are currently no employees registered in this office.</p>
+        </ng-template>
 </div>

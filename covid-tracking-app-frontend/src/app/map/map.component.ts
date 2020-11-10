@@ -4,11 +4,8 @@ import { MedicalOfficeService } from '../services/medical-office.service';
 import { AddressService } from '../services/address.service';
 import { LocationService } from '../services/location.service'
 import { Location } from '../models/location';
-import { DoctorService } from '../services/doctor.service';
 import { AppComponent } from '../app.component';
 import { MedicalOffice } from '../models/medical_office';
-import { ManagePatientsComponent } from '../manage-patients/manage-patients.component';
-import { CovidCasesComponent } from '../covid-cases/covid-cases.component';
 import {OfficeInformationComponent} from '../office-information/office-information.component';
 import { MessageBoxComponent } from '../message-box/message-box.component';
 

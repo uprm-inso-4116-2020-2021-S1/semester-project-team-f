@@ -6,8 +6,8 @@ import { AppComponent } from '../app.component';
 import { MapComponent } from '../map/map.component';
 import { ManagePatientsComponent } from '../manage-patients/manage-patients.component';
 import { ManageEmployeesComponent } from '../manage-employees/manage-employees.component';
-import { CovidCasesComponent } from '../covid-cases/covid-cases.component';
 import { MedicalOffice } from '../models/medical_office';
+import { ManageCovidCasesComponent } from '../manage-covid-cases/manage-covid-cases.component';
 
 @Component({
   selector: 'app-navbar',
@@ -24,13 +24,12 @@ export class NavbarComponent implements OnInit {
     return UserService.loggedUser;
   }
 
-  public doctorIsLogged(): boolean{ return DoctorService.loggedDoctorId != null; }
+  public doctorIsLogged(): boolean{ return DoctorService.doctorWorkingOfficesId != null; }
 
   public hasMedicalOffices(): boolean { return UserService.userOwnedOfficesId.size != 0;}
 
   public logout(): void{
       this.userService.logout();
-      DoctorService.loggedDoctorId = null;
       DoctorService.doctorWorkingOfficesId = null;
       AppComponent.changeToLogin();
   }
@@ -50,7 +49,7 @@ export class NavbarComponent implements OnInit {
       return DoctorService.doctorWorkingOfficesId.has(medical_office.office_id) 
     },
     (medical_office) => { 
-      CovidCasesComponent.medical_office = medical_office; 
+      ManageCovidCasesComponent.medical_office = medical_office; 
       AppComponent.changeManagingCovidCases();
      }); 
   }

@@ -15,7 +15,7 @@ import { MapComponent } from './map/map.component';
 import { ManagePatientsComponent } from './manage-patients/manage-patients.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { HelpInfoComponent } from './help-info/help-info.component';
-import { CovidCasesComponent } from './covid-cases/covid-cases.component';
+import { ManageCovidCasesComponent } from './manage-covid-cases/manage-covid-cases.component';
 
 import { OfficeInformationComponent } from './office-information/office-information.component';
 import { PatientService } from './services/patient.service';
@@ -37,7 +37,7 @@ import { ManageEmployeesComponent } from './manage-employees/manage-employees.co
     ManagePatientsComponent,
     AccountSettingsComponent,
     HelpInfoComponent,
-    CovidCasesComponent,
+    ManageCovidCasesComponent,
     OfficeInformationComponent,
     MessageBoxComponent,
     ManageEmployeesComponent,

@@ -1,0 +1,16 @@
+<div class="sidebar slide-right">
+    <div class="form">
+        <div class="upperBar" >
+            <img id="back" (click) = "returnToNavbar()"src="../../assets/Back.png" alt="back">
+            <a id="title">Your COVID-19 Tests Results</a>
+        </div>
+    </div>
+
+        <div class="CaseList" *ngFor="let case of cases">
+            <div class="element">
+                <a>Date tested: {{case.date_tested}}</a>
+                <a>Test result:  {{decodeCovidResult(case)}}</a>
+                <a>Office tested: {{case.office_name}}</a>
+            </div>
+          </div>
+</div>
