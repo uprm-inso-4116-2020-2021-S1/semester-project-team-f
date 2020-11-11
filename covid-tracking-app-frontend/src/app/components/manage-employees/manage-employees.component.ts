@@ -1,10 +1,10 @@
-import { Component, OnInit, Type } from '@angular/core';
-import { AppComponent } from '../app.component';
-import { MedicalOffice } from '../models/medical_office';
-import { User } from '../models/user';
-import { UserService } from '../services/user.service';
-import { Doctor } from '../models/doctor';
-import { DoctorService } from '../services/doctor.service';
+import { Component, OnInit, Type, Input } from '@angular/core';
+import { AppComponent } from '../../app.component';
+import { MedicalOffice } from '../../models/medical_office';
+import { User } from '../../models/user';
+import { UserService } from '../../services/user.service';
+import { Doctor } from '../../models/doctor';
+import { DoctorService } from '../../services/doctor.service';
 
 type EmployeeRecord = Doctor & User;
 
@@ -16,7 +16,8 @@ type EmployeeRecord = Doctor & User;
 
 export class ManageEmployeesComponent implements OnInit {
 
-  static medical_office: MedicalOffice
+  @Input() medical_office: MedicalOffice
+
   employees: EmployeeRecord[]
   error: string;
   
@@ -29,7 +30,7 @@ export class ManageEmployeesComponent implements OnInit {
    public showPatients(): void{
     this.employees = [];
 
-    this.doctorService.getDoctorsByOfficeId(ManageEmployeesComponent.medical_office.office_id).subscribe(employee_repsonse => {
+    this.doctorService.getDoctorsByOfficeId(this.medical_office.office_id).subscribe(employee_repsonse => {
       for (let i = 0; i < employee_repsonse.doctors.length; i++){
           let employee: Doctor = employee_repsonse.doctors[i];
 
@@ -71,14 +72,9 @@ export class ManageEmployeesComponent implements OnInit {
      return false;
    }
 
-  public returnToNavbar(): void{
-    ManageEmployeesComponent.medical_office = null; 
-    AppComponent.exitManagingEmployees();
-  }
+  public returnToNavbar(): void{ AppComponent.exitManagingEmployees(); }
 
-  public getOffice(): MedicalOffice{
-    return ManageEmployeesComponent.medical_office;
-  }
+  public getOffice(): MedicalOffice{ return this.medical_office; }
 
   public deleteEmployee(employee: EmployeeRecord){
     if(employee.user_id == UserService.loggedUser.user_id){
@@ -107,7 +103,7 @@ export class ManageEmployeesComponent implements OnInit {
 
         let employee: Doctor = {
           user_id: user_response.user.user_id,
-          office_id: ManageEmployeesComponent.medical_office.office_id,
+          office_id: this.medical_office.office_id,
           registered_date: date.toDateString()
         }
         this.doctorService.createDoctor(employee).subscribe(employees_response => {

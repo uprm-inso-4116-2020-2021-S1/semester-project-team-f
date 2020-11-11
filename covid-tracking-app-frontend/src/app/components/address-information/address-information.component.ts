@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { COUNTRIES, STATES } from 'src/config';
-import { Address } from '../models/address';
-import { AddressService } from '../services/address.service';
-import { UserService } from '../services/user.service';
-import { AppComponent } from '../app.component';
+import { Address } from '../../models/address';
+import { AddressService } from '../../services/address.service';
+import { UserService } from '../../services/user.service';
+import { AppComponent } from '../../app.component';
 import { ContactInformationComponent } from '../contact-information/contact-information.component';
 
 @Component({

@@ -1,14 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { UserService } from '../services/user.service';
-import { DoctorService } from '../services/doctor.service';
-import { User } from '../models/user';
-import { AppComponent } from '../app.component';
+import { Component, OnInit, Input } from '@angular/core';
+import { UserService } from '../../services/user.service';
+import { DoctorService } from '../../services/doctor.service';
+import { User } from '../../models/user';
+import { AppComponent } from '../../app.component';
 import { MapComponent } from '../map/map.component';
-import { ManagePatientsComponent } from '../manage-patients/manage-patients.component';
-import { ManageEmployeesComponent } from '../manage-employees/manage-employees.component';
-import { MedicalOffice } from '../models/medical_office';
-import { ManageCovidCasesComponent } from '../manage-covid-cases/manage-covid-cases.component';
-import { PatientService } from '../services/patient.service';
+import { MedicalOffice } from '../../models/medical_office';
+import { PatientService } from '../../services/patient.service';
 
 @Component({
   selector: 'app-navbar',
@@ -16,6 +13,9 @@ import { PatientService } from '../services/patient.service';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
+
+  @Input() parent: AppComponent;
+  @Input() map: MapComponent;
 
   constructor(public userService: UserService) { }
 
@@ -25,42 +25,48 @@ export class NavbarComponent implements OnInit {
     return UserService.loggedUser;
   }
 
-  public doctorIsLogged(): boolean{ return DoctorService.doctorWorkingOfficesId != null; }
-  public patientIsLogged(): boolean{ return PatientService.patientAttendedOfficesId != null; }
+  public doctorIsLogged(): boolean{ return DoctorService.doctorWorkingOfficesId.size != 0; }
+  public patientIsLogged(): boolean{ return PatientService.patientAttendedOfficesId.size != 0; }
 
   public hasMedicalOffices(): boolean { return UserService.userOwnedOfficesId.size != 0;}
 
   public logout(): void{
       this.userService.logout();
+
       DoctorService.doctorWorkingOfficesId = null;
+      PatientService.patientAttendedOfficesId = null;
+
       AppComponent.changeToLogin();
   }
 
   public addOrRemovePatient(): void{
-    MapComponent.showWorkingPlacesOnly((medical_office: MedicalOffice): boolean => {
+      this.map.showWorkingPlacesOnly((medical_office: MedicalOffice): boolean => {
       return DoctorService.doctorWorkingOfficesId.has(medical_office.office_id) 
     },
     (medical_office) => {
-      ManagePatientsComponent.medical_office = medical_office;
+      this.parent.selected_office = medical_office;
       AppComponent.changeAddOrRemovePatients();
     });
   }
 
+  public addVisitedLocations(): void{ this.map.addVisitedLocation();}
+  public showVisitedLocations(bool: boolean): void{ this.map.showVisitedLocation(bool);}
+
   public manageCovidCases(): void {
-    MapComponent.showWorkingPlacesOnly((medical_office: MedicalOffice): boolean => {
+      this.map.showWorkingPlacesOnly((medical_office: MedicalOffice): boolean => {
       return DoctorService.doctorWorkingOfficesId.has(medical_office.office_id) 
     },
     (medical_office) => { 
-      ManageCovidCasesComponent.medical_office = medical_office; 
+      this.parent.selected_office = medical_office; 
       AppComponent.changeManagingCovidCases();
      }); 
   }
   public manageEmployees(): void {
-    MapComponent.showWorkingPlacesOnly((medical_office: MedicalOffice): boolean => {
+      this.map.showWorkingPlacesOnly((medical_office: MedicalOffice): boolean => {
       return UserService.userOwnedOfficesId.has(medical_office.office_id) 
     },
     (medical_office) => { 
-      ManageEmployeesComponent.medical_office = medical_office; 
+      this.parent.selected_office = medical_office; 
       AppComponent.changeManagingEmployees();
      }); 
     }

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { CovidCase } from '../models/covid_case';
-import { MedicalOffice } from '../models/medical_office';
-import { CovidService } from '../services/covid.service';
-import { UserService } from '../services/user.service';
-import { MedicalOfficeService } from '../services/medical-office.service';
-import { AppComponent } from '../app.component';
-import { PatientService } from '../services/patient.service';
+import { CovidCase } from '../../models/covid_case';
+import { MedicalOffice } from '../../models/medical_office';
+import { CovidService } from '../../services/covid.service';
+import { UserService } from '../../services/user.service';
+import { MedicalOfficeService } from '../../services/medical-office.service';
+import { AppComponent } from '../../app.component';
+import { PatientService } from '../../services/patient.service';
 
 type CaseInfo = MedicalOffice & CovidCase;
 

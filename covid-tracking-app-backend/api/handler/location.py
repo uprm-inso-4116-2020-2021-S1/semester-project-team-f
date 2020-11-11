@@ -65,8 +65,12 @@ class LocationHandler:
         valid_params = Utilities.verify_parameters(json, Location.REQUIRED_PARAMETERS)
         if valid_params:
             try:
-                location = Location(**valid_params).create()
-                location_dict = Utilities.to_dict(covid_case)
+                location = Location.getLocationByLattitudeAndLongitude(json)
+                
+                if location is None:  
+                    location = Location(**valid_params).create()
+
+                location_dict = Utilities.to_dict(location)
                 result = {
                     "message": "Success!",
                     "location": location_dict,

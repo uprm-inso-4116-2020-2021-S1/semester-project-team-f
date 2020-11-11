@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { MedicalOffice } from '../models/medical_office';
-import { CovidCase } from '../models/covid_case';
-import { User } from '../models/user';
-import { CovidService } from '../services/covid.service';
-import { UserService } from '../services/user.service';
-import { AppComponent } from '../app.component';
-import { PatientService } from '../services/patient.service';
+import { Component, OnInit, Input } from '@angular/core';
+import { MedicalOffice } from '../../models/medical_office';
+import { CovidCase } from '../../models/covid_case';
+import { User } from '../../models/user';
+import { CovidService } from '../../services/covid.service';
+import { UserService } from '../../services/user.service';
+import { AppComponent } from '../../app.component';
+import { PatientService } from '../../services/patient.service';
 import { MessageBoxComponent } from '../message-box/message-box.component';
 
 type InfectedPatient = User & CovidCase;
@@ -18,7 +18,8 @@ type InfectedPatient = User & CovidCase;
 
 export class ManageCovidCasesComponent implements OnInit {
 
-  static medical_office: MedicalOffice
+  @Input() medical_office: MedicalOffice;
+
   statuses: string[]
   cases: InfectedPatient[]
   error: string;
@@ -33,7 +34,7 @@ export class ManageCovidCasesComponent implements OnInit {
    public showCases(): void{
     this.cases = [];
 
-    this.covidService.getCovidCasesByOfficeId(ManageCovidCasesComponent.medical_office.office_id).subscribe(cases_repsonse => {
+    this.covidService.getCovidCasesByOfficeId(this.medical_office.office_id).subscribe(cases_repsonse => {
       for (let i = 0; i < cases_repsonse.cases.length; i++){
           let covid_case: CovidCase = cases_repsonse.cases[i];
 
@@ -77,13 +78,10 @@ export class ManageCovidCasesComponent implements OnInit {
      return false;
    }
 
-  public returnToNavbar(): void{
-    ManageCovidCasesComponent.medical_office = null; 
-    AppComponent.exitManagingCovidCases();
-  }
+  public returnToNavbar(): void{ AppComponent.exitManagingCovidCases(); }
 
   public getOffice(): MedicalOffice{
-    return ManageCovidCasesComponent.medical_office;
+    return this.medical_office;
   }
 
   public classifyTestResult(covid_case: InfectedPatient, result: string){
@@ -131,7 +129,7 @@ export class ManageCovidCasesComponent implements OnInit {
         let covid_case: CovidCase = {
           patient_id: user_response.user.user_id,
           doctor_id: UserService.loggedUser.user_id,
-          office_id: ManageCovidCasesComponent.medical_office.office_id,
+          office_id: this.medical_office.office_id,
           date_tested: date.toDateString()
         };
 

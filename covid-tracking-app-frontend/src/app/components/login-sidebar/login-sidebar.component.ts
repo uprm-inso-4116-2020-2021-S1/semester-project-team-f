@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../services/user.service';
-import { AppComponent } from '../app.component';
-import { DoctorService } from '../services/doctor.service';
-import { MedicalOfficeService } from '../services/medical-office.service';
-import { PatientService } from '../services/patient.service';
+import { UserService } from '../../services/user.service';
+import { AppComponent } from '../../app.component';
+import { DoctorService } from '../../services/doctor.service';
+import { MedicalOfficeService } from '../../services/medical-office.service';
+import { PatientService } from '../../services/patient.service';
 
 @Component({
   selector: 'app-login-sidebar',

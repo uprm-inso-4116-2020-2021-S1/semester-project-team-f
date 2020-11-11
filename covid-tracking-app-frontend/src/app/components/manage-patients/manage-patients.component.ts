@@ -1,10 +1,10 @@
-import { Component, OnInit, Type } from '@angular/core';
-import { AppComponent } from '../app.component';
-import { MedicalOffice } from '../models/medical_office';
-import { Patient } from '../models/patient';
-import { PatientService } from '../services/patient.service';
-import { User } from '../models/user';
-import { UserService } from '../services/user.service';
+import { Component, OnInit, Input} from '@angular/core';
+import { AppComponent } from '../../app.component';
+import { MedicalOffice } from '../../models/medical_office';
+import { Patient } from '../../models/patient';
+import { PatientService } from '../../services/patient.service';
+import { User } from '../../models/user';
+import { UserService } from '../../services/user.service';
 
 type PatientRecord = Patient & User;
 
@@ -16,7 +16,9 @@ type PatientRecord = Patient & User;
 
 export class ManagePatientsComponent implements OnInit {
 
-  static medical_office: MedicalOffice
+
+  @Input() medical_office: MedicalOffice;
+
   patients: PatientRecord[]
   error: string;
   
@@ -29,7 +31,7 @@ export class ManagePatientsComponent implements OnInit {
    public showPatients(): void{
     this.patients = [];
 
-    this.patientsService.getPatientsByOfficeId(ManagePatientsComponent.medical_office.office_id).subscribe(patient_repsonse => {
+    this.patientsService.getPatientsByOfficeId(this.medical_office.office_id).subscribe(patient_repsonse => {
       for (let i = 0; i < patient_repsonse.patients.length; i++){
           let patient: Patient = patient_repsonse.patients[i];
 
@@ -72,16 +74,15 @@ export class ManagePatientsComponent implements OnInit {
      return false;
    }
 
-  public returnToNavbar(): void{
-    ManagePatientsComponent.medical_office = null; 
-    AppComponent.exitAddOrRemovePatient(); 
-  }
+  public returnToNavbar(): void{ AppComponent.exitAddOrRemovePatient(); }
 
   public getOffice(): MedicalOffice{
-    return ManagePatientsComponent.medical_office;
+    return this.medical_office;
   }
 
   public deletePatient(patient: PatientRecord){
+    if(patient.user_id == UserService.loggedUser.user_id) { PatientService.patientAttendedOfficesId.delete(patient.office_id); }
+
     this.patientsService.deletePatient(patient.office_id, patient.user_id).subscribe(res =>{
       if(res.message == "Success!"){
         console.log("The following patient record was deleted: ");
@@ -100,11 +101,13 @@ export class ManagePatientsComponent implements OnInit {
 
         let patient: Patient = {
           user_id: user_response.user.user_id,
-          office_id: ManagePatientsComponent.medical_office.office_id
+          office_id: this.medical_office.office_id
         }
         this.patientsService.createPatient(patient).subscribe(patient_response => {
             if(patient_response.message == "Success!"){
               let user: User = user_response.user;
+
+              if(patient.user_id == UserService.loggedUser.user_id) { PatientService.patientAttendedOfficesId.add(patient.office_id); }
 
               let patient_to_add: PatientRecord = {
                 user_id: user.user_id,

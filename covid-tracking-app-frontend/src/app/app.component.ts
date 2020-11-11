@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { LoginSidebarComponent } from './login-sidebar/login-sidebar.component';
+import { MedicalOffice } from './models/medical_office';
+import { MapComponent } from './components/map/map.component';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +8,10 @@ import { LoginSidebarComponent } from './login-sidebar/login-sidebar.component';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent{
+  public current_component: AppComponent = this;
+  public selected_office: MedicalOffice;
+  public map_component: MapComponent;
+
   private static hasLoggedIn: boolean;
   private static addingOrRemovingPatient: boolean;
   private static managingCovidCases: boolean;
@@ -16,6 +21,7 @@ export class AppComponent{
   private static changingContactInformation: boolean;
   private static changingAddressInformation: boolean;
   private static seeingHelp: boolean;
+  
   title = 'Coronavirus Tracking App';
 
   public isLoggedIn() { return AppComponent.hasLoggedIn; }

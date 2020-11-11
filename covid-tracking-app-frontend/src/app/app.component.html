@@ -1,16 +1,16 @@
 <router-outlet></router-outlet>
 
-<app-map></app-map>
+<app-map [parent]="current_component"></app-map>
 
 <div *ngIf="isLoggedIn(); else loginSidebar">
-    <app-navbar></app-navbar>
+    <app-navbar [parent]="current_component" [map]="map_component"></app-navbar>
 </div>
 <div *ngIf="isAddingOrRemovingPatient();">
-    <app-manage-patients></app-manage-patients>
+    <app-manage-patients [medical_office]="selected_office"></app-manage-patients>
 </div>
 
 <div *ngIf="isManagingCovidCases();">
-    <app-manage-covid-cases></app-manage-covid-cases>
+    <app-manage-covid-cases [medical_office]="selected_office"></app-manage-covid-cases>
 </div>
 
 <div *ngIf="isViewingPrevCovidTests();">
@@ -26,11 +26,11 @@
 </div>
 
 <div *ngIf="isViewingOffice();">
-    <app-office-information></app-office-information>
+    <app-office-information  [medical_office]="selected_office" [map]="map_component"></app-office-information>
 </div>
 
 <div *ngIf="isManagingEmployees();">
-    <app-manage-employees></app-manage-employees>
+    <app-manage-employees [medical_office]="selected_office"></app-manage-employees>
 </div>
 
 <ng-template #loginSidebar>
