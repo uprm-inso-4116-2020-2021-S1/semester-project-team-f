@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { UserService } from '../services/user.service';
-import { AppComponent } from '../app.component';
-import { DoctorService } from '../services/doctor.service';
-import { MedicalOfficeService } from '../services/medical-office.service';
-import { PatientService } from '../services/patient.service';
+import { Component, OnInit, Input } from '@angular/core';
+import { UserService } from '../../services/user.service';
+import { AppComponent } from '../../app.component';
+import { DoctorService } from '../../services/doctor.service';
+import { MedicalOfficeService } from '../../services/medical-office.service';
+import { PatientService } from '../../services/patient.service';
+import { MapComponent } from '../map/map.component';
 
 @Component({
   selector: 'app-login-sidebar',
@@ -11,6 +12,8 @@ import { PatientService } from '../services/patient.service';
   styleUrls: ['./login-sidebar.component.scss']
 })
 export class LoginSidebarComponent implements OnInit {
+
+  @Input()map: MapComponent;
 
   public effectsInAction: string[]; //effects not related to login
   public canGoToNextPage: boolean;
@@ -76,6 +79,8 @@ export class LoginSidebarComponent implements OnInit {
 
             UserService.loggedUser = res.user;
             localStorage.setItem('currentUserId', res.user.user_id);
+
+            this.map.initVisitedLocations();
 
             console.log("User with id of " + res.user.user_id + " has logged in!");
 

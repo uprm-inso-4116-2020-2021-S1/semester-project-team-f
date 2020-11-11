@@ -1,7 +1,11 @@
 export const API_URL = 'http://localhost:5000/'; //change when deployed
 
 export const ICON_TYPE = {
-    DEFAULT_ICON: "",
+    DEFAULT_ICON: {
+        url: 'http://image.flaticon.com/icons/svg/252/252025.svg', // url
+        scaledSize: new google.maps.Size(50, 50), // scaled size
+        labelOrigin: new google.maps.Point(25, 60)
+    },
     DOCTOR_ICON: {
         url: "assets/doctor.png", // url
         scaledSize: new google.maps.Size(50, 50), // scaled size

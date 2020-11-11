@@ -11,8 +11,8 @@
     padding: 2px;
     color: rgb(255, 255, 255);
     text-decoration: none;
-    font-size: 18px;
-    width: 20%; /* Four equal-width links. If you have two links, use 50%, and 33.33% for three links, etc.. */
+    font-size: 1.15vw;
+    width: 16.6666%; /* Four equal-width links. If you have two links, use 50%, and 33.33% for three links, etc.. */
     text-align: center; /* If you want the text to be centered */
   }
 
@@ -26,8 +26,12 @@
   transition: transform .5s ease;
 }
 
-  #settings_icon, #logout_icon{
-    width: 6%;
+  #settings_icon, #logout_icon, #results_icon{
+    width: 7%;
+  }
+
+  #location_icon, #medic_icon{
+    width: 7.5%;
   }
 
   .navbar_link:hover{

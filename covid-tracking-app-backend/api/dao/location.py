@@ -9,7 +9,7 @@ class Location(db.Model):
     location_id = db.Column(db.Integer, unique=True, nullable = False, primary_key=True)
     lattitude = db.Column(db.Float, nullable = False)
     longitude = db.Column(db.Float, nullable = False)
-    closest_address_id = db.Column(db.Integer,  db.ForeignKey('address.address_id'), nullable = False)
+    closest_address_id = db.Column(db.Integer,  db.ForeignKey('address.address_id'), nullable = True)
 
     def __init__(self, **args):
         self.lattitude = args.get('lattitude')

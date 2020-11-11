@@ -41,7 +41,7 @@
         <a class="btn btn-lg btn-primary" role="button" (click)=goToNextPage()>Next</a>
     </div>
 
-    <a id="createAccount">I want to sign up as a doctor!</a>
+    <a id="createAccount" (click) = "showDoctorDialog()">I want to sign up as a doctor!</a>
 
     <app-login-sidebar *ngIf="canGoToPreviousPage"></app-login-sidebar>
     <app-address-information *ngIf="canGoToNextPage"></app-address-information>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from '../models/user';
-import { UserService } from '../services/user.service';
-import { AppComponent } from '../app.component';
+import { User } from '../../models/user';
+import { UserService } from '../../services/user.service';
+import { AppComponent } from '../../app.component';
 import { MessageBoxComponent } from '../message-box/message-box.component';
 
 @Component({

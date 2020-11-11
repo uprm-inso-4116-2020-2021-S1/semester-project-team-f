@@ -22,27 +22,32 @@ class VisitedLocationHandler:
     @staticmethod
     def getLocationsVisitedByUserId(uid):
         try:
-            visited_location = VisitedLocation.getLocationsVisitedByUserId(uid)
-            location_dic = Utilities.to_dict(visited_location)
+            visited_locations = VisitedLocation.getLocationsVisitedByUserId(uid)
+            result_list = []
+            for location in visited_locations:
+                result_list.append(Utilities.to_dict(location))
 
             result = {
                 "message": "Success!",
-                "visited_location": location_dic
+                "visited_locations": result_list
             }
             return jsonify(result), 200
 
         except Exception as e:
+
             return jsonify(reason="Server error", error=e.__str__()), 500
 
     @staticmethod
     def getVisitedLocationsRelativeToAddress(aid):
         try:
-            visited_location = VisitedLocation.getVisitedLocationsRelativeToAddress(aid)
-            location_dic = Utilities.to_dict(visited_location)
+            visited_locations = VisitedLocation.getVisitedLocationsRelativeToAddress(aid)
+            result_list = []
+            for location in visited_locations:
+                result_list.append(Utilities.to_dict(location))
 
             result = {
                 "message": "Success!",
-                "visited_location": location_dic
+                "visited_locations": result_list
             }
             return jsonify(result), 200
 

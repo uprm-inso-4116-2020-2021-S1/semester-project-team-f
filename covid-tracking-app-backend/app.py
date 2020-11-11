@@ -43,7 +43,8 @@ def getAllAddressesOrCreate():
 
 @app.route('/address/<int:aid>', methods=['GET'])
 def getAddressById(aid):
-    return AddressHandler.getAddressById(aid)
+    if request.method == 'GET':
+        return AddressHandler.getAddressById(aid)
 
 @app.route('/offices', methods=['GET'])
 def getMedicalOffices():
@@ -52,11 +53,18 @@ def getMedicalOffices():
 
 @app.route('/offices/<int:mid>', methods=['GET'])
 def getMedicalOfficeById(mid):
-    return MedicalOfficeHandler.getMedicalOfficeById(mid)
+    if request.method == 'GET':
+        return MedicalOfficeHandler.getMedicalOfficeById(mid)
 
 @app.route('/users/<string:uid>/offices', methods=['GET'])
 def getMedicalOfficesByOwnerId(uid):
-    return MedicalOfficeHandler.getMedicalOfficesByOwnerId(uid)
+    if request.method == 'GET':
+        return MedicalOfficeHandler.getMedicalOfficesByOwnerId(uid)
+
+@app.route('/users/<string:uid>/visited-locations', methods=['GET'])
+def getLocationsVisitedByUserId(uid):
+    if request.method == 'GET':
+        return VisitedLocationHandler.getLocationsVisitedByUserId(uid)
 
 @app.route("/users", methods=['GET', 'POST', 'PUT'])
 def getAllUsersOrCreateOrUpdate():

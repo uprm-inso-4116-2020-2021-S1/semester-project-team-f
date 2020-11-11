@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { User } from '../models/user'
+import { User } from '../../models/user'
+import { MessageBoxComponent } from '../message-box/message-box.component';
 
 @Component({
   selector: 'app-contact-information',
@@ -38,6 +39,8 @@ export class ContactInformationComponent{
   public getSavedUserInfo(): User{
     return ContactInformationComponent.contact_info;
   }
+
+  public showDoctorDialog(): void { MessageBoxComponent.displayMessageBox("If you want to sign up as a doctor or any other medical authority, please proceed to create your account as a regular one and then contact our administration at 939-216-6370"); }
 
   private initializeUserInfo(){
     if(!this.getSavedUserInfo()){
