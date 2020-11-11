@@ -26,31 +26,37 @@ export class CovidService {
 
   public createRecord(covid_Case: CovidCase): Observable<any> {
     return this.httpClient
-      .post(API_URL + `covid_cases`, covid_Case)
+      .post(API_URL + `covid-cases`, covid_Case)
       .pipe(catchError(this._handleError))
   }
 
   public deleteRecord(covid_Case: CovidCase): Observable<any> {
     return this.httpClient
-      .delete(API_URL + `covid_cases/` + covid_Case.patient_id + '&' + covid_Case.office_id + '&' + covid_Case.date_tested)
+      .delete(API_URL + `covid-cases/` + covid_Case.patient_id + '&' + covid_Case.office_id + '&' + covid_Case.date_tested)
       .pipe(catchError(this._handleError))
   }
 
   public updateRecord(covid_Case: CovidCase): Observable<any> {
     return this.httpClient
-      .put(API_URL + `covid_cases`, covid_Case)
+      .put(API_URL + `covid-cases`, covid_Case)
       .pipe(catchError(this._handleError))
   }
 
   public getAllCases(): Observable<CovidCasesResponse> {
     return this.httpClient
-    .get<CovidCasesResponse>(API_URL + `covid_cases`)
+    .get<CovidCasesResponse>(API_URL + `covid-cases`)
     .pipe(catchError(this._handleError))
   }
 
   public getCovidCasesByOfficeId(id: number): Observable<CovidCasesResponse>{
     return this.httpClient
-    .get<CovidCasesResponse>(API_URL + `covid_cases/` + id)
+    .get<CovidCasesResponse>(API_URL + `offices/${id}/covid-cases`)
+    .pipe(catchError(this._handleError))
+  }
+
+  public getCovidCasesByPatientId(id: string): Observable<CovidCasesResponse>{
+    return this.httpClient
+    .get<CovidCasesResponse>(API_URL + `patients/${id}/covid-cases`)
     .pipe(catchError(this._handleError))
   }
 }

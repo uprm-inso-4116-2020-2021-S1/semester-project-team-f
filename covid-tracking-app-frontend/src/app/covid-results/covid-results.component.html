@@ -1,0 +1,33 @@
+<div class="sidebar slide-right">
+    <div class="form">
+        <div class="upperBar" >
+            <img id="back" (click) = "returnToNavbar()"src="../../assets/Back.png" alt="back">
+            <a id="title">Your COVID-19 Tests Results</a>
+        </div>
+    </div>
+
+        <div class="list" *ngFor="let case of cases">
+            <div class="element">
+                <a>Date tested: {{case.date_tested}}</a>
+                <a>Test result:  
+                    <div style="display: inline;" class={{decodeCovidResult(case)}}>
+                        {{decodeCovidResult(case)}}
+                    </div>
+                </a>
+                <a>Office tested: {{case.office_name}}</a>
+                <a>Phone number: {{case.office_phone_number}}</a>
+            </div>
+          </div>
+
+          <ng-template [ngIf]= "cases.length == 0">
+                <p>It looks like you don't have any COVID-19 tests. However, you are registered in 
+                    the follow offices that provides COVID-19 tests:
+                </p>
+                <div class="list" *ngFor="let office of offices">
+                    <div class="element">
+                        <a>Office tested: {{office.office_name}}</a>
+                        <a>Phone number: {{office.office_phone_number}}</a>
+                    </div>
+                  </div>
+          </ng-template>
+</div>

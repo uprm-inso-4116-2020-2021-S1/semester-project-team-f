@@ -1,0 +1,75 @@
+.upperBar{
+    a{display: inline;}
+    background-color: #FF4646;
+    padding: 1.6vw;
+  }
+  
+  .EmployeeList {
+      width: 19.5vw;
+      position: relative;
+      overflow-y: auto;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  
+    .btn-primary{
+       display: inline; 
+       margin: 0.45vw;
+      }
+    
+    .EmployeeList a {
+      background-color: #eee;
+      color: black;
+      display: block;
+      padding: 1vw;
+      font-size: 1vw;
+      text-align: left;
+      text-decoration: none;
+    }
+    
+    .EmployeeList a:hover {
+      background-color: #ccc;
+    }
+    
+    .EmployeeList a.active {
+      background-color:#FF8A00;
+      color: white;
+    }
+  
+    #RemoveDoctor{
+      font-weight: bold;
+      color: red;
+      transition:all .5s ease;
+      -webkit-transition-delay:all .5s ease;
+      -moz-transition-delay:all .5s ease;
+      -ms-transition-delay:all .5s ease;
+      -o-transition-delay:all .5s ease;
+    }
+  
+    #RemoveDoctor:hover{
+      font-weight: bold;
+      color: red;
+      cursor: pointer;
+      color: orange;
+      transition:all .5s ease;
+      -webkit-transition-delay:all .5s ease;
+      -moz-transition-delay:all .5s ease;
+      -ms-transition-delay:all .5s ease;
+      -o-transition-delay:all .5s ease;
+    }
+  
+    .btn-primary{
+      margin-top: 20px;
+      color:white;
+      border-color: #FF8A00;
+      background-color: #FF8A00;
+      width: 10vw;
+  }
+  #title{
+    font-size: 1.35vw;
+    margin-left: 2.25vw;
+  }
+  
+  .form-text{
+    margin-top: 1vw;
+  }

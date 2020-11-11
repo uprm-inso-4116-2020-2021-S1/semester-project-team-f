@@ -21,15 +21,30 @@ class DoctorHandler:
             return jsonify(reason="Server error", error=e.__str__()), 500
 
     @staticmethod
-    def getDoctorById(did):
+    def getDoctorByUserId(did):
         try:
-            doctors = Doctor.getDoctorById(did)
+            doctors = Doctor.getDoctorByUserId(did)
             result_list = []
             for doctor in doctors: #let's not get consfuse, sometimes doctors may work in mort than one ficcw
                 result_list.append(Utilities.to_dict(doctor))
             result = {
                 "message": "Success!",
                 "doctor": result_list
+            }
+            return jsonify(result), 200
+        except Exception as e:
+            return jsonify(reason="Server error", error=e.__str__()), 500
+
+    @staticmethod
+    def getDoctorsByOfficeId(oid):
+        try:
+            doctors = Doctor.getDoctorsByOfficeId(oid)
+            result_list = []
+            for doctor in doctors:
+                result_list.append(Utilities.to_dict(doctor))
+            result = {
+                "message": "Success!",
+                "doctors": result_list
             }
             return jsonify(result), 200
         except Exception as e:
@@ -56,3 +71,12 @@ class DoctorHandler:
                 return jsonify(message="Server error!", error=err.__str__()), 500
         else:
             return jsonify(message="Bad Request!"), 40
+
+    @staticmethod
+    def deleteDoctor(oid, uid):
+        deletedDoctor = Doctor.deleteDoctor(oid, uid)
+        result = {
+            "message": "Success!",
+            "patient": Utilities.to_dict(deletedDoctor)
+        }
+        return jsonify(result), 200

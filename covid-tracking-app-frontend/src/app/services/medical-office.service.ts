@@ -36,4 +36,9 @@ export class MedicalOfficeService {
     .pipe(catchError(this._handleError))
   }
   
+  public getMedicalOfficesByOwnerId(uid:string): Observable<MedicalOfficesResponse> {
+    return this.httpClient
+    .get<MedicalOfficesResponse>(API_URL + `users/${uid}/offices`)
+    .pipe(catchError(this._handleError))
+  }
 }

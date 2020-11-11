@@ -69,8 +69,8 @@ class User(db.Model):
         return User().query.filter_by(email=uemail).first()
 
     @staticmethod
-    def updateUserInfo(uid, **args):
-        user = User.getUserById(uid)
+    def updateUserInfo(**args):
+        user = User.getUserById(args.get('user_id'))
         user.phone_number = args.get('phone_number')
         user.email = args.get('email')
         user.password = args.get('password')

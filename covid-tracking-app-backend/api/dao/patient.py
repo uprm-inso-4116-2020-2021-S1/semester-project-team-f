@@ -29,18 +29,18 @@ class Patient(db.Model):
 
     @staticmethod
     def getPatientsByOfficeId(oid):
-        return Patient().query.filter_by(office_id=oid)
+        return Patient().query.filter_by(office_id=oid).all()
 
     '''Retrieves a single individual that may have a record in multiple offices'''
     @staticmethod
-    def getPatientById(pid):
+    def getPatientByUserId(pid):
         return Patient().query.filter_by(user_id=pid).all()
 
 
     '''Retrieves a specific patient record in an office'''
     @staticmethod
-    def getPatientByIdAndOffice(json):
-        return Patient().query.filter_by(user_id=json['user_id'], office_id=json['office_id']).first()
+    def getPatientByOfficeAndUserId(oid, uid):
+        return Patient().query.filter_by(user_id=uid, office_id=oid).first()
 
     @staticmethod
     def getDeathPatients():
@@ -54,8 +54,8 @@ class Patient(db.Model):
         return self
 
     @staticmethod
-    def deletePatient(json):
-        patient = Patient.getPatientByIdAndOffice(json)
+    def deletePatient(oid, uid):
+        patient = Patient.getPatientByOfficeAndUserId(oid, uid)
         if not patient:
             return None
         db.session.delete(patient)

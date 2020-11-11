@@ -15,28 +15,27 @@ from flask_mail import Message
 def home():
     return "Welcome!"
 
-@app.route("/location", methods=['GET', 'POST'])
-def getAllLocationOrCreate():
+@app.route("/locations", methods=['GET', 'POST'])
+def getAllLocationsOrCreate():
     if request.method == 'GET':
         return LocationHandler.getAllLocations()
     elif request.method == 'POST':
         return LocationHandler.createLocation(request.json)
 
-@app.route('/location/<int:lid>', methods=['GET'])
+@app.route('/locations/<int:lid>', methods=['GET'])
 def getLocationById(lid):
-    return LocationHandler.getLocationById(lid)
+    if request.method == 'GET':
+        return LocationHandler.getLocationById(lid)
 
-@app.route("/visited_location", methods =['GET', 'POST'])
-def getALLVisitedLocationOrCreateOrDelete():
+@app.route("/visited-locations", methods =['GET', 'POST'])
+def getAllVisitedLocationsOrCreate():
     if request.method == 'GET':
         return VisitedLocationHandler.getAllVisitedLocations()
     elif request.method =='POST':
         return VisitedLocationHandler.createVisitedLocation(request.json)
-    # elif request.method == 'DELETE':
-    #     return VisitedLocationHandler.deleteVisitedLocation(request.json)
 
 @app.route("/address", methods=['GET', 'POST'])
-def getAllAddressOrCreate():
+def getAllAddressesOrCreate():
     if request.method == 'GET':
         return AddressHandler.getAllAddresses()
     elif request.method == 'POST':
@@ -48,28 +47,43 @@ def getAddressById(aid):
 
 @app.route('/offices', methods=['GET'])
 def getMedicalOffices():
-    return MedicalOfficeHandler.getAllMedicalOffices()
+    if request.method == 'GET':
+        return MedicalOfficeHandler.getAllMedicalOffices()
 
 @app.route('/offices/<int:mid>', methods=['GET'])
 def getMedicalOfficeById(mid):
     return MedicalOfficeHandler.getMedicalOfficeById(mid)
 
-@app.route("/users", methods=['GET', 'POST'])
-def getAllUsersOrCreate():
+@app.route('/users/<string:uid>/offices', methods=['GET'])
+def getMedicalOfficesByOwnerId(uid):
+    return MedicalOfficeHandler.getMedicalOfficesByOwnerId(uid)
+
+@app.route("/users", methods=['GET', 'POST', 'PUT'])
+def getAllUsersOrCreateOrUpdate():
     if request.method == 'GET':
         return UserHandler.getAllUsers()
     elif request.method == 'POST':
         return UserHandler.createUser(request.json)
+    elif request.method == 'PUT':
+        return UserHandler.updateUserInfo(request.json)
 
-@app.route('/users/<string:uid>', methods=['GET', 'PUT'])
-def getUserByIdOrEmailOrUpdate(uid):
+@app.route('/users/<string:uid>', methods=['GET'])
+def getUserByIdOrEmail(uid):
     if request.method == 'GET':
         if '@' in uid:
             return UserHandler.getUserByEmail(uid)
         else:
             return UserHandler.getUserById(uid)
-    elif request.method == 'PUT':
-        return UserHandler.updateUserInfo(uid, request.json)
+
+@app.route('/patients/<string:uid>', methods=['GET'])
+def getPatientByUserId(uid):
+    if request.method == 'GET':
+        return PatientHandler.getPatientByUserId(uid)
+
+@app.route('/patients/<string:id>/covid-cases', methods=['GET'])
+def getCovidCasesByPatientId(id):
+    if request.method == 'GET':
+        return CovidCasesHandler.getCovidTestsByPatientId(id)
 
 @app.route('/doctors', methods=['GET', 'POST'])
 def getAllDoctorsOrCreate():
@@ -79,40 +93,55 @@ def getAllDoctorsOrCreate():
         return DoctorHandler.createDoctor(request.json)
 
 @app.route('/doctors/<string:did>', methods=['GET'])
-def getDoctorById(did):
-    return DoctorHandler.getDoctorById(did)
+def getDoctorByUserId(did):
+    return DoctorHandler.getDoctorByUserId(did)
+
+@app.route('/offices/<int:oid>/doctors/<string:uid>', methods=['DELETE'])
+def deleteDoctorByOfficeAndUserId(oid, uid):
+    if request.method == 'DELETE':
+        return DoctorHandler.deleteDoctor(oid, uid)
 
 @app.route('/patients', methods=['GET', 'POST'])
-def getAllPatientsOrCreateOrDelete():
+def getAllPatientsOrCreate():
     if request.method == 'GET':
         return PatientHandler.getAllPatients()
     elif request.method == 'POST':
         return PatientHandler.createPatient(request.json)
 
-@app.route('/patients/<id>', methods=['GET', 'DELETE'])
-def getPatientsByOfficeOrDeletePatient(id):
+@app.route('/offices/<int:id>/patients', methods=['GET'])
+def getPatientsByOfficeId(id):
     if request.method == 'GET':
-        if '&' in id:
-            return PatientHandler.getPatientByIdAndOffice(id)
-        else:
-            return PatientHandler.getPatientsByOfficeId(id)
-    elif request.method == 'DELETE':
-        return PatientHandler.deletePatient(id)
+        return PatientHandler.getPatientsByOfficeId(id)
 
-@app.route('/covid_cases', methods=['GET', 'POST', 'PUT'])
-def getAllCovidCasesOrCreate():
+@app.route('/offices/<int:id>/doctors', methods=['GET'])
+def getDoctorsByOfficeId(id):
+    if request.method == 'GET':
+        return DoctorHandler.getDoctorsByOfficeId(id)
+
+@app.route('/offices/<int:id>/covid-cases', methods=['GET'])
+def getCovidCasesByOfficeId(id):
+    if request.method == 'GET':
+        return CovidCasesHandler.getCovidTestsByofficeId(id)
+
+@app.route('/offices/<int:oid>/patients/<string:uid>', methods=['GET', 'DELETE'])
+def getOrDeletePatientOfficeAndUserId(oid, uid):
+    if request.method == 'GET':
+        return PatientHandler.getPatientByOfficeAndUserId(oid, uid)
+    elif request.method == 'DELETE':
+        return PatientHandler.deletePatient(oid, uid)
+
+@app.route('/covid-cases', methods=['GET', 'POST', 'PUT'])
+def getAllCovidCasesOrCreateOrUpdate():
     if request.method == 'GET':
         return CovidCasesHandler.getAllCases()
     elif request.method == 'POST':
-        return CovidCasesHandler.addRecord(request.json)
+        return CovidCasesHandler.createRecord(request.json)
     elif request.method == 'PUT':
         return CovidCasesHandler.updateRecord(request.json)
 
-@app.route('/covid_cases/<id>', methods=['GET', 'DELETE'])
-def getCovidCaseOrUpdate(id):
-    if request.method == 'GET':
-        return CovidCasesHandler.getCovidTestsByoffice(id)
-    elif request.method == 'DELETE':
+@app.route('/covid-cases/<string:id>', methods=['DELETE'])
+def deleteCovidCase(id):
+    if request.method == 'DELETE':
         return CovidCasesHandler.deleteRecord(id)
 
 def send_activation_email(user):
@@ -135,14 +164,14 @@ def login():
 def logout():
     return UserHandler.logout()
 
-@app.route('/account_activation', methods=['GET', 'POST'])
+@app.route('/account-activation', methods=['GET', 'POST'])
 def activation_request():
     json = request.json
     user =   User.getUserByEmail(json['email'])
     send_activation_email(user)
     return UserHandler.sentEmail()
 
-@app.route('/account_activation/<token>', methods=['GET', 'POST'])
+@app.route('/account-activation/<token>', methods=['GET', 'POST'])
 def activation_token(token):
     #You should check if user is logged in MAYBE
     user = User.getUserByEmail(User.verify_activation_token(token))

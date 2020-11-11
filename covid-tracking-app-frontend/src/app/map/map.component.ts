@@ -4,11 +4,8 @@ import { MedicalOfficeService } from '../services/medical-office.service';
 import { AddressService } from '../services/address.service';
 import { LocationService } from '../services/location.service'
 import { Location } from '../models/location';
-import { DoctorService } from '../services/doctor.service';
 import { AppComponent } from '../app.component';
 import { MedicalOffice } from '../models/medical_office';
-import { ManagePatientsComponent } from '../manage-patients/manage-patients.component';
-import { CovidCasesComponent } from '../covid-cases/covid-cases.component';
 import {OfficeInformationComponent} from '../office-information/office-information.component';
 import { MessageBoxComponent } from '../message-box/message-box.component';
 
@@ -127,39 +124,24 @@ export class MapComponent implements AfterViewInit {
     MapComponent.addOfficeListener(marker);
   }
 
-    // Shows only the places where the logged in doctor works.
-    public static showWorkingPlacesOnly(patient_listener: boolean): void {
-      
+    // Shows the places working places of the logged in user and add a listener to it.
+    public static showWorkingPlacesOnly(condition: (o) => boolean, listener: (o) => void): void {
       for (let i = 0; i < this.markers.length; i++) { 
         let medical_office: MedicalOffice = this.offices_mapping.get(this.markers[i]);
 
-        if(DoctorService.doctorOfficesId.has(medical_office.office_id)){ 
+        if(condition(medical_office)){ 
           this.markers[i].setIcon(ICON_TYPE.WORK_ICON);
           google.maps.event.clearListeners(this.markers[i], "click");
-          
-          if(patient_listener){
-              this.markers[i].addListener("click",() => {
-          
-              ManagePatientsComponent.medical_office = medical_office;
-              AppComponent.changeAddOrRemovePatients();
-              this.showOfficesOnly();
-              });
-          }
-          else{
-            this.markers[i].addListener("click",() => {
-          
-              CovidCasesComponent.medical_office = medical_office;
-              AppComponent.changeManagingCovidCases();
-              this.showOfficesOnly();
-              });
-          }
 
-         }
-        else{ 
-          this.markers[i].setMap(null); //hide label from the map
-         } 
-       }
-
+          this.markers[i].addListener("click",() => { 
+            listener(medical_office);
+            MapComponent.showOfficesOnly();
+           });
+        }
+        else{
+          this.markers[i].setMap(null);
+        }
+      }
        alert("Please select the office that you wish to manage...")
     }
 

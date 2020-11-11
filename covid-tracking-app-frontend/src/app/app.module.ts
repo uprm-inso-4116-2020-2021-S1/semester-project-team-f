@@ -15,7 +15,8 @@ import { MapComponent } from './map/map.component';
 import { ManagePatientsComponent } from './manage-patients/manage-patients.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { HelpInfoComponent } from './help-info/help-info.component';
-import { CovidCasesComponent } from './covid-cases/covid-cases.component';
+import { ManageCovidCasesComponent } from './manage-covid-cases/manage-covid-cases.component';
+import { CovidResultsComponent } from './covid-results/covid-results.component';
 
 import { OfficeInformationComponent } from './office-information/office-information.component';
 import { PatientService } from './services/patient.service';
@@ -24,6 +25,7 @@ import { DoctorService } from './services/doctor.service';
 import { LocationService } from './services/location.service';
 import { VisitedLocationService } from './services/visited-location.service';
 import { MessageBoxComponent } from './message-box/message-box.component';
+import { ManageEmployeesComponent } from './manage-employees/manage-employees.component';
 
 @NgModule({
   declarations: [
@@ -36,9 +38,11 @@ import { MessageBoxComponent } from './message-box/message-box.component';
     ManagePatientsComponent,
     AccountSettingsComponent,
     HelpInfoComponent,
-    CovidCasesComponent,
+    ManageCovidCasesComponent,
     OfficeInformationComponent,
     MessageBoxComponent,
+    ManageEmployeesComponent,
+    CovidResultsComponent
   ],
   imports: [
     BrowserModule,
