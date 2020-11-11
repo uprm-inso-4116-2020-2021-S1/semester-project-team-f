@@ -8,6 +8,7 @@ import { ManagePatientsComponent } from '../manage-patients/manage-patients.comp
 import { ManageEmployeesComponent } from '../manage-employees/manage-employees.component';
 import { MedicalOffice } from '../models/medical_office';
 import { ManageCovidCasesComponent } from '../manage-covid-cases/manage-covid-cases.component';
+import { PatientService } from '../services/patient.service';
 
 @Component({
   selector: 'app-navbar',
@@ -25,6 +26,7 @@ export class NavbarComponent implements OnInit {
   }
 
   public doctorIsLogged(): boolean{ return DoctorService.doctorWorkingOfficesId != null; }
+  public patientIsLogged(): boolean{ return PatientService.patientAttendedOfficesId != null; }
 
   public hasMedicalOffices(): boolean { return UserService.userOwnedOfficesId.size != 0;}
 
@@ -63,6 +65,7 @@ export class NavbarComponent implements OnInit {
      }); 
     }
 
+  public viewCovidTests(): void{ AppComponent.changeViewPrevCovidTests(); }
   public contactInformation(): void{ AppComponent.changeContactInformation(); }
   public addressInformation(): void{ AppComponent.changeAddressInformation(); } 
   public helpInformation(): void{AppComponent.seeHelpInfo();}

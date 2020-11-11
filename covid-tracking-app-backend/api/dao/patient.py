@@ -29,11 +29,11 @@ class Patient(db.Model):
 
     @staticmethod
     def getPatientsByOfficeId(oid):
-        return Patient().query.filter_by(office_id=oid)
+        return Patient().query.filter_by(office_id=oid).all()
 
     '''Retrieves a single individual that may have a record in multiple offices'''
     @staticmethod
-    def getPatientById(pid):
+    def getPatientByUserId(pid):
         return Patient().query.filter_by(user_id=pid).all()
 
 

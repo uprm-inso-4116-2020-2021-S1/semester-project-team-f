@@ -11,7 +11,6 @@ import {API_URL} from '../../config';
 })
 export class DoctorService {
 
-  public static loggedDoctorId: string;
   public static doctorWorkingOfficesId: Set<number>;
 
   constructor(private httpClient: HttpClient, private router: Router) { }

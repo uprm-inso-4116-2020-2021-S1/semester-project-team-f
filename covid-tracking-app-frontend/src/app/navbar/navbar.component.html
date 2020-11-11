@@ -12,15 +12,26 @@
           <a (click) = "addressInformation()" >Change address information</a>
         </div>
     </a>
-    <ng-template [ngIf]="doctorIsLogged()">
+
+    <ng-template [ngIf]="patientIsLogged()">
+        <a class="navbar_link" (click) = "viewCovidTests()">
+            My COVID-19 Tests
+        </a>
+    </ng-template>
+
+    <ng-template [ngIf]="doctorIsLogged() || hasMedicalOffices()">
         <a class="dropdown navbar_link">
                 <a class="dropbtn">Office Management</a>
+
                 <div class="dropdown-content">
-                <a (click) = "addOrRemovePatient()" >Manage Patients</a>
-                <a (click) = "manageCovidCases()">Manage COVID-19 Cases</a>
-                <ng-template [ngIf]="hasMedicalOffices()">
-                    <a (click) = "manageEmployees()">Manage Employees</a>
-                </ng-template>
+                    <ng-template [ngIf]="doctorIsLogged()">
+                        <a (click) = "addOrRemovePatient()" >Manage Patients</a>
+                        <a (click) = "manageCovidCases()">Manage COVID-19 Cases</a>
+                    </ng-template>
+
+                    <ng-template [ngIf]="hasMedicalOffices()">
+                        <a (click) = "manageEmployees()">Manage Employees</a>
+                    </ng-template>
                 </div>
         </a>     
     </ng-template>
@@ -28,5 +39,6 @@
     <a class="navbar_link" (click) = "logout()">
         <img id = "logout_icon" src="../../assets/logout.png">
         Logout
-        
     </a>
+
+</div>

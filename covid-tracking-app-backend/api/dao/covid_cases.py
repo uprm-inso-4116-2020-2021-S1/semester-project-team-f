@@ -35,7 +35,7 @@ class CovidCases(db.Model):
        return the cases of that user by both offices
        '''
     @staticmethod
-    def getCasesByPatient(pid):
+    def getCasesByPatientId(pid):
         return CovidCases().query.filter_by(patient_id=pid).all()
 
     '''Assuming that the patient can get re-infected, then the following query will
@@ -68,7 +68,7 @@ class CovidCases(db.Model):
 
     '''Tests realized by X doctor'''
     @staticmethod
-    def getCasesByDoctor(did):
+    def getCasesByDoctorId(did):
         return CovidCases().query.filter_by(doctor_id=did).all()
 
     '''Tests realized by X office'''

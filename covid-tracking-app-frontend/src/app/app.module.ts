@@ -16,6 +16,7 @@ import { ManagePatientsComponent } from './manage-patients/manage-patients.compo
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { HelpInfoComponent } from './help-info/help-info.component';
 import { ManageCovidCasesComponent } from './manage-covid-cases/manage-covid-cases.component';
+import { CovidResultsComponent } from './covid-results/covid-results.component';
 
 import { OfficeInformationComponent } from './office-information/office-information.component';
 import { PatientService } from './services/patient.service';
@@ -41,6 +42,7 @@ import { ManageEmployeesComponent } from './manage-employees/manage-employees.co
     OfficeInformationComponent,
     MessageBoxComponent,
     ManageEmployeesComponent,
+    CovidResultsComponent
   ],
   imports: [
     BrowserModule,

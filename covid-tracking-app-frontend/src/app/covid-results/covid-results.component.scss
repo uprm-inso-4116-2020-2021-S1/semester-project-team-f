@@ -1,0 +1,64 @@
+.upperBar{
+    background-color: #FF4646;
+    padding: 1.6vw;
+  }
+  
+  .list {
+      width: 19.5vw;
+      position: relative;
+      overflow-y: auto;
+      margin-left: auto;
+      margin-right: auto;
+      a{
+        font-size: 0.8vw;
+      }
+      .element {
+        border-style: solid;
+        border-width: 0vw 0.05vw 0.05vw 0.05vw;
+        background-color: #eee;
+        color: black;
+        display: block;
+        padding: 0.5vw;
+        text-align: left;
+        text-decoration: none;
+      }  
+    }
+  
+    .form{ padding: 0px; }
+  
+    .btn-primary{
+       display: inline; 
+       margin: 0.45vw;
+      }
+  
+    .btn-primary{
+      margin-top: 20px;
+      color:white;
+      border-color: #FF8A00;
+      background-color: #FF8A00;
+      width: 10vw;
+  }
+  #title{
+    font-size: 1.35vw;
+    margin-left: 2.25vw;
+  }
+  
+  .form-text{
+    margin-top: 1vw;
+  }
+
+  #statuses{
+    font-size: 1vw;
+    width: 7.5vw;
+    height: 2.25vw;
+  }
+
+  p{
+    text-align: left;
+    font-size: 1.15vw;
+    margin: 1.5vw;
+  }
+
+  .Pending{ color: orange; }
+  .Negative{ color: yellowgreen; }
+  .Positive{ color: orangered; }

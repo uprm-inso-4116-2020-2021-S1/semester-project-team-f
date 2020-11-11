@@ -53,4 +53,10 @@ export class CovidService {
     .get<CovidCasesResponse>(API_URL + `offices/${id}/covid-cases`)
     .pipe(catchError(this._handleError))
   }
+
+  public getCovidCasesByPatientId(id: string): Observable<CovidCasesResponse>{
+    return this.httpClient
+    .get<CovidCasesResponse>(API_URL + `patients/${id}/covid-cases`)
+    .pipe(catchError(this._handleError))
+  }
 }

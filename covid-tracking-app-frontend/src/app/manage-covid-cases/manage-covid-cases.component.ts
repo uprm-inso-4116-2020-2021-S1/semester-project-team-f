@@ -5,7 +5,6 @@ import { User } from '../models/user';
 import { CovidService } from '../services/covid.service';
 import { UserService } from '../services/user.service';
 import { AppComponent } from '../app.component';
-import { DoctorService } from '../services/doctor.service';
 import { PatientService } from '../services/patient.service';
 import { MessageBoxComponent } from '../message-box/message-box.component';
 

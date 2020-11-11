@@ -79,7 +79,7 @@ class CovidCasesHandler:
             patients = Patient.getAllPatients()
             recovered_cases = []
             for patient in patients:
-                cases = CovidCases.getCasesByPatient(patient.user_id)
+                cases = CovidCases.getCasesByPatientId(patient.user_id)
                 prev_case = None
                 for patient_case in cases:
                     if patient_case.test_status != 3 and prev_case and prev_case.test_status == 3:
@@ -95,9 +95,24 @@ class CovidCasesHandler:
             return jsonify(reason="Server error", error=e.__str__()), 500
 
     @staticmethod
-    def getCovidTestsByDoctor(did):
+    def getCovidTestsByDoctorId(did):
         try:
-            records = CovidCases.getCasesByDoctor(did)
+            records = CovidCases.getCasesByDoctorId(did)
+            result_list = []
+            for record in records:
+                result_list.append(Utilities.to_dict(record))
+            result = {
+                "message": "Success!",
+                "cases": result_list
+            }
+            return jsonify(result), 200
+        except Exception as e:
+            return jsonify(reason="Server error", error=e.__str__()), 500
+
+    @staticmethod
+    def getCovidTestsByPatientId(pid):
+        try:
+            records = CovidCases.getCasesByPatientId(pid)
             result_list = []
             for record in records:
                 result_list.append(Utilities.to_dict(record))

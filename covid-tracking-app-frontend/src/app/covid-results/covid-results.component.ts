@@ -4,6 +4,8 @@ import { MedicalOffice } from '../models/medical_office';
 import { CovidService } from '../services/covid.service';
 import { UserService } from '../services/user.service';
 import { MedicalOfficeService } from '../services/medical-office.service';
+import { AppComponent } from '../app.component';
+import { PatientService } from '../services/patient.service';
 
 type CaseInfo = MedicalOffice & CovidCase;
 
@@ -16,15 +18,17 @@ export class CovidResultsComponent implements OnInit {
 
   statuses: string[]
   cases: CaseInfo[]
+  offices: MedicalOffice[]
 
   constructor(private covidService: CovidService, private officeService: MedicalOfficeService) { }
 
   ngOnInit(): void {
-    this.statuses = ['Pending', 'Negative', 'Positive']
-    this.showCases();
+    this.statuses = ['Pending', 'Negative', 'Positive'];
+    this.populateCases();
+    this.populateOffices();
   }
 
-  public showCases(): void{
+  private populateCases(): void{
     this.cases = [];
 
     this.covidService.getCovidCasesByPatientId(UserService.loggedUser.user_id).subscribe(cases_repsonse => {
@@ -51,6 +55,15 @@ export class CovidResultsComponent implements OnInit {
       }
     });
    }
+
+   private populateOffices(): void{
+     this.offices = []
+     for(let oid of PatientService.patientAttendedOfficesId){
+       this.officeService.getMedicalOfficeById(oid).subscribe(res => { this.offices.push(res.medical_office) })
+     }
+   }
+
+  public returnToNavbar(){ AppComponent.exitViewPrevCovidTests(); }
 
   public decodeCovidResult(covid_case: CovidCase): string{
     return this.statuses[covid_case.test_status - 1];

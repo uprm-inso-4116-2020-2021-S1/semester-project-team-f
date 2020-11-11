@@ -12,6 +12,7 @@ export class AppComponent{
   private static managingCovidCases: boolean;
   private static managingEmployees: boolean;
   private static viewingOffice: boolean;
+  private static viewingPrevCovidTests: boolean;
   private static changingContactInformation: boolean;
   private static changingAddressInformation: boolean;
   private static seeingHelp: boolean;
@@ -25,7 +26,7 @@ export class AppComponent{
   public isChangingContactInformation() { return AppComponent.changingContactInformation; }
   public isChangingAddressInformation() { return AppComponent.changingAddressInformation;}
   public isViewingOffice(){ return AppComponent.viewingOffice;}
-
+  public isViewingPrevCovidTests() { return AppComponent.viewingPrevCovidTests; }
 
   public static changeToNavbar(){ 
     try{ this.hideSidebar(); }
@@ -48,7 +49,8 @@ export class AppComponent{
     else this.showOfficeWhenLoggedOut(); 
 
     this.viewingOffice = !this.managingCovidCases && !this.addingOrRemovingPatient && 
-    !this.changingContactInformation && !this.changingAddressInformation;
+    !this.changingContactInformation && !this.changingAddressInformation && !this.managingEmployees
+    && !this.viewingPrevCovidTests;
   }
 
   public static changeAddOrRemovePatients() { 
@@ -74,6 +76,11 @@ export class AppComponent{
   public static changeAddressInformation() { 
     this.hideNavbar();
     this.changingAddressInformation = true; 
+  }
+
+  public static changeViewPrevCovidTests(){
+    this.hideNavbar();
+    this.viewingPrevCovidTests = true;
   }
 
   public static exitOfficeView(){
@@ -106,6 +113,11 @@ export class AppComponent{
   public static exitManagingEmployees() {
     this.hideSidebar();
     setTimeout(()=> this.managingEmployees = false, 800);
+  }
+
+  public static exitViewPrevCovidTests(){
+    this.hideSidebar();
+    setTimeout(()=> this.viewingPrevCovidTests = false, 800);
   }
 
   public static exitHelp() {

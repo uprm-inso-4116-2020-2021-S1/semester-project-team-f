@@ -13,6 +13,10 @@
     <app-manage-covid-cases></app-manage-covid-cases>
 </div>
 
+<div *ngIf="isViewingPrevCovidTests();">
+    <app-covid-results></app-covid-results>
+</div>
+
 <div *ngIf="isChangingContactInformation();">
     <app-account-settings></app-account-settings>
 </div>

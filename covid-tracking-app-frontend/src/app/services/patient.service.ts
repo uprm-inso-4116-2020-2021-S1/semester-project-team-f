@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PatientResponse, PatientsResponse, Patient } from '../models/patient'
+import { PatientsResponse, Patient } from '../models/patient'
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { throwError, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -10,6 +10,8 @@ import {API_URL} from '../../config';
   providedIn: 'root'
 })
 export class PatientService {
+
+  public static patientAttendedOfficesId: Set<number>;
 
   constructor(private httpClient: HttpClient, private router: Router) { }
 
@@ -45,6 +47,12 @@ export class PatientService {
   public getPatientsByOfficeId(id: number): Observable<PatientsResponse>{
     return this.httpClient
     .get<PatientsResponse>(API_URL + `offices/${id}/patients`)
+    .pipe(catchError(this._handleError))
+  }
+
+  public getPatientByUserId(id: string): Observable<PatientsResponse>{
+    return this.httpClient
+    .get<PatientsResponse>(API_URL + `patients/${id}`)
     .pipe(catchError(this._handleError))
   }
 

@@ -75,6 +75,16 @@ def getUserByIdOrEmail(uid):
         else:
             return UserHandler.getUserById(uid)
 
+@app.route('/patients/<string:uid>', methods=['GET'])
+def getPatientByUserId(uid):
+    if request.method == 'GET':
+        return PatientHandler.getPatientByUserId(uid)
+
+@app.route('/patients/<string:id>/covid-cases', methods=['GET'])
+def getCovidCasesByPatientId(id):
+    if request.method == 'GET':
+        return CovidCasesHandler.getCovidTestsByPatientId(id)
+
 @app.route('/doctors', methods=['GET', 'POST'])
 def getAllDoctorsOrCreate():
     if request.method == 'GET':

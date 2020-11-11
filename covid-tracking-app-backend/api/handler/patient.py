@@ -23,13 +23,15 @@ class PatientHandler:
             return jsonify(reason="Server error", error=e.__str__()), 500
 
     @staticmethod
-    def getPatientById(pid):
+    def getPatientByUserId(pid):
         try:
-            patient = Patient.getPatientsById(pid)
-            patient_dict = Utilities.to_dict(patient)
+            patients = Patient.getPatientByUserId(pid)
+            result_list = []
+            for patient in patients:
+                result_list.append(Utilities.to_dict(patient))
             result = {
                 "message": "Success!",
-                "patient": patient_dict
+                "patients": result_list
             }
             return jsonify(result), 200
         except Exception as e:
@@ -97,7 +99,7 @@ class PatientHandler:
 
     @staticmethod
     def deletePatient(oid, uid):
-        covid_case_exists = CovidCases.getCasesByPatient(uid)
+        covid_case_exists = CovidCases.getCasesByPatientId(uid)
         if covid_case_exists:
             return jsonify(reason="Can't delete the patient, the patient has active tests."), 400
         deletedPatient = Patient.deletePatient(oid, uid)
