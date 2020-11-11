@@ -7,7 +7,9 @@ class VisitedLocation(db.Model):
     REQUIRED_PARAMETERS = {'user_id', 'location_id', 'date_visited'}
 
     __tablename__ = 'visited_location'
-    user_id = db.Column(UUID(as_uuid = True), db.ForeignKey('user.user_id'), unique=True, nullable = False, primary_key=True)
+    __table_args__ = ( db.UniqueConstraint('user_id', 'location_id', 'date_visited'), )
+
+    user_id = db.Column(UUID(as_uuid = True), db.ForeignKey('user.user_id'), nullable = False, primary_key=True)
     location_id = db.Column(db.Integer, db.ForeignKey('location.location_id'), nullable = False, primary_key=True)
     date_visited = db.Column(db.Date, default=datetime.now(), primary_key=True)
 
@@ -27,7 +29,7 @@ class VisitedLocation(db.Model):
 
     @staticmethod
     def getLocationsVisitedByUserId(uid):
-        return VisitedLocation().query.join(Location, Location.location_id==VisitedLocation.location_id).filter_by(user_id=uid).all()
+        return VisitedLocation().query.filter_by(user_id=uid).join(Location, Location.location_id==VisitedLocation.location_id).all()
     
     @staticmethod
     def getVisitedLocationsRelativeToAddress(aid):

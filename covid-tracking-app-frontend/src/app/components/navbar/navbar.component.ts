@@ -31,12 +31,14 @@ export class NavbarComponent implements OnInit {
   public hasMedicalOffices(): boolean { return UserService.userOwnedOfficesId.size != 0;}
 
   public logout(): void{
-      this.userService.logout();
+    this.map.removeVisitedLocations();
+    this.map.showMedicalOffices();
+    this.userService.logout();
 
-      DoctorService.doctorWorkingOfficesId = null;
-      PatientService.patientAttendedOfficesId = null;
+    DoctorService.doctorWorkingOfficesId = null;
+    PatientService.patientAttendedOfficesId = null;
 
-      AppComponent.changeToLogin();
+    AppComponent.changeToLogin();
   }
 
   public addOrRemovePatient(): void{
@@ -50,7 +52,7 @@ export class NavbarComponent implements OnInit {
   }
 
   public addVisitedLocations(): void{ this.map.addVisitedLocation();}
-  public showVisitedLocations(bool: boolean): void{ this.map.showVisitedLocation(bool);}
+  public toggleVisitedLocations(): void{ this.map.toggleVisitedLocations();}
 
   public manageCovidCases(): void {
       this.map.showWorkingPlacesOnly((medical_office: MedicalOffice): boolean => {

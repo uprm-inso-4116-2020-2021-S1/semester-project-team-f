@@ -67,10 +67,11 @@ class LocationHandler:
             try:
                 location = Location.getLocationByLattitudeAndLongitude(json)
                 
-                if location is None:  
+                if location == None:  
                     location = Location(**valid_params).create()
 
                 location_dict = Utilities.to_dict(location)
+
                 result = {
                     "message": "Success!",
                     "location": location_dict,

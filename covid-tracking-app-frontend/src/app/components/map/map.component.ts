@@ -7,7 +7,9 @@ import { Location } from '../../models/location';
 import { AppComponent } from '../../app.component';
 import { MedicalOffice } from '../../models/medical_office';
 import { MessageBoxComponent } from '../message-box/message-box.component';
-import { VisitedLocationService } from 'src/app/services/visited-location.service';
+import { VisitedLocationService } from '../../services/visited-location.service';
+import { UserService } from 'src/app/services/user.service';
+import { VisitedLocation } from 'src/app/models/visited_location';
 
 @Component({
   selector: 'app-map',
@@ -24,13 +26,17 @@ export class MapComponent implements AfterViewInit {
   private route_distance: string; //saves the route_distance from a specific location to a coordinate
   private map: google.maps.Map;
   private offices_mapping: Map<google.maps.Marker, any>;
-  private markers: google.maps.Marker[] = [];
-  private directionsRenderer = new google.maps.DirectionsRenderer({suppressMarkers: true});
+  private markers: google.maps.Marker[];
+  private directions_renderer;
+  private show_visited_locations: boolean;
+  public visited_locations: Set<google.maps.Marker>;
 
   constructor(private medicalOfficeService: MedicalOfficeService, private addressService: AddressService,
-     private locationService: LocationService) { }
+     private locationService: LocationService, private visitedLocationService: VisitedLocationService) { }
 
   ngAfterViewInit(): void {
+    this.markers = [];
+    this.directions_renderer = new google.maps.DirectionsRenderer({suppressMarkers: true});
     this.parent.map_component = this;
 
     let coordinates = new google.maps.LatLng(18.196512, -66.4224762);
@@ -110,6 +116,37 @@ export class MapComponent implements AfterViewInit {
               );
   }
 
+  public initVisitedLocations(){
+    this.visitedLocationService.getLocationsVisitedByUserId(UserService.loggedUser.user_id).subscribe(res => {
+      if(res.message == "Success!"){
+        this.visited_locations = new Set<google.maps.Marker>();
+        this.show_visited_locations = res.visited_locations.length != 0;
+        for(let visited_location of res.visited_locations){
+          this.locationService.getLocationById(visited_location.location_id).subscribe(res => {
+            if(res.message == "Success!"){
+              let coordinates = new google.maps.LatLng(res.location.lattitude, res.location.longitude);
+              this.findPlaceAndDoAction(coordinates, result => {
+                  let marker = this.addMarker(result, visited_location.date_visited.toString(), ICON_TYPE.DEFAULT_ICON);
+                  this.visited_locations.add(marker);
+              });
+            }
+          });
+        }
+      }
+    });
+  }
+
+  public removeVisitedLocations(){
+      for(let i = 0; i < this.markers.length; i++){
+        let marker: google.maps.Marker = this.markers[i];
+        if(this.visited_locations.has(marker)){
+              marker.setMap(null);
+              this.markers.splice(i--, 1);
+        }
+      }
+      this.visited_locations = null;
+  }
+
   public addMarker(place: google.maps.GeocoderResult, marker_name: string, icon_type){
 
     const marker = new google.maps.Marker({
@@ -126,7 +163,7 @@ export class MapComponent implements AfterViewInit {
       title: marker_name
     });
 
-    this.markers.push(marker)
+    this.markers.push(marker);
 
     return marker;
   }
@@ -142,32 +179,57 @@ export class MapComponent implements AfterViewInit {
 
           this.markers[i].addListener("click",() => { 
             listener(medical_office);
-            this.showOfficesOnly();
+            this.showMedicalOffices();
            });
         }
         else{
           this.markers[i].setMap(null);
         }
       }
-       alert("Please select the office that you wish to manage...")
+      alert("Please select the office that you wish to manage...");
     }
 
     public addVisitedLocation(){
       this.map.addListener("click", (mapsMouseEvent) => {
         let coordinates = mapsMouseEvent.latLng;
-        this.findPlaceAndDoAction(coordinates, (result) =>{
-          let marker = this.addMarker(result, new Date().toDateString(), ICON_TYPE.DEFAULT_ICON)
-        })
+        
+        let location: Location = {
+          lattitude: coordinates.lat(),
+          longitude: coordinates.lng()
+        }
+
+        this.locationService.createLocation(location).subscribe(res => {
+          if(res.message == "Success!"){
+
+            let visited_location: VisitedLocation = {
+              user_id: UserService.loggedUser.user_id,
+              location_id: res.location.location_id,
+              date_visited: new Date()
+            }
+
+            this.visitedLocationService.createVisitedLocation(visited_location).subscribe(res => {
+              if(res.message == "Success!"){
+                  this.findPlaceAndDoAction(coordinates, (result) =>{
+                    let marker = this.addMarker(result, res.visited_location.date_visited, ICON_TYPE.DEFAULT_ICON);
+                    this.visited_locations.add(marker);
+                  });
+                  alert("Visited location was added!");
+            }});
+          }
+        }, err => alert(err.error.reason));
         
         google.maps.event.clearListeners(this.map, 'click');
       });
     }
 
     //working on it...
-    public showVisitedLocation(show: boolean){
-      for(let marker of this.markers){
-        if(marker.getIcon() == ICON_TYPE.DEFAULT_ICON){
-          if(show) marker.setMap(this.map);
+    public toggleVisitedLocations(){
+      this.show_visited_locations = !this.show_visited_locations;
+
+      for(let i = 0; i < this.markers.length; i++){
+        let marker = this.markers[i];
+        if(this.visited_locations.has(marker)){
+          if(this.show_visited_locations) marker.setMap(this.map);
           else marker.setMap(null);
         }
       }
@@ -180,7 +242,7 @@ export class MapComponent implements AfterViewInit {
       //declared so that it can be used on the inner function
       let office_mappings = this.offices_mapping; 
       let user_marker = this.user_marker;
-      let directionsRenderer = this.directionsRenderer;
+      let directions_renderer = this.directions_renderer;
       let curr_obj = this;
 
       let parent = this.parent;
@@ -191,9 +253,9 @@ export class MapComponent implements AfterViewInit {
 
         let start = user_marker.getPosition().lat() + ', ' + user_marker.getPosition().lng();
         let end = marker.getPosition().lat() + ', ' + marker.getPosition().lng();
-        let directionsService = new google.maps.DirectionsService();
+        let directions_service = new google.maps.DirectionsService();
 
-        directionsService.route(
+        directions_service.route(
           {
             origin: start,
             destination: end,
@@ -202,8 +264,8 @@ export class MapComponent implements AfterViewInit {
             if(status === 'OK'){ 
               user_marker.setMap(this.map);
               user_marker.setAnimation(google.maps.Animation.DROP);
-              directionsRenderer.setDirections(response); 
-              directionsRenderer.setMap(this.map);
+              directions_renderer.setDirections(response); 
+              directions_renderer.setMap(this.map);
               curr_obj.setRouteDistance(response.routes[0].legs[0].distance.text);
             }
           }
@@ -211,7 +273,7 @@ export class MapComponent implements AfterViewInit {
      }); 
     }
 
-    public showOfficesOnly(){
+    public showMedicalOffices(){
       for (let i = 0; i < this.markers.length; i++) { 
         if(this.offices_mapping.has(this.markers[i])){
           google.maps.event.clearListeners(this.markers[i], "click");
@@ -222,9 +284,10 @@ export class MapComponent implements AfterViewInit {
 
     public resetRoute(){ 
       if(this.user_marker) this.user_marker.setMap(null);
-      if(this.directionsRenderer) this.directionsRenderer.setMap(null); 
+      if(this.directions_renderer) this.directions_renderer.setMap(null); 
     }
 
     public getRouteDistance(): string { return this.route_distance; }
     public setRouteDistance(distance: string): void { this.route_distance = distance; }
+    public canShowVisitedLocations(): boolean { return this.show_visited_locations; }
 }
