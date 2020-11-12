@@ -23,6 +23,11 @@ class VisitedLocation(db.Model):
     def getSpecificVisitedLocation(json):
         return VisitedLocation().query.filter_by(user_id=json['user_id'], location_id=json['location_id'], date_visited=json['date_visited'])
 
+    '''Retrieve individuals who visited the location with the specified id'''
+    @staticmethod
+    def getVisitedLocationByLocationId(lid):
+        return VisitedLocation().query.filter_by(location_id=lid)
+
     @staticmethod
     def getAllVisitedLocations():
         return VisitedLocation().query.all()

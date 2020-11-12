@@ -1,5 +1,6 @@
 from api.util.config import db
 from datetime import datetime
+from sqlalchemy.sql import func
 from sqlalchemy.dialects.postgresql import UUID
 
 class Location(db.Model):
@@ -20,6 +21,16 @@ class Location(db.Model):
     def pk(self):
         return self.location_id
 
+    @staticmethod
+    def getLocationsWithinOneKilometerRadius(json):
+        return Location().query.filter((func.degrees(
+        func.acos(
+            func.sin(func.radians(json['lattitude'])) * func.sin(func.radians(Location.lattitude)) + 
+            func.cos(func.radians(json['lattitude'])) * func.cos(func.radians(Location.lattitude)) * 
+            func.cos(func.radians(json['longitude']-Location.longitude))
+        )
+    ) * 60 * 1.1515 * 1.609344) <= 1).all()
+   
     @staticmethod
     def getAllLocations():
         return Location().query.all()

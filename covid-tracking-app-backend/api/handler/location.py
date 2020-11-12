@@ -5,6 +5,23 @@ from api.util.utilities import Utilities
 class LocationHandler:
 
     @staticmethod
+    def getLocationsWithinOneKilometerRadius(json):
+        try:
+            locations = Location.getLocationsWithinOneKilometerRadius(json)
+            result_list = []
+            for location in locations:
+                result_list.append(Utilities.to_dict(location))
+
+            result = {
+                "message": "Success!",
+                "locations": result_list
+            }
+            return jsonify(result), 200
+
+        except Exception as e:
+            return jsonify(reason="Server error", error=e.__str__()), 500
+
+    @staticmethod
     def getAllLocations():
         try:
             locations = Location.getAllLocations()

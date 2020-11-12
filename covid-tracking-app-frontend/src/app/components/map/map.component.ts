@@ -125,6 +125,7 @@ export class MapComponent implements AfterViewInit {
           this.locationService.getLocationById(visited_location.location_id).subscribe(res => {
             if(res.message == "Success!"){
               let coordinates = new google.maps.LatLng(res.location.lattitude, res.location.longitude);
+              console.log(coordinates.lat() + " " + coordinates.lng());
               this.findPlaceAndDoAction(coordinates, result => {
                   let marker = this.addMarker(result, visited_location.date_visited.toString(), ICON_TYPE.DEFAULT_ICON);
                   this.visited_locations.add(marker);

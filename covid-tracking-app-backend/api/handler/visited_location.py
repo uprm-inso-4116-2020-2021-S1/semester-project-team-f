@@ -34,7 +34,6 @@ class VisitedLocationHandler:
             return jsonify(result), 200
 
         except Exception as e:
-
             return jsonify(reason="Server error", error=e.__str__()), 500
 
     @staticmethod
