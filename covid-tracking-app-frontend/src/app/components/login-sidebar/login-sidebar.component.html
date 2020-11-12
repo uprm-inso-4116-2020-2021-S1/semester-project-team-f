@@ -1,0 +1,19 @@
+
+
+<div class="sidebar">
+    <div class="upperBar {{effectsInAction[0]}}" ><img id="sidebar-logo" src="../../assets/Logo.png" alt="logo"></div>
+
+    <div class="form {{effectsInAction[1]}}">
+        <a *ngIf="!error">Please login to makes use of the contact tracing</a>
+        <a *ngIf="error" style="color: orange;">{{error}}</a>
+        <a class="form-text">Email:</a>
+        <a><input type="email" id="inputEmail" class="form-control" required autofocus></a>
+        <a class="form-text">Password:</a>                
+        <a><input type="password" id="inputPassword" class="form-control" required></a>
+        <a class="btn btn-lg btn-primary" role="button" (click)="login()">Login</a>
+    </div>
+    <a id="forgotPassword" (click)="forgotPassword()">Forgot my Password</a>
+    <a id="createAccount" (click)="createAccount()">Don’t have an account? Please click here to sign up.</a>
+
+    <app-contact-information *ngIf="canGoToNextPage"></app-contact-information>
+</div>

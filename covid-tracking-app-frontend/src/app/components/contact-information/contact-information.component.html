@@ -1,0 +1,48 @@
+<div class="sidebar">
+    <div class="form {{fadeEffect}}">
+
+        <div>
+            <img id="back" (click) = "goToPreviousPage()"src="../../assets/Back.png" alt="back">
+            <a id="title">Contact Information</a>
+        </div>
+
+        <a class="form-text">Full name:</a>
+        <a><input type="text" class="form-control" 
+             (input) = "setUserInfo('full_name',$event.target.value)"  
+             value="{{getSavedUserInfo().full_name}}" required autofocus></a>
+
+        <a class="form-text">Gender:</a>
+        <a>
+            <select name="genders" class="form-control"
+            (input) = "setUserInfo('gender_id',$event.target.value)" value = "{{getSavedUserInfo().gender_id}}">
+                <option value="0">Male</option>
+                <option value="1">Female</option>
+                <option value="2">Non-binary</option>
+              </select>
+        </a>
+
+        <a class="form-text">Birthday:</a>
+        <a><input type="date" class="form-control"
+            (input) = "setUserInfo('birthdate',$event.target.value)" value = "{{getSavedUserInfo().birthdate}}"></a>
+
+        <a class="form-text">Phone number:</a>
+        <a> <input type="tel" class="form-control" name="phone" 
+            placeholder="Ex: 787-872-0000" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" 
+            (input) = "setUserInfo('phone_number',$event.target.value)" value = "{{getSavedUserInfo().phone_number}}" required></a>
+
+        <a class="form-text">Email:</a>
+        <a><input type="email" class="form-control" 
+            (input) = "setUserInfo('email',$event.target.value)" value = "{{getSavedUserInfo().email}}" required autofocus></a>
+
+        <a class="form-text">Password:</a>                
+        <a><input type="password" class="form-control"
+            (input) = "setUserInfo('password',$event.target.value)" value = "{{getSavedUserInfo().password}}" required></a>
+
+        <a class="btn btn-lg btn-primary" role="button" (click)=goToNextPage()>Next</a>
+    </div>
+
+    <a id="createAccount" (click) = "showDoctorDialog()">I want to sign up as a doctor!</a>
+
+    <app-login-sidebar *ngIf="canGoToPreviousPage"></app-login-sidebar>
+    <app-address-information *ngIf="canGoToNextPage"></app-address-information>
+</div>

@@ -14,13 +14,12 @@ class Patient(db.Model):
     user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('user.user_id'), nullable=False, primary_key=True)
     office_id = db.Column(db.Integer, db.ForeignKey('medical_office.office_id'), nullable=False, primary_key=True)
     date_registered = db.Column(db.Date, nullable=False)
-    has_died = db.Column(db.Boolean, nullable = True)
+    has_died = db.Column(db.Boolean, default=False)
 
 
 
     def __init__(self, **args):
         self.user_id = args.get('user_id')
-        self.doctor_id = args.get('doctor_id')
         self.office_id = args.get('office_id')
         self.date_registered = args.get('date_registered')
 
@@ -28,16 +27,20 @@ class Patient(db.Model):
     def getAllPatients():
         return Patient().query.all()
 
+    @staticmethod
+    def getPatientsByOfficeId(oid):
+        return Patient().query.filter_by(office_id=oid).all()
+
     '''Retrieves a single individual that may have a record in multiple offices'''
     @staticmethod
-    def getPatientById(pid):
+    def getPatientByUserId(pid):
         return Patient().query.filter_by(user_id=pid).all()
 
 
     '''Retrieves a specific patient record in an office'''
     @staticmethod
-    def getPatientByIdAndOffice(json):
-        return Patient().query.filter_by(user_id=json['user_id'], office_id=json['office_id']).first()
+    def getPatientByOfficeAndUserId(oid, uid):
+        return Patient().query.filter_by(user_id=uid, office_id=oid).first()
 
     @staticmethod
     def getDeathPatients():
@@ -49,3 +52,12 @@ class Patient(db.Model):
         db.session.add(self)
         db.session.commit()
         return self
+
+    @staticmethod
+    def deletePatient(oid, uid):
+        patient = Patient.getPatientByOfficeAndUserId(oid, uid)
+        if not patient:
+            return None
+        db.session.delete(patient)
+        db.session.commit()
+        return patient

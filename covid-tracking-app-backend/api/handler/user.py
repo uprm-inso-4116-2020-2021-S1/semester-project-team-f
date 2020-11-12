@@ -34,6 +34,22 @@ class UserHandler:
         except Exception as e:
             return jsonify(reason="Server error", error=e.__str__()), 500
 
+    @staticmethod
+    def getUserByEmail(email):
+        try:
+            user = User.getUserByEmail(email)
+            if user:
+                user_dict = Utilities.to_dict(user)
+                result = {
+                    "message": "Success!",
+                    "user": user_dict
+                }
+                return jsonify(result), 200
+            else:
+                return jsonify(reason="User does not exist."), 401
+        except Exception as e:
+            return jsonify(reason="Server error", error=e.__str__()), 500
+
 
     @staticmethod
     def login(json):
@@ -66,9 +82,11 @@ class UserHandler:
             return jsonify(status='Success!'), 200
         except Exception as err:
             return jsonify(reason="Server error!", error=err.__str__()), 500
+
     @staticmethod
     def sentEmail():
         return jsonify(status='Sent Mail Almost!'), 200
+
     @staticmethod
     def createUser(json):
         valid_params = Utilities.verify_parameters(json, User.REQUIRED_PARAMETERS)
@@ -88,6 +106,25 @@ class UserHandler:
                 return jsonify(message="Server error!", error=err.__str__()), 500
         else:
             return jsonify(message="Bad Request!"), 40
+
+    @staticmethod
+    def updateUserInfo(json):
+        valid_parameters = Utilities.verify_parameters(json, ['user_id', 'email', 'phone_number', 'password'])
+        if valid_parameters:
+            try:
+                email_exists = User.getUserByEmail(json['email'])
+                if email_exists:
+                    return jsonify(message="Email already in use."), 400
+
+                updatedInfo = User.updateUserInfo(**valid_parameters)
+                result = {
+                    "message": "Success!",
+                    "user": Utilities.to_dict(updatedInfo)
+                }
+                return jsonify(result), 200
+            except Exception as e:
+                return jsonify(reason="Server error", error=e.__str__()), 500
+
     @staticmethod
     def activateAccount(user):
         try:

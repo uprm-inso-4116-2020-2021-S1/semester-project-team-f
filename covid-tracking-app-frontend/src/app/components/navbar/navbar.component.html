@@ -1,0 +1,64 @@
+<div class = "navbar slide-down">
+    <a>
+        <img id="navbar_logo" src="../../assets/Navbar logo.png">
+        <b id="greeting">Hello, {{getLoggedInUser().full_name}}</b>
+    </a>
+
+    <ng-template [ngIf]="patientIsLogged()">
+        <a class="navbar_link" (click) = "viewCovidTests()">
+        <img id = "results_icon" src="../../assets/results.png">
+            My COVID-19 Tests
+        </a>
+    </ng-template>
+
+    <ng-template [ngIf]="doctorIsLogged() || hasMedicalOffices()">
+        <a class="dropdown navbar_link">
+            <img id = "medic_icon" src="../../assets/medic.png">
+                <a class="dropbtn">Office Management</a>
+
+                <div class="dropdown-content">
+                    <ng-template [ngIf]="doctorIsLogged()">
+                        <a (click) = "addOrRemovePatient()">Manage Patients</a>
+                        <a (click) = "manageCovidCases()">Manage COVID-19 Cases</a>
+                    </ng-template>
+
+                    <ng-template [ngIf]="hasMedicalOffices()">
+                        <a (click) = "manageEmployees()">Manage Employees</a>
+                    </ng-template>
+                </div>
+        </a>     
+    </ng-template>
+
+    <a class="dropdown navbar_link">
+        <img id = "location_icon" src="../../assets/location.png">
+        Location
+        <div class="dropdown-content">
+          <a (click)="addVisitedLocations()">Add visited location</a>
+
+          <ng-template [ngIf] = "map.visited_locations.size != 0">
+            <ng-template [ngIf]="!map.canShowVisitedLocations()" [ngIfElse] = "hideVisitedLocations">
+                    <a (click)="toggleVisitedLocations()">Show visited locations</a>
+            </ng-template>
+
+            <ng-template #hideVisitedLocations>
+                    <a (click)="toggleVisitedLocations()">Hide visited locations</a>
+            </ng-template>
+          </ng-template>
+
+        </div>
+    </a>
+
+    <a class="dropdown navbar_link">
+        <img id = "settings_icon" src="../../assets/settings.png">
+        Account Settings
+        <div class="dropdown-content">
+          <a (click) = "contactInformation()" >Change contact information</a>
+          <a (click) = "addressInformation()" >Change address information</a>
+        </div>
+    </a>
+ 
+    <a class="navbar_link" (click) = "logout()">
+        <img id = "logout_icon" src="../../assets/logout.png">
+        Logout
+    </a>
+</div>

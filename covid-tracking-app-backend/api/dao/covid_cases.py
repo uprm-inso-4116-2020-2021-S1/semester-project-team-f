@@ -7,7 +7,7 @@ from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
 class CovidCases(db.Model):
-    REQUIRED_PARAMETERS = {'patient_id', 'doctor_id', 'office_id'}
+    REQUIRED_PARAMETERS = {'patient_id', 'doctor_id', 'office_id', 'date_tested'}
 
     __tablename__ = 'covid_cases'
     
@@ -15,16 +15,18 @@ class CovidCases(db.Model):
     doctor_id = db.Column(UUID(as_uuid=True), nullable=False)
     office_id = db.Column(db.Integer, nullable = False, primary_key=True)
     date_tested = db.Column(db.Date, nullable = False,  primary_key=True)
-    tested_positive = db.Column(db.Boolean, nullable = True) #the test may take days to show the results
+    test_status = db.Column(db.Integer, nullable=False, default=1) #the test may take days to show the results
 
     __table_args__ = (db.ForeignKeyConstraint([patient_id, office_id], [Patient.user_id, Patient.office_id]),
-                        db.ForeignKeyConstraint([doctor_id, office_id], [Doctor.user_id, Doctor.office_id]))
+                        db.ForeignKeyConstraint([doctor_id, office_id], [Doctor.user_id, Doctor.office_id]),
+                        )
 
     def __init__(self, **args):
         self.patient_id = args.get('patient_id')
         self.doctor_id = args.get('doctor_id')
         self.office_id = args.get('office_id')
-        self.tested_positive = args.get('tested_positive')
+        self.date_tested = args.get('date_tested')
+        self.test_status = args.get('test_status')
 
     '''Assuming that the patient can get re-infected, then the following query will
        return the record of all the times that the patient got COVID-19, if any
@@ -33,7 +35,7 @@ class CovidCases(db.Model):
        return the cases of that user by both offices
        '''
     @staticmethod
-    def getCasesByPatient(pid):
+    def getCasesByPatientId(pid):
         return CovidCases().query.filter_by(patient_id=pid).all()
 
     '''Assuming that the patient can get re-infected, then the following query will
@@ -50,7 +52,7 @@ class CovidCases(db.Model):
     '''Value object: we have to search a specific case by it's attributes'''
     @staticmethod
     def getSpecificCase(json):
-        return CovidCases().query.filter_by(patient_id=json['patient_id'], office_id=json['office_id'], date_tested=json['date_tested'])
+        return CovidCases().query.filter_by(patient_id=json['patient_id'], office_id=json['office_id'], date_tested=json['date_tested']).first()
 
     @staticmethod
     def getCumulativePositiveCases():
@@ -66,7 +68,7 @@ class CovidCases(db.Model):
 
     '''Tests realized by X doctor'''
     @staticmethod
-    def getCasesByDoctor(did):
+    def getCasesByDoctorId(did):
         return CovidCases().query.filter_by(doctor_id=did).all()
 
     '''Tests realized by X office'''
@@ -80,18 +82,14 @@ class CovidCases(db.Model):
         return CovidCases().query.filter_by(doctor_id = json['doctor_id'], office_id=json['office_id']).all()
 
     def create(self):
-        #the date tested was precisely the same date when the record was added
-        self.date_tested = datetime.now()
-
         db.session.add(self)
         db.session.commit()
-
         return self
 
     @staticmethod
     def updateCovidStatus(json):
         covid_case = CovidCases.getSpecificCase(json)
-        covid_case.tested_positive = json['tested_positive']
+        covid_case.test_status = json['test_status']
         db.session.commit()
         return covid_case
 

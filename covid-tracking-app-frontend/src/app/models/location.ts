@@ -1,5 +1,5 @@
 export interface Location {
-    location_id: number;
+    location_id?: number;
     lattitude: number;
     longitude: number;
     closest_address_id?: number;
