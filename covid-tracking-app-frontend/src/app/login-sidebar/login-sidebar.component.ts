@@ -32,6 +32,10 @@ export class LoginSidebarComponent implements OnInit {
     setTimeout(() => this.canGoToNextPage = true, 800);
   }
 
+  public forgotPassword(): void{
+    
+  }
+
   public login(): void{
       let email: string = (<HTMLInputElement>document.querySelector("#inputEmail")).value;
       let password: string = (<HTMLInputElement>document.querySelector("#inputPassword")).value;
