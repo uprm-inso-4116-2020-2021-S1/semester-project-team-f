@@ -5,6 +5,7 @@ import { AddressService } from '../services/address.service';
 import { UserService } from '../services/user.service';
 import { AppComponent } from '../app.component';
 import { ContactInformationComponent } from '../contact-information/contact-information.component';
+import { MapComponent } from '../map/map.component';
 
 @Component({
   selector: 'app-address-information',
@@ -21,6 +22,8 @@ export class AddressInformationComponent{
   states: string[];
 
   static address_info: Address;
+
+  mapComponent: MapComponent;
 
   constructor(private addressService: AddressService, private userService: UserService) { 
     this.initializeAddressInfo();
@@ -62,23 +65,27 @@ export class AddressInformationComponent{
   public signUp(): void{
     let newAddress = AddressInformationComponent.address_info;
     let newUser = ContactInformationComponent.contact_info;
-    this.addressService.createAddress(newAddress).subscribe(res => {
-
-        let address_id = res.address.address_id; 
-        newUser.address_id = address_id;
-        this.userService.createUser(newUser).subscribe(res => {
-          
-          if(res.message == "Success!"){
-            this.userService.sendUserActivation(newUser.email).subscribe(res =>{
-              this.fadeEffect = "fade-out"; //after the users press go next, this effect that will be executed
-              setTimeout(() => this.canGoToNextPage = true, 800);
-              alert('Signup Success! Activate your account using the link we sent to your email.')
-            });
+    let valid:boolean;
+    MapComponent.validate(newAddress["street_address"] + ", " + newAddress["city_name"] + ", " + newAddress["country_name"], function(res){valid = res;});//validates address
+    setTimeout(() => alert(valid ? "An address was found, please wait.":"Address could not be found, please enter a valid address"), 2000);//message could be changed
+    setTimeout(() => {
+      if(valid){
+      this.addressService.createAddress(newAddress).subscribe(res => {
+        
+          let address_id = res.address.address_id; 
+          newUser.address_id = address_id;
+          this.userService.createUser(newUser).subscribe(res => {
             
-          }
-
-        });
-      
-    });
+            if(res.message == "Success!"){
+              this.userService.sendUserActivation(newUser.email).subscribe(res =>{
+                this.fadeEffect = "fade-out"; //after the users press go next, this effect that will be executed
+                setTimeout(() => this.canGoToNextPage = true, 800);
+                alert('Signup Success! Activate your account using the link we sent to your email.')
+              });
+            }
+          });
+      });
+    }
+    }, 3000)
   }
 }

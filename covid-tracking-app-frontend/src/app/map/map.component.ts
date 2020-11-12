@@ -97,4 +97,21 @@ export class MapComponent implements AfterViewInit {
             this.markers[i].setMap(map);
       }
     }
+
+    public static validate(address: string, callback){
+      let geocode = new google.maps.Geocoder();
+      let found = geocode.geocode({address}, 
+                (
+                  results: google.maps.GeocoderResult[],
+                  status: google.maps.GeocoderStatus
+                ) => {
+                  if(status === "OK"){
+                    callback(true); //callback pq geocoder es asincrónico
+                  }
+                  else{
+                    callback(false);
+                  }
+                });
+                
+    }
 }
