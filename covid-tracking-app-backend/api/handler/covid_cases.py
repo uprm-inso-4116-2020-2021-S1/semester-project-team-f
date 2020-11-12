@@ -5,6 +5,8 @@ from api.dao.covid_cases import CovidCases
 from api.dao.patient import Patient
 from api.dao.medical_office import MedicalOffice
 from api.dao.user import User
+from api.dao.visited_location import VisitedLocation
+from api.dao.location import Location
 from api.util.utilities import Utilities
 
 class CovidCasesHandler:
@@ -205,17 +207,51 @@ class CovidCasesHandler:
                 user = Utilities.to_dict(User.getUserById(json['patient_id']))
                 office = Utilities.to_dict(MedicalOffice.getMedicalOfficeById(json['office_id']))
 
-                if(json['test_status'] != 1):
-                    statuses = {2: 'negative', 3: 'positive'}
+                status = json['test_status']
 
-                    msg = Message('COVID-19 Test Result',
-                                    sender='thecovidtracker@gmail.com',
-                                    recipients=[user['email']])
-                    msg.body = f'''Hi {user['full_name']},
-                    
-                    Your tested {statuses[json['test_status']]} to the COVID-19. If you want to know more info about your COVID-19 test, please call {office['office_phone_number']}.
+                statuses = {2: 'negative', 3: 'positive'}
+
+                msg = Message('COVID-19 Test Result',
+                                sender='thecovidtracker@gmail.com',
+                                recipients=[user['email']])
+                msg.body = f'''Hi {user['full_name']},
+
+                    Your tested {statuses[status]} to the COVID-19. If you want to know more info about your COVID-19 test, please call {office['office_phone_number']}.
                     '''
-                    mail.send(msg)
+                mail.send(msg)
+
+                if(status != 1):
+                    if(status==3):          
+                        visited_locations = VisitedLocation.getLocationsVisitedByUserId(json['patient_id'])
+                        for patient_visited_location in visited_locations:
+                            patient_location = Utilities.to_dict(Location.getLocationById(patient_visited_location.location_id)) 
+                                
+                            patient_location['lattitude'] = float("{:.14f}".format(patient_location['lattitude']))
+                            patient_location['longitude'] = float("{:.14f}".format(patient_location['longitude']))
+
+                            locations_within_1km = Location.getLocationsWithinOneKilometerRadius(patient_location)
+
+                            for close_location in locations_within_1km:
+                                locations_in_danger = VisitedLocation.getVisitedLocationByLocationId(close_location.location_id)
+                                for user_visited_location in locations_in_danger:
+                                    user_in_danger = Utilities.to_dict(User.getUserById(user_visited_location.user_id))
+
+                                    if user_in_danger['user_id'] != user['user_id']:
+                                        msg = Message('Possible COVID-19 Contact',
+                                        sender='thecovidtracker@gmail.com',
+                                        recipients=[user_in_danger['email']])
+                                        msg.body = f'''Hi {user_in_danger['full_name']},
+
+                                        A indivual that tested positive positive to COVID-19 visited location
+                                        @ lattitude: {patient_location['lattitude']}, @longitude: {patient_location['longitude']}.
+                                        in the day of {patient_visited_location.date_visited}.
+
+                                        It looks like you visited a location within 1 km of distance, so you might have been
+                                        expose to the COVID-19. If you don't feel well in the following days, get tested.
+
+                                        For the offices that provides COVID-19 test, please check our website.
+                                        '''
+                                        mail.send(msg)
 
                 return jsonify(result), 200
             except Exception as e:
