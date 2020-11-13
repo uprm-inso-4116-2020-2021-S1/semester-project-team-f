@@ -112,7 +112,7 @@ class UserHandler:
         valid_parameters = Utilities.verify_parameters(json, ['user_id', 'email', 'phone_number', 'password'])
         if valid_parameters:
             try:
-                email_exists = User.getUserByEmail(json['email'])
+                email_exists = User.getUserByEmail(json['email']) and User.user_id == json['user_id']
                 if email_exists:
                     return jsonify(message="Email already in use."), 400
 
