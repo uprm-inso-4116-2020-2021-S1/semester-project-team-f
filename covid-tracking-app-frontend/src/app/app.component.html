@@ -5,7 +5,7 @@
 <div *ngIf="isLoggedIn(); else loginSidebar">
     <app-navbar [parent]="current_component" [map]="map_component"></app-navbar>
 </div>
-<div *ngIf="isAddingOrRemovingPatient();">
+<div *ngIf="isManagingPatients();">
     <app-manage-patients [medical_office]="selected_office"></app-manage-patients>
 </div>
 

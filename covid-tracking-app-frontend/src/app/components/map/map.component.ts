@@ -10,6 +10,8 @@ import { MessageBoxComponent } from '../message-box/message-box.component';
 import { VisitedLocationService } from '../../services/visited-location.service';
 import { UserService } from 'src/app/services/user.service';
 import { VisitedLocation } from 'src/app/models/visited_location';
+import { WorkingOffice } from 'src/app/interfaces/WorkingOffice';
+import { SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-map',
@@ -170,16 +172,16 @@ export class MapComponent implements AfterViewInit {
   }
 
     // Shows the places working places of the logged in user and add a listener to it.
-    public showWorkingPlacesOnly(condition: (o) => boolean, listener: (o) => void): void {
+    public showWorkingOfficesUnderCondition(working_office: WorkingOffice): void {
       for (let i = 0; i < this.markers.length; i++) { 
         let medical_office: MedicalOffice = this.offices_mapping.get(this.markers[i]);
 
-        if(condition(medical_office)){ 
+        if(working_office.satisfyCondition(medical_office)){ 
           this.markers[i].setIcon(ICON_TYPE.WORK_ICON);
           google.maps.event.clearListeners(this.markers[i], "click");
 
           this.markers[i].addListener("click",() => { 
-            listener(medical_office);
+            working_office.doAction(medical_office);
             this.showMedicalOffices();
            });
         }
@@ -191,6 +193,10 @@ export class MapComponent implements AfterViewInit {
     }
 
     public addVisitedLocation(){
+
+      alert("Click on the location you visited on the map");
+
+      this.map.setOptions({draggableCursor:'crosshair'});
       this.map.addListener("click", (mapsMouseEvent) => {
         let coordinates = mapsMouseEvent.latLng;
         
@@ -214,11 +220,11 @@ export class MapComponent implements AfterViewInit {
                     let marker = this.addMarker(result, res.visited_location.date_visited, ICON_TYPE.DEFAULT_ICON);
                     this.visited_locations.add(marker);
                   });
-                  alert("Visited location was added!");
+                  MessageBoxComponent.displayMessageBox("Visited location was added!");
             }});
           }
         }, err => alert(err.error.reason));
-        
+        this.map.setOptions({draggableCursor:null});
         google.maps.event.clearListeners(this.map, 'click');
       });
     }
@@ -236,42 +242,50 @@ export class MapComponent implements AfterViewInit {
       }
     }
 
-    private addOfficeListener(marker): void{
-      marker.setIcon(ICON_TYPE.DOCTOR_ICON);
-      marker.setMap(this.map);
+    private addOfficeListener(office_marker): void{
+      office_marker.setIcon(ICON_TYPE.DOCTOR_ICON);
+      office_marker.setMap(this.map);
 
       //declared so that it can be used on the inner function
       let office_mappings = this.offices_mapping; 
       let user_marker = this.user_marker;
-      let directions_renderer = this.directions_renderer;
       let curr_obj = this;
 
       let parent = this.parent;
 
-      google.maps.event.addListener(marker, 'click', function() { 
-        parent.selected_office = office_mappings.get(marker);
+      google.maps.event.addListener(office_marker, 'click', () => { 
+        parent.selected_office = office_mappings.get(office_marker);
         AppComponent.viewOffice();
 
-        let start = user_marker.getPosition().lat() + ', ' + user_marker.getPosition().lng();
-        let end = marker.getPosition().lat() + ', ' + marker.getPosition().lng();
-        let directions_service = new google.maps.DirectionsService();
+        let start = curr_obj.getMarkerLocationAsString(user_marker);
+        let end = curr_obj.getMarkerLocationAsString(office_marker);
 
-        directions_service.route(
-          {
-            origin: start,
-            destination: end,
-            travelMode: google.maps.TravelMode.DRIVING,
-          }, (response, status) => {
-            if(status === 'OK'){ 
-              user_marker.setMap(this.map);
-              user_marker.setAnimation(google.maps.Animation.DROP);
-              directions_renderer.setDirections(response); 
-              directions_renderer.setMap(this.map);
-              curr_obj.setRouteDistance(response.routes[0].legs[0].distance.text);
-            }
-          }
-        );
+        curr_obj.drawUserRoute(start, end);
      }); 
+    }
+
+    private drawUserRoute(start: string, end: string): void{
+      let directions_service = new google.maps.DirectionsService();
+
+      directions_service.route(
+        {
+          origin: start,
+          destination: end,
+          travelMode: google.maps.TravelMode.DRIVING,
+        }, (response, status) => {
+          if(status === 'OK'){ 
+            this.user_marker.setMap(this.map);
+            this.user_marker.setAnimation(google.maps.Animation.DROP);
+            this.directions_renderer.setDirections(response); 
+            this.directions_renderer.setMap(this.map);
+            this.setRouteDistance(response.routes[0].legs[0].distance.text);
+          }
+        }
+      );
+    }
+
+    private getMarkerLocationAsString(marker: google.maps.Marker): string{ 
+      return marker.getPosition().lat() + ', ' + marker.getPosition().lng(); 
     }
 
     public showMedicalOffices(){

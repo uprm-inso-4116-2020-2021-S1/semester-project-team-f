@@ -13,7 +13,7 @@ export class AppComponent{
   public map_component: MapComponent;
 
   private static hasLoggedIn: boolean;
-  private static addingOrRemovingPatient: boolean;
+  private static managingPatients: boolean;
   private static managingCovidCases: boolean;
   private static managingEmployees: boolean;
   private static viewingOffice: boolean;
@@ -25,7 +25,7 @@ export class AppComponent{
   title = 'Coronavirus Tracking App';
 
   public isLoggedIn() { return AppComponent.hasLoggedIn; }
-  public isAddingOrRemovingPatient() { return AppComponent.addingOrRemovingPatient; }
+  public isManagingPatients() { return AppComponent.managingPatients; }
   public isManagingCovidCases() { return AppComponent.managingCovidCases; }
   public isManagingEmployees() { return AppComponent.managingEmployees; }
   public isSeeingHelp()  { return AppComponent.seeingHelp; }
@@ -54,14 +54,14 @@ export class AppComponent{
     if(this.hasLoggedIn) this.hideNavbar(); 
     else this.showOfficeWhenLoggedOut(); 
 
-    this.viewingOffice = !this.managingCovidCases && !this.addingOrRemovingPatient && 
+    this.viewingOffice = !this.managingCovidCases && !this.managingPatients && 
     !this.changingContactInformation && !this.changingAddressInformation && !this.managingEmployees
     && !this.viewingPrevCovidTests;
   }
 
-  public static changeAddOrRemovePatients() { 
+  public static changeManagePatients() { 
     this.hideNavbar();
-    this.addingOrRemovingPatient = true;
+    this.managingPatients = true;
   }
 
   public static changeManagingCovidCases() { 
@@ -106,9 +106,9 @@ export class AppComponent{
     setTimeout(()=> this.changingAddressInformation = false, 800);
   }
 
-  public static exitAddOrRemovePatient() {
+  public static exitManagingPatients() {
     this.hideSidebar(); 
-    setTimeout(()=> this.addingOrRemovingPatient = false, 800);
+    setTimeout(()=> this.managingPatients = false, 800);
   }
 
   public static exitManagingCovidCases() { 

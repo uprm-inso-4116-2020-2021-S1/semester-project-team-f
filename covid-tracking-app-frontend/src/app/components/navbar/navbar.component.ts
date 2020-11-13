@@ -6,6 +6,7 @@ import { AppComponent } from '../../app.component';
 import { MapComponent } from '../map/map.component';
 import { MedicalOffice } from '../../models/medical_office';
 import { PatientService } from '../../services/patient.service';
+import { WorkingOffice } from '../../interfaces/WorkingOffice'
 
 @Component({
   selector: 'app-navbar',
@@ -21,9 +22,7 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  public getLoggedInUser(): User{
-    return UserService.loggedUser;
-  }
+  public getLoggedInUser(): User{ return UserService.loggedUser;}
 
   public doctorIsLogged(): boolean{ return DoctorService.doctorWorkingOfficesId.size != 0; }
   public patientIsLogged(): boolean{ return PatientService.patientAttendedOfficesId.size != 0; }
@@ -41,36 +40,51 @@ export class NavbarComponent implements OnInit {
     AppComponent.changeToLogin();
   }
 
-  public addOrRemovePatient(): void{
-      this.map.showWorkingPlacesOnly((medical_office: MedicalOffice): boolean => {
-      return DoctorService.doctorWorkingOfficesId.has(medical_office.office_id) 
-    },
-    (medical_office) => {
-      this.parent.selected_office = medical_office;
-      AppComponent.changeAddOrRemovePatients();
-    });
-  }
-
   public addVisitedLocations(): void{ this.map.addVisitedLocation();}
   public toggleVisitedLocations(): void{ this.map.toggleVisitedLocations();}
 
+  public managePatients(): void{
+    let working_office: WorkingOffice = {
+      satisfyCondition: (medical_office: MedicalOffice): boolean => {
+        return DoctorService.doctorWorkingOfficesId.has(medical_office.office_id);
+      },
+
+      doAction: (medical_office: MedicalOffice): void => {
+        this.parent.selected_office = medical_office;
+        AppComponent.changeManagePatients();
+      }
+    }
+
+    this.map.showWorkingOfficesUnderCondition(working_office);
+  }
+
   public manageCovidCases(): void {
-      this.map.showWorkingPlacesOnly((medical_office: MedicalOffice): boolean => {
-      return DoctorService.doctorWorkingOfficesId.has(medical_office.office_id) 
-    },
-    (medical_office) => { 
-      this.parent.selected_office = medical_office; 
-      AppComponent.changeManagingCovidCases();
-     }); 
+    let working_office: WorkingOffice = {
+      satisfyCondition: (medical_office: MedicalOffice): boolean => {
+        return DoctorService.doctorWorkingOfficesId.has(medical_office.office_id);
+      },
+
+      doAction: (medical_office: MedicalOffice): void => {
+        this.parent.selected_office = medical_office;
+        AppComponent.changeManagingCovidCases();
+      }
+    }
+
+      this.map.showWorkingOfficesUnderCondition(working_office); 
   }
   public manageEmployees(): void {
-      this.map.showWorkingPlacesOnly((medical_office: MedicalOffice): boolean => {
-      return UserService.userOwnedOfficesId.has(medical_office.office_id) 
-    },
-    (medical_office) => { 
-      this.parent.selected_office = medical_office; 
-      AppComponent.changeManagingEmployees();
-     }); 
+    let working_office: WorkingOffice = {
+      satisfyCondition: (medical_office: MedicalOffice): boolean => {
+        return UserService.userOwnedOfficesId.has(medical_office.office_id);
+      },
+
+      doAction: (medical_office: MedicalOffice): void => {
+        this.parent.selected_office = medical_office; 
+        AppComponent.changeManagingEmployees();
+      }
+    }
+
+      this.map.showWorkingOfficesUnderCondition(working_office); 
     }
 
   public viewCovidTests(): void{ AppComponent.changeViewPrevCovidTests(); }
