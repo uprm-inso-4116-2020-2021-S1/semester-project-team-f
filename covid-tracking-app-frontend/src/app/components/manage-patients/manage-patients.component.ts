@@ -74,7 +74,7 @@ export class ManagePatientsComponent implements OnInit {
      return false;
    }
 
-  public returnToNavbar(): void{ AppComponent.exitAddOrRemovePatient(); }
+  public returnToNavbar(): void{ AppComponent.exitManagingPatients(); }
 
   public getOffice(): MedicalOffice{
     return this.medical_office;
