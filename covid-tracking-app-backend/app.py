@@ -173,17 +173,6 @@ If you did not make this account then simply ignore this email.
 '''
     mail.send(msg)
 
-def send_passrequest_email(user):
-    token = user.get_user_token()
-    msg = Message('Password Reset',
-                    sender='thecovidtracker@gmail.com',
-                    recipients=[user.email])
-    msg.body = f'''To reset your password visit the following link:
-{url_for('password_reset', token=token, _external=True)}
-
-If you did not make this account then simply ignore this email.
-'''
-    mail.send(msg)
 
 @app.route('/account-activation', methods=['GET', 'POST'])
 def activation_request():
@@ -203,23 +192,6 @@ def activation_token(token):
     return redirect('http://localhost:4200')
     #return UserHandler.activateAccount(user)
 
-@app.route('/password_reset', methods=['GET', 'POST'])
-def passreset_request():
-    json = request.json
-    user =   User.getUserByEmail(json['email'])
-    send_passrequest_email(user)
-    return UserHandler.sentEmail()
-
-@app.route('/password_reset/<token>', methods=['GET', 'POST'])
-def passrequest_token(token):
-    #You should check if user is logged in MAYBE
-    user = User.getUserByEmail(User.verify_user_token(token))
-    if user is None:
-        pass
-        #You should print a message saying token is not valid or expired
-    #UserHandler.activateAccount(user)
-    #return redirect('http://localhost:4200')
-    #return UserHandler.activateAccount(user)
 
 if __name__ == '__main__':
     app.run()
