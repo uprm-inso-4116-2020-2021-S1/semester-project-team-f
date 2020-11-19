@@ -11,8 +11,8 @@
     padding: 2px;
     color: rgb(255, 255, 255);
     text-decoration: none;
-    font-size: 18px;
-    width: 20%; /* Four equal-width links. If you have two links, use 50%, and 33.33% for three links, etc.. */
+    font-size: 1.15vw;
+    width: 16.6666%; /* Four equal-width links. If you have two links, use 50%, and 33.33% for three links, etc.. */
     text-align: center; /* If you want the text to be centered */
   }
 
@@ -26,8 +26,12 @@
   transition: transform .5s ease;
 }
 
-  #settings_icon, #logout_icon{
-    width: 6%;
+  #settings_icon, #logout_icon, #results_icon{
+    width: 7%;
+  }
+
+  #location_icon, #medic_icon{
+    width: 7.5%;
   }
 
   .navbar_link:hover{
@@ -46,16 +50,17 @@
 
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
-  position: relative;
+  position: center;
   display: inline-block;
 }
 
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
   display: none;
-  position: absolute;
+  position: absolute; 
   background-color: #f1f1f1;
-  min-width: 160px;
+  min-width: 100px;
+  margin-left: -5px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
 }
@@ -76,7 +81,7 @@
 }
 
 .dropdown-content a:hover {
-  background-color: orange;
+  background-color:  #C93232;
   display: block;
   width: 100%;
   cursor: pointer;

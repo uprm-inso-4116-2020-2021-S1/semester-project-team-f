@@ -5,14 +5,13 @@ import { throwError, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import {API_URL} from '../../config';
-import { AppComponent } from '../app.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DoctorService {
 
-  public static loggedDoctor: Doctor;
+  public static doctorWorkingOfficesId: Set<number>;
 
   constructor(private httpClient: HttpClient, private router: Router) { }
 
@@ -39,9 +38,21 @@ export class DoctorService {
     .pipe(catchError(this._handleError))
   }
 
+  public getDoctorsByOfficeId(id): Observable<DoctorsResponse> {
+    return this.httpClient
+    .get<DoctorsResponse>(API_URL + `offices/${id}/doctors`)
+    .pipe(catchError(this._handleError))
+  }
+
   public getDoctorById(id: string): Observable<DoctorResponse>{
     return this.httpClient
     .get<DoctorResponse>(API_URL + `doctors/` + id)
     .pipe(catchError(this._handleError))
+  }
+
+  public deleteDoctor(oid: number, uid: string): Observable<any> {
+    return this.httpClient
+      .delete(API_URL + 'offices/' + oid +'/doctors/' + uid)
+      .pipe(catchError(this._handleError))
   }
 }

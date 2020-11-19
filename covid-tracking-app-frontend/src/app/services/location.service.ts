@@ -26,19 +26,19 @@ export class LocationService {
 
   public createLocation(location: Location): Observable<any> {
     return this.httpClient
-      .post(API_URL + `location`, location)
+      .post(API_URL + `locations`, location)
       .pipe(catchError(this._handleError))
   }
 
   public getAllLocations(): Observable<LocationsResponse> {
     return this.httpClient
-    .get<LocationsResponse>(API_URL + `location`)
+    .get<LocationsResponse>(API_URL + `locations`)
     .pipe(catchError(this._handleError))
   }
 
   public getLocationById(id: number): Observable<LocationResponse>{
     return this.httpClient
-    .get<LocationResponse>(API_URL + `location/` + id)
+    .get<LocationResponse>(API_URL + `locations/` + id)
     .pipe(catchError(this._handleError))
   }
 }

@@ -1,0 +1,47 @@
+/* The Modal (background) */
+.background {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content/Box */
+  .message-content {
+    background-color: #fefefe;
+    color: black;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 0.5vw;
+    width: 30%; /* Could be more or less, depending on screen size */
+    text-align: left;
+    font-size: 1.25vw;
+    font-family: Poppins;
+  }
+
+  .btn-primary{
+    width: 6vw;
+    display: block;
+    margin: auto;
+    font-size: 1.3vw;
+  }
+
+  .confirm-dialog{
+    display: flex;
+    margin: auto;
+    width: 50%;
+    padding: 0.5vw;
+    a{ 
+      margin: 0.4vw;
+      display: inline-block;
+      padding: 0.3vw 1.05vw 0.3vw 1.05vw;
+     }
+  } 
+

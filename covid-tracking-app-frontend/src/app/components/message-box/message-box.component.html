@@ -1,0 +1,18 @@
+<!-- The Modal -->
+<div id="my-message" class="background">
+
+  <!-- Modal content -->
+  <div class="message-content">
+    <p>{{getMessage()}}</p>
+
+    <ng-template [ngIf]="getMessageType() == 1">
+      <a class="btn btn-lg btn-primary" role="button" (click) = "closeMessageBox()">OK</a>
+    </ng-template>
+
+    <div class="confirm-dialog" *ngIf="getMessageType() == 2">
+      <a class="btn btn-lg btn-primary" role="button" (click) = "doAction()">Yes</a>
+      <a class="btn btn-lg btn-primary" role="button" (click) = "closeMessageBox()">No</a>
+    </div>
+  </div>
+
+</div>

@@ -1,15 +1,43 @@
 <router-outlet></router-outlet>
 
-<app-map></app-map>
+<app-map [parent]="current_component"></app-map>
 
 <div *ngIf="isLoggedIn(); else loginSidebar">
-    <app-navbar></app-navbar>
+    <app-navbar [parent]="current_component" [map]="map_component"></app-navbar>
+</div>
+<div *ngIf="isManagingPatients();">
+    <app-manage-patients [medical_office]="selected_office"></app-manage-patients>
+</div>
+
+<div *ngIf="isManagingCovidCases();">
+    <app-manage-covid-cases [medical_office]="selected_office"></app-manage-covid-cases>
+</div>
+
+<div *ngIf="isViewingPrevCovidTests();">
+    <app-covid-results></app-covid-results>
+</div>
+
+<div *ngIf="isChangingContactInformation();">
+    <app-account-settings></app-account-settings>
+</div>
+
+<div *ngIf="isChangingAddressInformation();">
+    <app-address-information></app-address-information>
+</div>
+
+<div *ngIf="isViewingOffice();">
+    <app-office-information  [medical_office]="selected_office" [map]="map_component"></app-office-information>
+</div>
+
+<div *ngIf="isManagingEmployees();">
+    <app-manage-employees [medical_office]="selected_office"></app-manage-employees>
 </div>
 <div *ngIf="isAddingPatient();">
     <app-add-patient-information></app-add-patient-information>
 </div>
 
 <ng-template #loginSidebar>
-    <app-login-sidebar></app-login-sidebar>
+    <app-login-sidebar [map]="map_component"></app-login-sidebar>
 </ng-template>
 
+<app-message-box></app-message-box>

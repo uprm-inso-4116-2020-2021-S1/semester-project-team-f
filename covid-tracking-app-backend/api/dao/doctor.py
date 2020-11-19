@@ -16,17 +16,18 @@ class Doctor(db.Model):
     def __init__(self, **args):
         self.user_id = args.get('user_id')
         self.office_id = args.get('office_id')
+        self.registered_date = args.get('registered_date')
 
     @staticmethod
     def getAllDoctors():
         return Doctor().query.all()
 
     @staticmethod
-    def getDoctorById(did):
-        return Doctor().query.filter_by(user_id=did).first()
+    def getDoctorByUserId(did):
+        return Doctor().query.filter_by(user_id=did).all()
     
     @staticmethod
-    def getDoctorsByOffice(oid):
+    def getDoctorsByOfficeId(oid):
         return Doctor().query.filter_by(office_id=oid).all()
 
     def create(self):

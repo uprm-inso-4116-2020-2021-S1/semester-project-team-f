@@ -1,0 +1,19 @@
+<div class= "sidebar office-info slide-right">
+    
+    <div class="upperBar">
+        <a><img id="back" (click) = "exitOfficeView()"src="../../assets/Back.png" alt="back"></a>
+        <a id="title">Office Information</a>
+    </div>
+
+    <div class="form">
+        <a>Office name:</a>
+        <a class="office">{{getOffice().office_name}}</a>
+        <a>Phone number:</a>
+        <a class="office">{{getOffice().office_phone_number}}</a>
+        <ng-template [ngIf]="getDistance() != null">
+            <a>Distance from your location:</a>
+            <a class="office">{{getDistance()}}</a>
+        </ng-template>
+    </div>
+
+</div>

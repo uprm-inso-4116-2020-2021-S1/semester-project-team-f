@@ -1,0 +1,36 @@
+<div class="sidebar slide-right">
+    <div class="form">
+        <div class="upperBar" >
+            <img id="back" (click) = "returnToNavbar()"src="../../assets/Back.png" alt="back">
+            <a id="title">{{getOffice().office_name}}</a>
+        </div>
+            <a *ngIf="error" style="color: orange; padding: 1vw;">{{error}}</a>
+            <a class="form-text">Patient's Email:</a>
+            <a><input type="email" id="inputEmail" class="form-control" required autofocus></a>
+    </div>
+
+    <a class="btn btn-lg btn-primary" (click) = "addCase()" role="button">Register</a>
+
+    <ng-template [ngIf]= "cases.length != 0" [ngIfElse]="default">
+        <a class="btn btn-lg btn-primary" role="button">Search</a>
+        <div style="margin-top: 1.1vw;">COVID-19 Cases:</div>
+        <div class="CaseList" *ngFor="let case of cases">
+            <div class="element">
+                <a>Name: {{case.full_name}}</a>
+                <a>Email: {{case.email}}</a>
+                <a>Date tested: {{case.date_tested}}</a>
+                <a>Test result:                 
+                        <select [ngModel]="decodeCovidResult(case)" style="display: inline;" name="statuses" id="statuses" 
+                        class="form-control" (input) = "classifyTestResult(case,$event.target.value)">
+                            <option *ngFor = "let status of statuses.values()" value="{{status}}">{{status}}</option>              
+                        </select>
+                </a>
+                <a id="RemoveCase" (click) = "deleteCase(case)">Remove case</a>
+            </div>
+          </div>
+    </ng-template>
+
+    <ng-template #default>
+        <p style="text-align: left; padding: 1.25vw;">There are currently no patients with COVID-19 Cases.</p>
+    </ng-template>
+</div>

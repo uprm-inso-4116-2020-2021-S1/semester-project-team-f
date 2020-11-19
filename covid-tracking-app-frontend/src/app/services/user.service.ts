@@ -13,6 +13,7 @@ import { AppComponent } from '../app.component';
 export class UserService {
 
   public static loggedUser: User;
+  public static userOwnedOfficesId: Set<number>;
 
   constructor(private httpClient: HttpClient, private router: Router) { }
 
@@ -33,13 +34,20 @@ export class UserService {
       .pipe(catchError(this._handleError))
   }
 
+  public updateContactInfo(user: User): Observable<any> {
+    return this.httpClient
+      .put(API_URL + `users`, user)
+      .pipe(catchError(this._handleError))
+
+  }
+
   public getAllUsers(): Observable<UsersResponse> {
     return this.httpClient
     .get<UsersResponse>(API_URL + `users`)
     .pipe(catchError(this._handleError))
   }
 
-  public getUserById(id: string): Observable<UserResponse>{
+  public getUserByIdOrEmail(id: string): Observable<UserResponse>{
     return this.httpClient
     .get<UserResponse>(API_URL + `users/` + id)
     .pipe(catchError(this._handleError))
@@ -49,7 +57,7 @@ export class UserService {
     let json = {
       "email": email
     }
-    return this.httpClient.post<UserResponse>(API_URL + `account_activation` , json)
+    return this.httpClient.post<UserResponse>(API_URL + `account-activation` , json)
   }
   public login(email: String, password: String): Observable<UserResponse> {
     let json = {

@@ -31,12 +31,12 @@ class User(db.Model):
         self.address_id = args.get('address_id')
         self.active = args.get("active")
     
-    def get_activation_token(self, expires_sec=1800):
+    def get_user_token(self, expires_sec=1800):
         s = Serializer(app.config['SECRET_KEY'], expires_sec)
         return s.dumps({'email': self.email}).decode('utf-8')
     
     @staticmethod
-    def verify_activation_token(token):
+    def verify_user_token(token):
         s = Serializer(app.config['SECRET_KEY'])
         try:
             email = s.loads(token)['email']
@@ -68,6 +68,15 @@ class User(db.Model):
     def getUserByEmail(uemail):
         return User().query.filter_by(email=uemail).first()
 
+    @staticmethod
+    def updateUserInfo(**args):
+        user = User.getUserById(args.get('user_id'))
+        user.phone_number = args.get('phone_number')
+        user.email = args.get('email')
+        user.password = args.get('password')
+
+        db.session.commit()
+        return user
     
     def activateUser(self):
         self.active = True

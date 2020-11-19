@@ -1,0 +1,84 @@
+.upperBar{
+    background-color: #FF4646;
+    padding: 1.6vw;
+  }
+  
+  .CaseList {
+      width: 19.5vw;
+      position: relative;
+      overflow-y: auto;
+      margin-left: auto;
+      margin-right: auto;
+      a{
+        font-size: 1vw;
+      }
+      .element {
+        border-style: solid;
+        border-width: 0vw 0.05vw 0.05vw 0.05vw;
+        background-color: #eee;
+        color: black;
+        display: block;
+        padding: 0.5vw;
+        text-align: left;
+        text-decoration: none;
+      }
+      .element:hover {
+        background-color: #ccc;
+      }
+      
+      .element:active {
+        background-color:#FF8A00;
+        color: white;
+      }
+    }
+  
+    .form{ padding: 0px; }
+  
+    .btn-primary{
+       display: inline; 
+       margin: 0.45vw;
+      }
+  
+    #RemoveCase{
+      font-weight: bold;
+      color: red;
+      transition:all .5s ease;
+      -webkit-transition-delay:all .5s ease;
+      -moz-transition-delay:all .5s ease;
+      -ms-transition-delay:all .5s ease;
+      -o-transition-delay:all .5s ease;
+    }
+  
+    #RemoveCase:hover{
+      font-weight: bold;
+      color: red;
+      cursor: pointer;
+      color: orange;
+      transition:all .5s ease;
+      -webkit-transition-delay:all .5s ease;
+      -moz-transition-delay:all .5s ease;
+      -ms-transition-delay:all .5s ease;
+      -o-transition-delay:all .5s ease;
+    }
+  
+    .btn-primary{
+      margin-top: 20px;
+      color:white;
+      border-color: #FF8A00;
+      background-color: #FF8A00;
+      width: 10vw;
+  }
+  #title{
+    font-size: 1.35vw;
+    margin-left: 2.25vw;
+  }
+  
+  .form-text{
+    margin-top: 1vw;
+  }
+
+  #statuses{
+    font-size: 1vw;
+    width: 7.5vw;
+    height: 2.25vw;
+  }
