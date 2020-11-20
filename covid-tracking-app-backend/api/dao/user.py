@@ -74,7 +74,7 @@ class User(db.Model):
         user.phone_number = args.get('phone_number')
         user.email = args.get('email')
         user.password = args.get('password')
-
+        user.address_id = args.get('address_id')
         db.session.commit()
         return user
     

@@ -27,20 +27,22 @@ export class AccountSettingsComponent implements OnInit {
     let curr_password_validation = (<HTMLInputElement>document.querySelector("#curr_password")).value;
 
     if (curr_password_validation == UserService.loggedUser.password){
-      UserService.loggedUser.password = (<HTMLInputElement>document.querySelector("#new_password")).value;
-      this.userService.updateContactInfo(UserService.loggedUser).subscribe(res => {
-        if(res.message == 'Success!'){
-          MessageBoxComponent.displayMessageBox('Contact information successfully updated!');
-          this.returnToNavbar();
-        }
-      })
+      let new_password: string = (<HTMLInputElement>document.querySelector("#new_password")).value;
+      if(new_password.length > 0){
+        UserService.loggedUser.password = new_password;
+      }
+      else{
+        MessageBoxComponent.displayMessageBox('ERROR: You tried to change the password, but empty passwords are not allowed.');
+        return ;
+      }
     }
-    MessageBoxComponent.displayMessageBox('Please enter your current password.')
-    return
-    
 
-    
-
+    this.userService.updateContactInfo(UserService.loggedUser).subscribe(res => {
+      if(res.message == 'Success!'){
+        MessageBoxComponent.displayMessageBox('Contact information successfully updated!');
+        this.returnToNavbar();
+      }
+    });
   }
 
   public returnToNavbar(): void{ setTimeout(() => { AppComponent.exitContactInformation(); }, 800); }

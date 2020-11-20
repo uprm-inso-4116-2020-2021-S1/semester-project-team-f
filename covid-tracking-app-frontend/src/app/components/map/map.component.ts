@@ -11,7 +11,6 @@ import { VisitedLocationService } from '../../services/visited-location.service'
 import { UserService } from 'src/app/services/user.service';
 import { VisitedLocation } from 'src/app/models/visited_location';
 import { WorkingOffice } from 'src/app/interfaces/WorkingOffice';
-import { SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-map',
@@ -148,6 +147,8 @@ export class MapComponent implements AfterViewInit {
         }
       }
       this.visited_locations = null;
+      this.map.setOptions({draggableCursor:null});
+      google.maps.event.clearListeners(this.map, 'click');
   }
 
   public addMarker(place: google.maps.GeocoderResult, marker_name: string, icon_type){

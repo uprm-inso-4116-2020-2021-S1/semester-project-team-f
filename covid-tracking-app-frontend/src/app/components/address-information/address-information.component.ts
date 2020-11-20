@@ -81,11 +81,15 @@ export class AddressInformationComponent{
     let newAddress = AddressInformationComponent.address_info;
     this.addressService.createAddress(newAddress).subscribe(res => {
           if(res.message == "Success!"){
-              UserService.loggedUser.address_id = res.address_id;
+              this.userService.updateContactInfo(UserService.loggedUser).subscribe(res => {
+                if(res.message == "Success!"){
+                  UserService.loggedUser.address_id = res.address_id;
+                  MessageBoxComponent.displayMessageBox('Address information successfully updated!');
+                }else{
+                  MessageBoxComponent.displayMessageBox("Couldn't update address");
+                }
+              });
 
-              this.userService.updateContactInfo(UserService.loggedUser);
-
-              alert('Address information successfully updated!');
 
               this.returnToNavbar();
           }

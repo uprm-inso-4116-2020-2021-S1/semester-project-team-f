@@ -109,7 +109,7 @@ class UserHandler:
 
     @staticmethod
     def updateUserInfo(json):
-        valid_parameters = Utilities.verify_parameters(json, ['user_id', 'email', 'phone_number', 'password'])
+        valid_parameters = Utilities.verify_parameters(json, ['user_id', 'email', 'phone_number', 'password', 'address_id'])
         if valid_parameters:
             try:
                 email_exists = User.getUserByEmail(json['email']) and User.user_id == json['user_id']
