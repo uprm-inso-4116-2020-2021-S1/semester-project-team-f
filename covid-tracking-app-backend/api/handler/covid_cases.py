@@ -248,11 +248,10 @@ class CovidCasesHandler:
                             recipients=[user_in_danger['email']])
                             msg.body = f'''Hi {user_in_danger['full_name']},
 
-    A indivual that tested positive positive to COVID-19 visited location @ lattitude: {patient_location['lattitude']}, @longitude: {patient_location['longitude']}. in the day of {patient_visited_location.date_visited}.
+An indivual that tested positive to COVID-19 visited location @ lattitude: {patient_location['lattitude']}, @longitude: {patient_location['longitude']}. in the day of {patient_visited_location.date_visited}.
 
-    It looks like you visited a location within 1 km of distance, so you might have been exposed to the COVID-19. If you don't feel well in the following days, get tested.
+It looks like you visited a location within 1 km of distance, so you might have been exposed to the COVID-19. If you don't feel well in the following days, get tested.
 
-    For the offices that provides COVID-19 test, please check our website.
-                                            '''
+For the offices that provides COVID-19 test, please check our website.'''
                             mail.send(msg)
             

@@ -33,6 +33,10 @@
     <app-manage-employees [medical_office]="selected_office"></app-manage-employees>
 </div>
 
+<div *ngIf="isManagingVisitedLocation();">
+    <app-location-info [visited_location]="selected_location" [map]="map_component"></app-location-info>
+</div>
+
 <ng-template #loginSidebar>
     <app-login-sidebar [map]="map_component"></app-login-sidebar>
 </ng-template>

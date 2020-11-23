@@ -30,7 +30,7 @@ export class NavbarComponent implements OnInit {
   public hasMedicalOffices(): boolean { return UserService.userOwnedOfficesId.size != 0;}
 
   public logout(): void{
-    this.map.removeVisitedLocations();
+    this.map.hideVisitedLocations();
     this.map.showMedicalOffices();
     this.userService.logout();
 

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MedicalOffice } from './models/medical_office';
 import { MapComponent } from './components/map/map.component';
+import { VisitedLocation } from './models/visited_location';
 
 @Component({
   selector: 'app-root',
@@ -10,12 +11,14 @@ import { MapComponent } from './components/map/map.component';
 export class AppComponent{
   public current_component: AppComponent = this;
   public selected_office: MedicalOffice;
+  public selected_location: VisitedLocation;
   public map_component: MapComponent;
 
   private static hasLoggedIn: boolean;
   private static managingPatients: boolean;
   private static managingCovidCases: boolean;
   private static managingEmployees: boolean;
+  private static managingVisitedLocation: boolean;
   private static viewingOffice: boolean;
   private static viewingPrevCovidTests: boolean;
   private static changingContactInformation: boolean;
@@ -28,6 +31,7 @@ export class AppComponent{
   public isManagingPatients() { return AppComponent.managingPatients; }
   public isManagingCovidCases() { return AppComponent.managingCovidCases; }
   public isManagingEmployees() { return AppComponent.managingEmployees; }
+  public isManagingVisitedLocation() { return AppComponent.managingVisitedLocation; }
   public isSeeingHelp()  { return AppComponent.seeingHelp; }
   public isChangingContactInformation() { return AppComponent.changingContactInformation; }
   public isChangingAddressInformation() { return AppComponent.changingAddressInformation;}
@@ -72,6 +76,11 @@ export class AppComponent{
   public static changeManagingEmployees() {
     this.hideNavbar();
     this.managingEmployees = true;
+  }
+
+  public static changeManagingVisitedLocation() {
+    this.hideNavbar();
+    this.managingVisitedLocation = true;
   }
 
   public static changeContactInformation() { 
@@ -119,6 +128,11 @@ export class AppComponent{
   public static exitManagingEmployees() {
     this.hideSidebar();
     setTimeout(()=> this.managingEmployees = false, 800);
+  }
+
+  public static exitManagingVisitedLocation() {
+    this.hideSidebar();
+    setTimeout(()=> this.managingVisitedLocation = false, 800);
   }
 
   public static exitViewPrevCovidTests(){

@@ -27,10 +27,10 @@ export class MapComponent implements AfterViewInit {
   private route_distance: string; //saves the route_distance from a specific location to a coordinate
   private map: google.maps.Map;
   private offices_mapping: Map<google.maps.Marker, any>;
+  private visited_locations_mapping: Map<google.maps.Marker, any>;
   private markers: google.maps.Marker[];
   private directions_renderer;
   private show_visited_locations: boolean;
-  public visited_locations: Set<google.maps.Marker>;
 
   constructor(private medicalOfficeService: MedicalOfficeService, private addressService: AddressService,
      private locationService: LocationService, private visitedLocationService: VisitedLocationService) { }
@@ -120,7 +120,7 @@ export class MapComponent implements AfterViewInit {
   public initVisitedLocations(){
     this.visitedLocationService.getLocationsVisitedByUserId(UserService.loggedUser.user_id).subscribe(res => {
       if(res.message == "Success!"){
-        this.visited_locations = new Set<google.maps.Marker>();
+        this.visited_locations_mapping = new Map<google.maps.Marker, any>();
         this.show_visited_locations = res.visited_locations.length != 0;
         for(let visited_location of res.visited_locations){
           this.locationService.getLocationById(visited_location.location_id).subscribe(res => {
@@ -129,7 +129,8 @@ export class MapComponent implements AfterViewInit {
               console.log(coordinates.lat() + " " + coordinates.lng());
               this.findPlaceAndDoAction(coordinates, result => {
                   let marker = this.addMarker(result, visited_location.date_visited.toString(), ICON_TYPE.DEFAULT_ICON);
-                  this.visited_locations.add(marker);
+                  this.visited_locations_mapping.set(marker, visited_location);
+                  this.addVisitedLocationListener(marker);
               });
             }
           });
@@ -138,17 +139,36 @@ export class MapComponent implements AfterViewInit {
     });
   }
 
-  public removeVisitedLocations(){
+  public containsVisitedLocations(): boolean{
+    return this.visited_locations_mapping.size != 0;
+  }
+
+  //when user gets logged out, his visited locations will not appear on the map
+  public hideVisitedLocations(){
       for(let i = 0; i < this.markers.length; i++){
         let marker: google.maps.Marker = this.markers[i];
-        if(this.visited_locations.has(marker)){
+        if(this.visited_locations_mapping.has(marker)){
               marker.setMap(null);
               this.markers.splice(i--, 1);
         }
       }
-      this.visited_locations = null;
+      this.visited_locations_mapping = null;
       this.map.setOptions({draggableCursor:null});
       google.maps.event.clearListeners(this.map, 'click');
+  }
+
+  public removeVisitedLocationMarker(visited_location: VisitedLocation){
+      for(let marker of this.visited_locations_mapping.keys()){
+        if(this.visited_locations_mapping.get(marker) == visited_location){
+            this.visited_locations_mapping.delete(marker);
+
+            marker.setMap(null);
+
+            let indexOfMarker = this.markers.indexOf(marker);
+
+            this.markers.splice(indexOfMarker, 1);
+          }
+        }
   }
 
   public addMarker(place: google.maps.GeocoderResult, marker_name: string, icon_type){
@@ -193,8 +213,18 @@ export class MapComponent implements AfterViewInit {
       alert("Please select the office that you wish to manage...");
     }
 
-    public addVisitedLocation(){
+    public addVisitedLocationListener(visited_location_marker){
+      //declared so that it can be used on the inner function
+      let visited_locations_mapping = this.visited_locations_mapping; 
+      let parent = this.parent;
 
+      google.maps.event.addListener(visited_location_marker, 'click', () => { 
+        parent.selected_location = visited_locations_mapping.get(visited_location_marker);
+        AppComponent.changeManagingVisitedLocation();
+     }); 
+    }
+
+    public addVisitedLocation(){
       alert("Click on the location you visited on the map");
 
       this.map.setOptions({draggableCursor:'crosshair'});
@@ -212,14 +242,15 @@ export class MapComponent implements AfterViewInit {
             let visited_location: VisitedLocation = {
               user_id: UserService.loggedUser.user_id,
               location_id: res.location.location_id,
-              date_visited: new Date()
+              date_visited: new Date().toDateString()
             }
 
             this.visitedLocationService.createVisitedLocation(visited_location).subscribe(res => {
               if(res.message == "Success!"){
                   this.findPlaceAndDoAction(coordinates, (result) =>{
                     let marker = this.addMarker(result, res.visited_location.date_visited, ICON_TYPE.DEFAULT_ICON);
-                    this.visited_locations.add(marker);
+                    this.visited_locations_mapping.set(marker, visited_location);
+                    this.addVisitedLocationListener(marker);
                   });
                   MessageBoxComponent.displayMessageBox("Visited location was added!");
             }});
@@ -230,13 +261,12 @@ export class MapComponent implements AfterViewInit {
       });
     }
 
-    //working on it...
     public toggleVisitedLocations(){
       this.show_visited_locations = !this.show_visited_locations;
 
       for(let i = 0; i < this.markers.length; i++){
         let marker = this.markers[i];
-        if(this.visited_locations.has(marker)){
+        if(this.visited_locations_mapping.has(marker)){
           if(this.show_visited_locations) marker.setMap(this.map);
           else marker.setMap(null);
         }
@@ -244,9 +274,6 @@ export class MapComponent implements AfterViewInit {
     }
 
     private addOfficeListener(office_marker): void{
-      office_marker.setIcon(ICON_TYPE.DOCTOR_ICON);
-      office_marker.setMap(this.map);
-
       //declared so that it can be used on the inner function
       let office_mappings = this.offices_mapping; 
       let user_marker = this.user_marker;

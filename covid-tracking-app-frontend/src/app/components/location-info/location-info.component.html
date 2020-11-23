@@ -1,0 +1,19 @@
+<div class= "sidebar office-info slide-right">
+    
+    <div class="upperBar">
+        <a><img id="back" (click) = "returnToNavbar()"src="../../assets/Back.png" alt="back"></a>
+        <a id="title">Visited Location</a>
+    </div>
+
+    <div class="form">
+        <a>Latitude:</a>
+        <a class="location">{{getLocation().lattitude}}</a>
+        <a>Longitude:</a>
+        <a class="location">{{getLocation().longitude}}</a>
+        <a>Date visited:</a>
+        <a class="location">{{getLocation().date_visited}}</a>
+    </div>
+
+    <a class="btn btn-lg btn-primary" (click) = "deleteLocation()" role="button">Delete</a>
+
+</div>

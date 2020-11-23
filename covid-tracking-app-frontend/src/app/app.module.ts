@@ -27,6 +27,7 @@ import { CovidResultsComponent } from './components/covid-results/covid-results.
 import { OfficeInformationComponent } from './components/office-information/office-information.component';
 import { MessageBoxComponent } from './components/message-box/message-box.component';
 import { ManageEmployeesComponent } from './components/manage-employees/manage-employees.component';
+import { LocationInfoComponent } from './components/location-info/location-info.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { ManageEmployeesComponent } from './components/manage-employees/manage-e
     OfficeInformationComponent,
     MessageBoxComponent,
     ManageEmployeesComponent,
-    CovidResultsComponent
+    CovidResultsComponent,
+    LocationInfoComponent
   ],
   imports: [
     BrowserModule,

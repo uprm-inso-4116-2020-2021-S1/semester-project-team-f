@@ -26,6 +26,5 @@ export class OfficeInformationComponent implements OnInit {
   }
 
   public getOffice(): MedicalOffice{ return this.medical_office; }
-
   public getDistance(): string{ return this.map.getRouteDistance(); }
 }

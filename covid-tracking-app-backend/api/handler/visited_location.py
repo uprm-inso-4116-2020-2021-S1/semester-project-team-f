@@ -71,8 +71,8 @@ class VisitedLocationHandler:
             return jsonify(message="Bad Request!"), 40
     
     @staticmethod
-    def deleteVisitedLocation(json):
-        deletedVisitedLocation = VisitedLocation.deleteVisitedLocation(json)
+    def deleteVisitedLocation(uid, lid, date):
+        deletedVisitedLocation = VisitedLocation.deleteVisitedLocation(uid, lid, date)
         result = {
             "message": "Success!",
             "visited_location": Utilities.to_dict(deletedVisitedLocation)

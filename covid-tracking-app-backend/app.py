@@ -66,6 +66,11 @@ def getLocationsVisitedByUserId(uid):
     if request.method == 'GET':
         return VisitedLocationHandler.getLocationsVisitedByUserId(uid)
 
+@app.route('/users/<string:uid>/locations/<int:lid>/visited-locations/<string:date>', methods=['DELETE'])
+def deleteVisitedLocation(uid, lid, date):
+    if request.method == 'DELETE':
+        return VisitedLocationHandler.deleteVisitedLocation(uid, lid, date)
+
 @app.route("/users", methods=['GET', 'POST', 'PUT'])
 def getAllUsersOrCreateOrUpdate():
     if request.method == 'GET':

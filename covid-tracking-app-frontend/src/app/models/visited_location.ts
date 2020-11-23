@@ -1,7 +1,7 @@
 export interface VisitedLocation {
     user_id: string;
     location_id: number;
-    date_visited: Date;
+    date_visited: string;
   }
   
   export interface VisitedLocationResponse {

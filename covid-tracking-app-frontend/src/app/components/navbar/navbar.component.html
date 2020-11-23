@@ -35,7 +35,7 @@
         <div class="dropdown-content">
           <a (click)="addVisitedLocations()">Add visited location</a>
 
-          <ng-template [ngIf] = "map.visited_locations.size != 0">
+          <ng-template [ngIf] = "map.containsVisitedLocations()">
             <ng-template [ngIf]="!map.canShowVisitedLocations()" [ngIfElse] = "hideVisitedLocations">
                     <a (click)="toggleVisitedLocations()">Show visited locations</a>
             </ng-template>

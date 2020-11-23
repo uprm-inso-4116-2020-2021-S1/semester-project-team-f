@@ -42,4 +42,10 @@ export class VisitedLocationService {
     .get<VisitedLocationsResponse>(API_URL + `visited-locations/`)
     .pipe(catchError(this._handleError))
   }
+
+  public deleteVisitedLocation(location: VisitedLocation): Observable<VisitedLocationResponse>{
+    return this.httpClient
+    .delete<VisitedLocationResponse>(API_URL + `users/${location.user_id}/locations/${location.location_id}/visited-locations/${location.date_visited}`)
+    .pipe(catchError(this._handleError))
+  }
 }

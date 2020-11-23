@@ -11,7 +11,7 @@ class VisitedLocation(db.Model):
 
     user_id = db.Column(UUID(as_uuid = True), db.ForeignKey('user.user_id'), nullable = False, primary_key=True)
     location_id = db.Column(db.Integer, db.ForeignKey('location.location_id'), nullable = False, primary_key=True)
-    date_visited = db.Column(db.Date, default=datetime.now(), primary_key=True)
+    date_visited = db.Column(db.Date, nullable = False, primary_key=True)
 
     def __init__(self, **args):
         self.user_id = args.get('user_id')
@@ -20,13 +20,13 @@ class VisitedLocation(db.Model):
 
     '''Value object: we have to search a specific visited location by it's attributes'''
     @staticmethod
-    def getSpecificVisitedLocation(json):
-        return VisitedLocation().query.filter_by(user_id=json['user_id'], location_id=json['location_id'], date_visited=json['date_visited'])
+    def getSpecificVisitedLocation(uid, lid, date):
+        return VisitedLocation().query.filter_by(user_id=uid, location_id=lid, date_visited=date).first()
 
     '''Retrieve individuals who visited the location with the specified id'''
     @staticmethod
     def getVisitedLocationByLocationId(lid):
-        return VisitedLocation().query.filter_by(location_id=lid)
+        return VisitedLocation().query.filter_by(location_id=lid).all()
 
     @staticmethod
     def getAllVisitedLocations():
@@ -46,8 +46,8 @@ class VisitedLocation(db.Model):
         return self
 
     @staticmethod
-    def deleteVisitedLocation(json):
-        visited_location = VisitedLocation.getSpecificVisitedLocation(json)
+    def deleteVisitedLocation(uid, lid, date):
+        visited_location = VisitedLocation.getSpecificVisitedLocation(uid, lid, date)
         if not visited_location:
             return None
         db.session.delete(visited_location)
