@@ -14,5 +14,5 @@
     </div>
     <a id="createAccount" (click)="createAccount()">Don’t have an account? Please click here to sign up.</a>
 
-    <app-contact-information *ngIf="canGoToNextPage"></app-contact-information>
+    <app-contact-information [login_component]="this"*ngIf="isCreatingAccount"></app-contact-information>
 </div>

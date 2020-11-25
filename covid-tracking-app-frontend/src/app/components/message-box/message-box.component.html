@@ -13,6 +13,12 @@
       <a class="btn btn-lg btn-primary" role="button" (click) = "doAction()">Yes</a>
       <a class="btn btn-lg btn-primary" role="button" (click) = "closeMessageBox()">No</a>
     </div>
+
+    <div class="inputVisitedDate" *ngIf="getMessageType() == 3">
+      <p style="color: red;">{{error}}</p>
+      <a><input type="date" id="visited_date"></a>
+      <a class="btn btn-lg btn-primary" role="button" (click) = "addVisitedDate()">Add Location</a>
+    </div>
   </div>
 
 </div>

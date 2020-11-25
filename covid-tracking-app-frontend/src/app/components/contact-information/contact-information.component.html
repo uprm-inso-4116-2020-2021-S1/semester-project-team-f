@@ -22,7 +22,7 @@
         </a>
 
         <a class="form-text">Birthday:</a>
-        <a><input type="date" class="form-control"
+        <a><input type="date" class="form-control" id="birthdate"
             (input) = "setUserInfo('birthdate',$event.target.value)" value = "{{getSavedUserInfo().birthdate}}"></a>
 
         <a class="form-text">Phone number:</a>
@@ -43,6 +43,5 @@
 
     <a id="createAccount" (click) = "showDoctorDialog()">I want to sign up as a doctor!</a>
 
-    <app-login-sidebar *ngIf="canGoToPreviousPage"></app-login-sidebar>
-    <app-address-information *ngIf="canGoToNextPage"></app-address-information>
+    <app-address-information [contact_info_component]="this" *ngIf="isCreatingAddress"></app-address-information>
 </div>

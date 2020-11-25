@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { DatePipe } from '@angular/common'
 
 import { UserService } from './services/user.service';
 import { AddressService } from './services/address.service';
@@ -62,7 +63,8 @@ import { LocationInfoComponent } from './components/location-info/location-info.
     CovidService,
     DoctorService, 
     LocationService,
-    VisitedLocationService
+    VisitedLocationService,
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })

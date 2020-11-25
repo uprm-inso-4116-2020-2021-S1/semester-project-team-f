@@ -242,7 +242,7 @@ class CovidCasesHandler:
                     for user_visited_location in locations_in_danger:
                         user_in_danger = Utilities.to_dict(User.getUserById(user_visited_location.user_id))
 
-                        if user_in_danger['user_id'] != user['user_id']:
+                        if user_in_danger['user_id'] != user['user_id'] and patient_visited_location.date_visited == user_visited_location.date_visited:
                             msg = Message('Possible COVID-19 Contact',
                             sender='thecovidtracker@gmail.com',
                             recipients=[user_in_danger['email']])

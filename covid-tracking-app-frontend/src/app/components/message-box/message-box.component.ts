@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { MapComponent } from '../map/map.component';
 
 @Component({
   selector: 'app-message-box',
@@ -7,9 +8,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MessageBoxComponent implements OnInit {
 
+  @Input() map: MapComponent;
+
   public static message: string;
+  public error: string;
   private static element;
-  private static type; //1 - display message, 2 - confirmation message 
+  private static type; //1 - display message, 2 - confirmation message, 3 - add visited location input
   private static action;
 
   constructor() { }
@@ -40,9 +44,33 @@ export class MessageBoxComponent implements OnInit {
     this.action = action;
   }
 
+  public static showVisitedDateInputBox(){
+    this.type = 3;
+    this.element.style.display = "block";
+    this.message = "Please enter the date you visited this location: ";
+  }
+
   public doAction(){
     MessageBoxComponent.action();
     this.closeMessageBox();
+  }
+
+  public addVisitedDate(){
+    let visited_date = (<HTMLInputElement>document.getElementById("visited_date")).value;
+
+    let today: Date = new Date();
+
+    let difference =  Date.parse(today.toDateString()) - Date.parse(visited_date);
+
+    if(difference <= 1209600000 && new Date(visited_date) <= today){
+      this.closeMessageBox();
+      this.map.createVisitedLocation(visited_date);
+    }
+    else{
+      this.error = "You selected an invalid visited date. "
+      this.error += "Make sure that the visited day you select is not older than two weeks, and "
+      this.error += "that the day doesn't come after today.";
+    }
   }
 
   public getMessageType(){ return MessageBoxComponent.type; }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { COUNTRIES, STATES } from 'src/config';
 import { Address } from '../../models/address';
 import { AddressService } from '../../services/address.service';
@@ -14,15 +14,15 @@ import { MessageBoxComponent } from '../message-box/message-box.component';
 })
 export class AddressInformationComponent{
 
-  
+  @Input() contact_info_component: ContactInformationComponent;
+
   canGoToNextPage: boolean;
-  canGoToPreviousPage: boolean;
   fadeEffect1: string;
   fadeEffect2: string;
   countries: string[];
   states: string[];
 
-  static address_info: Address;
+  address_info: Address;
 
   constructor(private addressService: AddressService, private userService: UserService) { 
     this.fadeEffect1 = "";
@@ -30,7 +30,6 @@ export class AddressInformationComponent{
     this.initializeAddressInfo();
     this.countries = COUNTRIES;
     this.states = STATES;
-    this.canGoToPreviousPage = false;
     this.canGoToNextPage = false;
   }
 
@@ -40,26 +39,34 @@ export class AddressInformationComponent{
     }
     else{
       this.fadeEffect2 = "fade-out"; //after the users press go back, this effect will be executed
-      setTimeout(() => this.canGoToPreviousPage = true, 800);
+      setTimeout(() => {
+        this.contact_info_component.isCreatingAddress = false;
+        this.contact_info_component.fadeEffect = "fade-in";
+      }, 800);
     }
   }
   public goToNextPage(): void{
     this.fadeEffect2 = "fade-out"; //after the users press go next, this effect that will be executed
     setTimeout(() => this.canGoToNextPage = true, 800);
   }
-  public setAddressInfo(key:string, value:string){
-      AddressInformationComponent.address_info[key] = value;
-  }
 
-  public getSavedAddressInfo(): Address{
-    return AddressInformationComponent.address_info;
-  }
+  public setAddressInfo(key:string, value:string){ this.address_info[key] = value; }
+
+  public getSavedAddressInfo(): Address{ return this.address_info; }
 
   public isLoggedIn():boolean{ return UserService.loggedUser != null; }
 
   private initializeAddressInfo(){
-    if(!this.isLoggedIn() && !this.getSavedAddressInfo()){
-      AddressInformationComponent.address_info = {
+    if(this.isLoggedIn()){
+      this.fadeEffect1 = "slide-right";
+      this.addressService.getAddressById(UserService.loggedUser.address_id).subscribe(res => {
+        if(res.message == "Success!"){
+          this.address_info = res.address;
+        }
+      });
+    }
+    else{
+      this.address_info = {
         country_name: '',
         region_name: '',
         street_address: '',
@@ -67,30 +74,20 @@ export class AddressInformationComponent{
         zip_code: null
       }
     }
-    else if(this.isLoggedIn()){
-      this.fadeEffect1 = "slide-right";
-      this.addressService.getAddressById(UserService.loggedUser.address_id).subscribe(res => {
-        if(res.message == "Success!"){
-          AddressInformationComponent.address_info = res.address;
-        }
-      });
-    }
   }
 
   public updateAddress(): void{
-    let newAddress = AddressInformationComponent.address_info;
+    let newAddress = this.address_info;
     this.addressService.createAddress(newAddress).subscribe(res => {
           if(res.message == "Success!"){
+              UserService.loggedUser.address_id = res.address.address_id;
               this.userService.updateContactInfo(UserService.loggedUser).subscribe(res => {
                 if(res.message == "Success!"){
-                  UserService.loggedUser.address_id = res.address_id;
                   MessageBoxComponent.displayMessageBox('Address information successfully updated!');
                 }else{
                   MessageBoxComponent.displayMessageBox("Couldn't update address");
                 }
               });
-
-
               this.returnToNavbar();
           }
         },
@@ -99,8 +96,8 @@ export class AddressInformationComponent{
   }
 
   public signUp(): void{
-    let newAddress = AddressInformationComponent.address_info;
-    let newUser = ContactInformationComponent.contact_info;
+    let newAddress = this.address_info;
+    let newUser = this.contact_info_component.contact_info;
     this.addressService.createAddress(newAddress).subscribe(res => {
 
         let address_id = res.address.address_id; 

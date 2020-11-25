@@ -16,7 +16,7 @@ export class LoginSidebarComponent implements OnInit {
   @Input()map: MapComponent;
 
   public effectsInAction: string[]; //effects not related to login
-  public canGoToNextPage: boolean;
+  public isCreatingAccount: boolean;
   public error: string;
 
   constructor(private userService: UserService, private patientService: PatientService, 
@@ -24,12 +24,12 @@ export class LoginSidebarComponent implements OnInit {
 
   ngOnInit(): void {
     this.effectsInAction = ["slide-down", "fade-in"]; //the default effects when someone enters to the main-page  
-    this.canGoToNextPage = false;
+    this.isCreatingAccount = false;
   }
 
   public createAccount(): void{
     this.effectsInAction = ["slide-up", "fade-out"]; //after the users press create account, those are the effects that will be executed
-    setTimeout(() => this.canGoToNextPage = true, 800);
+    setTimeout(() => this.isCreatingAccount = true, 800);
   }
 
   public login(): void{

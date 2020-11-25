@@ -40,7 +40,7 @@ export class NavbarComponent implements OnInit {
     AppComponent.changeToLogin();
   }
 
-  public addVisitedLocations(): void{ this.map.addVisitedLocation();}
+  public addVisitedLocations(): void{ this.map.addVisitedLocationDate();}
   public toggleVisitedLocations(): void{ this.map.toggleVisitedLocations();}
 
   public managePatients(): void{
