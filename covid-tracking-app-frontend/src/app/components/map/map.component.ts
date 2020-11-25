@@ -11,6 +11,8 @@ import { VisitedLocationService } from '../../services/visited-location.service'
 import { UserService } from 'src/app/services/user.service';
 import { VisitedLocation } from 'src/app/models/visited_location';
 import { WorkingOffice } from 'src/app/interfaces/WorkingOffice';
+import { PatientService } from 'src/app/services/patient.service';
+import { CovidService } from 'src/app/services/covid.service';
 
 @Component({
   selector: 'app-map',
@@ -34,7 +36,8 @@ export class MapComponent implements AfterViewInit {
   private mapsMouseEvent: google.maps.MouseEvent;
 
   constructor(private medicalOfficeService: MedicalOfficeService, private addressService: AddressService,
-     private locationService: LocationService, private visitedLocationService: VisitedLocationService) { }
+     private locationService: LocationService, private visitedLocationService: VisitedLocationService,
+     private patientService: PatientService, private covidService: CovidService) { }
 
   ngAfterViewInit(): void {
     this.markers = [];
@@ -58,6 +61,43 @@ export class MapComponent implements AfterViewInit {
     this.geocoder = new google.maps.Geocoder();
     this.requestUserLocation();
     this.markOfficeLocations();
+    this.markCovidHotspots();
+  }
+
+  private markCovidHotspots(){
+    this.visitedLocationService.getAllVisitedLocations().subscribe(res => {
+      for(let visited_location of res.visited_locations){
+          this.covidService.getCovidCasesByPatientId(visited_location.user_id).subscribe(res =>{
+              if(res.message=="Success!"){
+                for(let covid_case of res.cases){
+                  let today: Date = new Date();
+                  let map = this.map;
+                  let difference =  Date.parse(today.toDateString()) - Date.parse(covid_case.date_tested);
+              
+                  if(difference <= 1209600000 && new Date(covid_case.date_tested) <= today && covid_case.test_status == 3){
+                    this.locationService.getLocationById(visited_location.location_id).subscribe(res => {
+                      console.log("weeee cbbb")
+                      const covidRadius = new google.maps.Circle({
+                        strokeColor: "#FF0000",
+                        strokeOpacity: 0.8,
+                        strokeWeight: 2,
+                        fillColor: "#FF0000",
+                        fillOpacity: 0.35,
+                        map,
+                        center: {lat: res.location.lattitude, lng: res.location.longitude},
+                        radius: 1000,
+                      });
+                    });
+                  }
+
+                
+                }
+              }
+          });
+            
+          
+      }
+    })
   }
 
   private requestUserLocation(){

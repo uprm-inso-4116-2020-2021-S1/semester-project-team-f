@@ -39,7 +39,7 @@ export class VisitedLocationService {
 
   public getAllVisitedLocations(): Observable<VisitedLocationsResponse>{
     return this.httpClient
-    .get<VisitedLocationsResponse>(API_URL + `visited-locations/`)
+    .get<VisitedLocationsResponse>(API_URL + `visited-locations`)
     .pipe(catchError(this._handleError))
   }
 
