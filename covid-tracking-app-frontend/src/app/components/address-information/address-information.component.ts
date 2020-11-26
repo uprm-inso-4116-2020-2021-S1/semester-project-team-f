@@ -99,16 +99,15 @@ export class AddressInformationComponent{
     let newAddress = this.address_info;
     let newUser = this.contact_info_component.contact_info;
     this.addressService.createAddress(newAddress).subscribe(res => {
-
         let address_id = res.address.address_id; 
         newUser.address_id = address_id;
         this.userService.createUser(newUser).subscribe(res => {
-          
           if(res.message == "Success!"){
+            alert("You will be receiving an account validation email, press OKAY so that we can send you the email");
             this.userService.sendUserActivation(newUser.email).subscribe(res =>{
               this.fadeEffect2 = "fade-out"; //after the users press go next, this effect that will be executed
               setTimeout(() => this.canGoToNextPage = true, 800);
-              MessageBoxComponent.displayMessageBox('Sign up was successful! Activate your account using the link we sent to your email.')
+              MessageBoxComponent.displayMessageBox('Sign up was successful! Activate your account using the link we sent to your email.');
             },
             err => alert(err.error.reason)
             );

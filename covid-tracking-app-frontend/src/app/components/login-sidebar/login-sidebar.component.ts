@@ -5,6 +5,7 @@ import { DoctorService } from '../../services/doctor.service';
 import { MedicalOfficeService } from '../../services/medical-office.service';
 import { PatientService } from '../../services/patient.service';
 import { MapComponent } from '../map/map.component';
+import { MessageBoxComponent } from '../message-box/message-box.component';
 
 @Component({
   selector: 'app-login-sidebar',
@@ -37,7 +38,7 @@ export class LoginSidebarComponent implements OnInit {
       let password: string = (<HTMLInputElement>document.querySelector("#inputPassword")).value;
       this.userService.login(email, password).subscribe(res => {
         if(res.message == "Inactive Account"){
-          alert('Account not active. Check Email for activation link.')
+          MessageBoxComponent.displayMessageBox('Account not active. Check email for activation link.')
           this.userService.sendUserActivation(email).subscribe(res =>{
           });
         }

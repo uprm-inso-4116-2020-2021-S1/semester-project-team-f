@@ -169,6 +169,7 @@ def logout():
 
 def send_activation_email(user):
     token = user.get_user_token()
+
     msg = Message('Email Confirmation Code',
                     sender='thecovidtracker@gmail.com',
                     recipients=[user.email])
@@ -177,15 +178,17 @@ def send_activation_email(user):
 
 If you did not make this account then simply ignore this email.
 '''
+    mail.connect()
     mail.send(msg)
 
 
-@app.route('/account-activation', methods=['GET', 'POST'])
+@app.route('/account-activation', methods=['POST'])
 def activation_request():
-    json = request.json
-    user =   User.getUserByEmail(json['email'])
-    send_activation_email(user)
-    return UserHandler.sentEmail()
+    if(request.method == "POST"):
+        json = request.json
+        user =   User.getUserByEmail(json['email'])
+        send_activation_email(user)
+        return UserHandler.sentEmail()
 
 @app.route('/account-activation/<token>', methods=['GET', 'POST'])
 def activation_token(token):
