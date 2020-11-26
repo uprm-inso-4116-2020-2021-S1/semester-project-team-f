@@ -9,9 +9,10 @@ db_user = 'team-f'
 db_password = 'pay-respect'
 
 DEV_DB = f'postgresql://{db_user}:{db_password}@{db_url}/{db_name}'
+PROD_DB = 'postgres://ihfzbzayjmxvfz:a827b1d632abeaddef58603ff26a672a028f5617d4470a332459f55a829fa716@ec2-54-157-88-70.compute-1.amazonaws.com:5432/dahctghrejcqb5'
 
 app = flask.Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = DEV_DB
+app.config['SQLALCHEMY_DATABASE_URI'] = PROD_DB
 app.secret_key = "coronavirus"
 app.config['SECRET_KEY'] = "coronavirus"
 db = SQLAlchemy(app)
