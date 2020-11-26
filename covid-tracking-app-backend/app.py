@@ -178,7 +178,6 @@ def send_activation_email(user):
 
 If you did not make this account then simply ignore this email.
 '''
-    mail.connect()
     mail.send(msg)
 
 
