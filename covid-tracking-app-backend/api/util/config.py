@@ -9,7 +9,7 @@ db_user = 'team-f'
 db_password = 'pay-respect'
 
 DEV_DB = f'postgresql://{db_user}:{db_password}@{db_url}/{db_name}'
-PROD_DB = ' postgres://ntqtqkcotdjvpk:458fda834c0d3dafee5ad4183a17d9b760f2c64f9f9b04a6b13705c57a13c67f@ec2-54-147-126-202.compute-1.amazonaws.com:5432/d1q4e8lrv6el9l'
+PROD_DB = 'postgres://ntqtqkcotdjvpk:458fda834c0d3dafee5ad4183a17d9b760f2c64f9f9b04a6b13705c57a13c67f@ec2-54-147-126-202.compute-1.amazonaws.com:5432/d1q4e8lrv6el9l'
 
 app = flask.Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = PROD_DB
