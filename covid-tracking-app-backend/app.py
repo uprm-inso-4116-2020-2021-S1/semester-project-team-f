@@ -10,6 +10,7 @@ from api.handler.location import LocationHandler
 from api.handler.visited_location import VisitedLocationHandler
 from api.dao.user import User
 from flask_mail import Message
+import os 
 
 @app.route('/', methods=['GET'])
 def home():
@@ -194,9 +195,10 @@ def activation_token(token):
         pass
         #You should print a message saying token is not valid or expired
     UserHandler.activateAccount(user)
-    return redirect('http://localhost:4200')
+    return redirect('https://the-covid-tracker.herokuapp.com/')
     #return UserHandler.activateAccount(user)
 
 
 if __name__ == '__main__':
-    app.run()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
