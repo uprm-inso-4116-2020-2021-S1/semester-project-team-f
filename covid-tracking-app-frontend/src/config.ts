@@ -1,4 +1,4 @@
-export const API_URL = 'http://localhost:5000/'; //change when deployed
+export const API_URL = 'https://the-covid-tracker-backend.herokuapp.com/'; //production backend
 
 export const ICON_TYPE = {
     DEFAULT_ICON: {
