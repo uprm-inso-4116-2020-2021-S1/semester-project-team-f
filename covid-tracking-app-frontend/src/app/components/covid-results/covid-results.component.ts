@@ -46,7 +46,7 @@ export class CovidResultsComponent implements OnInit {
               office_id: covid_case.office_id,
               patient_id: covid_case.patient_id,
               doctor_id: covid_case.doctor_id,
-              date_tested: covid_case.date_tested,
+              date_tested: new Date(covid_case.date_tested).toLocaleDateString('en-US', {timeZone: 'UTC'}),
               test_status: covid_case.test_status
             }
 

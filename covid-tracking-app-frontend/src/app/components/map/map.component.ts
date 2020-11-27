@@ -76,7 +76,6 @@ export class MapComponent implements AfterViewInit {
               
                   if(difference <= 1209600000 && new Date(covid_case.date_tested) <= today && covid_case.test_status == 3){
                     this.locationService.getLocationById(visited_location.location_id).subscribe(res => {
-                      console.log("weeee cbbb")
                       const covidRadius = new google.maps.Circle({
                         strokeColor: "#FF0000",
                         strokeOpacity: 0.8,
@@ -178,7 +177,6 @@ export class MapComponent implements AfterViewInit {
             this.locationService.getLocationById(visited_location.location_id).subscribe(res => {
               if(res.message == "Success!"){
                 let coordinates = new google.maps.LatLng(res.location.lattitude, res.location.longitude);
-                console.log(coordinates.lat() + " " + coordinates.lng());
                 this.findPlaceAndDoAction(coordinates, result => {
                   let visited_date_string = new Date(visited_location.date_visited).toLocaleDateString('en-US', {timeZone: 'UTC'});
   

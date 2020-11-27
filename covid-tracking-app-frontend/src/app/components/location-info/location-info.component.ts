@@ -31,7 +31,7 @@ export class LocationInfoComponent implements OnInit {
           lattitude: res.location.lattitude,
           longitude: res.location.longitude,
           closest_address_id: res.location.closest_address_id,
-          date_visited: this.visited_location.date_visited,
+          date_visited: new Date(this.visited_location.date_visited).toLocaleDateString('en-US', {timeZone: 'UTC'}),
           user_id: this.visited_location.user_id
         }
       }

@@ -51,7 +51,7 @@ export class ManageCovidCasesComponent implements OnInit {
               office_id: covid_case.office_id,
               patient_id: covid_case.patient_id,
               doctor_id: covid_case.doctor_id,
-              date_tested: covid_case.date_tested,
+              date_tested: new Date(covid_case.date_tested).toLocaleDateString('en-US', {timeZone: 'UTC'}),
               test_status: covid_case.test_status
             }
 
@@ -108,6 +108,9 @@ export class ManageCovidCasesComponent implements OnInit {
   }
 
   public deleteCase(covid_case: InfectedPatient){
+
+    covid_case.date_tested = new Date(covid_case.date_tested).toDateString() //used to change to original formatting
+
     this.covidService.deleteRecord(covid_case).subscribe(res =>{
       if(res.message == "Success!"){
         console.log("The following COVID-19 record was deleted: ");
