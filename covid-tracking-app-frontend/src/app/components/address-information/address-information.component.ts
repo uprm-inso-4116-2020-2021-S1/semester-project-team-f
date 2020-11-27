@@ -103,7 +103,6 @@ export class AddressInformationComponent{
         newUser.address_id = address_id;
         this.userService.createUser(newUser).subscribe(res => {
           if(res.message == "Success!"){
-            alert("You will be receiving an account validation email, press OKAY so that we can send you the email");
             this.userService.sendUserActivation(newUser.email).subscribe(res =>{
               this.fadeEffect2 = "fade-out"; //after the users press go next, this effect that will be executed
               setTimeout(() => this.canGoToNextPage = true, 800);
